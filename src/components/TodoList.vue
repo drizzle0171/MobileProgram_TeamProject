@@ -1,20 +1,17 @@
 <template>
   <div>
     <div>
-      <div name="list" class="ul">
-        <li
-          v-for="(todoItem, index) in propsdata" :key="todoItem" class="shadow">
+      <transition-group name="list" tag="ul">
+        <li v-for="(todoItem, index) in propsdata" :key="todoItem" class="shadow">
           <i class="checkBtn fas fa-check" aria-hidden="true"></i>
-          <div>
-            <span>{{todoItem}}</span>
-            <p class="memo">여기는 메모 자리</p>
-
-          </div>
-          <span class="moreinfoBtn" type="button" @click="moreInfo(index)">
-            <i class="fas fa-plus" aria-hidden="true"></i>
-          </span>
+            <div class="todo-item-text">
+              <span>{{ todoItem }}</span> <p class="todo-memo"> 메모자리 </p>
+            </div>
+            <span class="moreinfoBtn" type="button" @click="moreInfo(index)">
+              <i class="fas fa-plus" aria-hidden="true"></i>
+            </span>
         </li>
-      </div>
+      </transition-group>
     </div>
     <div class="info-mask" v-if="showInfo == true">
       <div class="info-wrapper">
@@ -113,25 +110,32 @@ div {
 }
 ul {
   list-style-type: none;
-  padding-left: 0px;
-  margin-top: 0;
+  padding: 0px;
+  margin: 0;
   text-align: left;
-  display: flex;
-  align-content: flex-start;
-  flex-direction: column;
-  flex-wrap: wrap;
-  overflow: auto;
 }
+
 li {
   display: flex;
-  min-height: 60px;
-  height: 50px;
-  line-height: 50px;
   margin: 0.5rem 0;
   padding: 0 0.9rem;
   background: white;
   border-radius: 5px;
+  align-items: center;
 }
+
+.todo-item-text {
+  padding: 15px;
+  word-break: break-all;
+  align-items: center;
+}
+
+.todo-memo {
+  margin: 0px 2px;
+  font-size: 12px;
+  color: gray;
+}
+
 .checkBtn {
   line-height: 45px;
   color: #62acde;
@@ -143,8 +147,10 @@ li {
   font-size: 13px;
 }
 .moreinfoBtn {
+  display: table-cell;
   margin-left: auto;
   color: purple;
+  vertical-align: middle;
 }
 .list-enter-active,
 .list-leave-active {
@@ -166,19 +172,5 @@ li {
   float: right;
 }
 
-.memo {
-  font-size: 12px;
-  color: gray;
-}
-
-.aboutTodo{
-  display: flex;
-  min-height: 60px;
-  height: 50px;
-  line-height: 50px;
-  margin: 0.5rem 0;
-  padding: 0 0.9rem;
-  border-radius: 5px;
-}
 </style>
 
