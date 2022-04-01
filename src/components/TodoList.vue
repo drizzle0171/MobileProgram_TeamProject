@@ -13,6 +13,8 @@
         </li>
       </transition-group>
     </div>
+
+    <!-- modal_info -->
     <div class="info-mask" v-if="showInfo == true">
       <div class="info-wrapper">
         <div class="info-container">

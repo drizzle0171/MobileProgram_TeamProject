@@ -60,12 +60,16 @@ input:focus {
 }
 .addContainer {
   background: linear-gradient(to right, #6478FB, #8763FB);
-  display: inline-block;
+  float: right;
   width: 3rem;
   border-radius: 0 5px 5px 0;
 }
 .addBtn {
   color: white;
   vertical-align: middle;
+}
+
+input::placeholder {
+  text-align: right;
 }
 </style>
