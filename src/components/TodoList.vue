@@ -21,18 +21,16 @@
           <span class="close" type="button" @click="showInfo = false">
             <i class="fas fa-times" aria-hidden="true"></i>
           </span>
-          <h3 style="text-align: left">
-            {{ item }}
-            <hr>
-          </h3>
+          <input v-if="showModiHead" v-model="newHead" type = "text" placeholder="Type your goal" style="text-align: left">
+           <span @click="modifyHead" ><h3 style="text-align: left"> {{ item }} <hr> </h3></span>
           <p style="text-align: left"> <b>D-day</b> 4월 5일</p>
           <p style="text-align: left"> <b>카테고리</b> 학교</p>
           <p style="text-align: left"> <b>중요도</b> 매우 중요</p>
             <p style="text-align: left"> <b>메모</b> 
-              <span class="modified" type="button" @click="showInfo=false">
+              <span class="modified" type="button" @click="modify">
                 <i class="fas fa-pencil-alt"></i>
               </span>
-                <br> 내가 진짜 싹 다 구현하고 만다.
+                <br> <input type="text" v-model="memo" placeholder="Memo..." v-on:keyup.enter="addMemo">
               </p>
           <span
             class="removeBtn"
@@ -52,7 +50,11 @@ export default {
   data() {
     return {
       showInfo: false,
+      showModiHead: false,
       item: "",
+      memo: "",
+      memoList: [],
+      newHead: ""
     };
   },
   props: ["propsdata"],
@@ -65,6 +67,20 @@ export default {
       this.showInfo = true;
       this.item = this.propsdata[index];
     },
+    modifyHead() {
+      localStorage.removeItem(this.todoItem);
+      this.item = "";
+      this.showModiHead=true;
+      this.todoItem = this.newHead
+    },
+    modify() {
+      localStorage.setItem(this.memo, this.memo);
+      this.memoList.push(this.memo);
+
+    },
+    clearInput() {
+      this.memo = '';
+    }
   },
 };
 </script>
