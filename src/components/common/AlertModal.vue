@@ -24,6 +24,7 @@
 .closeModalBtn {
   color: #62acde;
 }
+
 .modal-mask {
   position: fixed;
   z-index: 9998;

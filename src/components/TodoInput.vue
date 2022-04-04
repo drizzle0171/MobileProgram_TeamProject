@@ -59,6 +59,9 @@ input:focus {
   font-size: 0.9rem;
 }
 .addContainer {
+  background: linear-gradient(to right, #6478FB, #8763FB);
+  float: right;
+
   float: right;
   background: linear-gradient(to right, #6478FB, #8763FB);
   display: inline-block;
@@ -69,4 +72,9 @@ input:focus {
   color: white;
   vertical-align: middle;
 }
+
+input::placeholder {
+  text-align: right;
+}
+
 </style>
