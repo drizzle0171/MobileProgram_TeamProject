@@ -60,7 +60,7 @@ input:focus {
 }
 .addContainer {
   background: linear-gradient(to right, #6478FB, #8763FB);
-  float: right;
+  display: inline-block;
   width: 3rem;
   border-radius: 0 5px 5px 0;
 }
@@ -72,4 +72,5 @@ input:focus {
 input::placeholder {
   text-align: right;
 }
+
 </style>
