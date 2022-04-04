@@ -40,7 +40,6 @@
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
-  
 }
 
 .modal-container {
