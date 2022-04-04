@@ -21,17 +21,24 @@
           <span class="close" type="button" @click="showInfo = false">
             <i class="fas fa-times" aria-hidden="true"></i>
           </span>
-          <input v-if="showModiHead" v-model="newHead" type = "text" placeholder="Type your goal" style="text-align: left">
-           <span @click="modifyHead" ><h3 style="text-align: left"> {{ item }} <hr> </h3></span>
+          <!-- <div class = "memobox">
+            <input v-if="showModiHead" v-model="newHead" type = "text" placeholder="Type your goal" style="text-align: left">
+          </div>  -->
+          <!-- <span @click="modifyHead" > -->
+            <h3 style="text-align: left"> {{ item }} <hr> </h3>
+            <!-- </span> -->
           <p style="text-align: left"> <b>D-day</b> 4월 5일</p>
           <p style="text-align: left"> <b>카테고리</b> 학교</p>
           <p style="text-align: left"> <b>중요도</b> 매우 중요</p>
+          <div class = "memobox">
+
             <p style="text-align: left"> <b>메모</b> 
               <span class="modified" type="button" @click="modify">
                 <i class="fas fa-pencil-alt"></i>
               </span>
                 <br> <input type="text" v-model="memo" placeholder="Memo..." v-on:keyup.enter="addMemo">
               </p>
+          </div>
           <span
             class="removeBtn"
             type="button"
@@ -188,6 +195,19 @@ li {
   margin-left: auto;
   color: #000000;
   float: right;
+}
+input:focus {
+  outline: none;
+}
+/* .memobox {
+  background: white;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 5px;
+} */
+.memobox {
+  border-style: none;
+  font-size: 0.9rem;
 }
 
 </style>
