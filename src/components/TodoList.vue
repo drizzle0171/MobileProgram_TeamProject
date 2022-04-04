@@ -21,12 +21,12 @@
           <span class="close" type="button" @click="showInfo = false">
             <i class="fas fa-times" aria-hidden="true"></i>
           </span>
-          <!-- <div class = "memobox">
+          <div class = "memobox">
             <input v-if="showModiHead" v-model="newHead" type = "text" placeholder="Type your goal" style="text-align: left">
           </div>  -->
-          <!-- <span @click="modifyHead" > -->
+          <span @click="modifyHead" >
             <h3 style="text-align: left"> {{ item }} <hr> </h3>
-            <!-- </span> -->
+            </span>
           <p style="text-align: left"> <b>D-day</b> 4월 5일</p>
           <p style="text-align: left"> <b>카테고리</b> 학교</p>
           <p style="text-align: left"> <b>중요도</b> 매우 중요</p>
@@ -75,7 +75,9 @@ export default {
       this.item = this.propsdata[index];
     },
     modifyHead() {
-      localStorage.removeItem(this.todoItem);
+      // localStorage.removeItem(todoItem);
+      console.log(localStorage)
+      console.log(this.propsdata)
       this.item = "";
       this.showModiHead=true;
       this.todoItem = this.newHead
