@@ -30,11 +30,11 @@ export default {
 		},
     removeTodo(todoItem, index) {
       localStorage.removeItem(todoItem);
+      console.log(this.todoItems)
       this.todoItems.splice(index, 1);
     }
   },
   created() {
-    console.log(localStorage)
 		if (localStorage.length > 0) {
 			for (var i = 0; i < localStorage.length; i++) {
 				this.todoItems.push(localStorage.key(i));
