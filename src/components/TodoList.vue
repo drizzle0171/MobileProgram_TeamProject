@@ -5,7 +5,7 @@
         <li v-for="(todoItem, index) in propsdata" :key="todoItem" class="shadow">
           <i class="checkBtn fas fa-check" aria-hidden="true"></i>
             <div class="todo-item-text">
-              <span>{{ todoItem }}</span> <p class="todo-memo"> {{memoList[todoItem]}} </p>
+              <span class="todo-item">{{ todoItem }}</span> <p class="todo-memo"> {{memoList[todoItem]}} </p>
             </div>
             <span class="moreinfoBtn" type="button" @click="moreInfo(todoItem, index)">
               <i class="fas fa-plus" aria-hidden="true"></i>
@@ -30,7 +30,7 @@
           <span @click="modifyHead" >
             <h3 style="text-align: left"> {{ item }} <hr> </h3>
             </span>
-          <p style="text-align: left"> <b>D-day</b> 4월 5일</p>
+          <p style="text-align: left"><b>D-day</b> <input type="date" style="width:150px"></p>
           <p style="text-align: left"> <b>카테고리</b> 학교</p>
           <p style="text-align: left"> <b>중요도</b> 매우 중요</p>
           <div class = "memobox">
@@ -83,7 +83,7 @@ export default {
     modify() {
       console.log(this.memo);
       localStorage.setItem(this.todoItem, this.memoList[this.todoItem]);
-      // this.memo=this.memoList[this.todoItem];
+      this.memo=localStorage.getItem(this.todoItem)
       console.log(this.memoList);
     },
     clearInput() {
@@ -143,17 +143,23 @@ ul {
 
 li {
   display: flex;
-  margin: 0.5rem 0;
+  margin: 10px;
   padding: 0 0.9rem;
   background: white;
   border-radius: 5px;
   align-items: center;
 }
 
+
 .todo-item-text {
-  padding: 15px;
+  margin: 15px;
+  margin-right: 20px;
   word-break: break-all;
+  display: inline-block;
   align-items: center;
+  overflow: hidden;
+  background-color: antiquewhite;
+  width:200px;
 }
 
 .todo-memo {
@@ -161,7 +167,7 @@ li {
   font-size: 12px;
   color: gray;
 }
-
+ 
 .checkBtn {
   line-height: 45px;
   color: #62acde;
@@ -175,6 +181,7 @@ li {
 .moreinfoBtn {
   display: table-cell;
   margin-left: 230px;
+  margin-right: 10px;
   color: black;
   vertical-align: middle;
 }
