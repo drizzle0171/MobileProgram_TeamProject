@@ -28,7 +28,7 @@ export default {
     addTodo() {
       if (this.newTodoItem !== "") {
         var value = this.newTodoItem && this.newTodoItem.trim();
-				this.$emit('addTodo', value)
+				this.$emit('addTodo', value);
         this.clearInput();
       } else {
         this.showModal = !this.showModal;
@@ -59,8 +59,8 @@ input:focus {
   font-size: 0.9rem;
 }
 .addContainer {
+  float: right;
   background: linear-gradient(to right, #6478FB, #8763FB);
-  display: inline-block;
   width: 3rem;
   border-radius: 0 5px 5px 0;
 }

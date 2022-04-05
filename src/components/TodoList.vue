@@ -5,11 +5,14 @@
         <li v-for="(todoItem, index) in propsdata" :key="todoItem" class="shadow">
           <i class="checkBtn fas fa-check" aria-hidden="true"></i>
             <div class="todo-item-text">
-              <span>{{ todoItem }}</span> <p class="todo-memo"> 메모자리 </p>
+              <span>{{ todoItem }}</span> <p class="todo-memo"> {{memoList[todoItem]}} </p>
             </div>
-            <span class="moreinfoBtn" type="button" @click="moreInfo(index)">
+            <span class="moreinfoBtn" type="button" @click="moreInfo(todoItem, index)">
               <i class="fas fa-plus" aria-hidden="true"></i>
             </span>
+             <span class="removeBtn" @click="removeTodo(todoItem, index)">
+            <i class="fas fa-trash-alt" aria-hidden="true"></i>
+          </span>
         </li>
       </transition-group>
     </div>
@@ -23,7 +26,7 @@
           </span>
           <div class = "memobox">
             <input v-if="showModiHead" v-model="newHead" type = "text" placeholder="Type your goal" style="text-align: left">
-          </div>  -->
+          </div> 
           <span @click="modifyHead" >
             <h3 style="text-align: left"> {{ item }} <hr> </h3>
             </span>
@@ -33,19 +36,12 @@
           <div class = "memobox">
 
             <p style="text-align: left"> <b>메모</b> 
-              <span class="modified" type="button" @click="modify">
+              <span class="modified" type="button" @keyup.enter="modify()">
                 <i class="fas fa-pencil-alt"></i>
               </span>
-                <br> <input type="text" v-model="memo" placeholder="Memo..." v-on:keyup.enter="addMemo">
+                <br> <input type="text" v-model="memoList[todoItem]" placeholder="Memo..." v-on:keyup.enter="modify(todoItem)">
               </p>
           </div>
-          <span
-            class="removeBtn"
-            type="button"
-            @click="removeTodo(todoItem, index)"
-          >
-            <i class="fas fa-trash-alt" aria-hidden="true"> 삭제 </i>
-          </span>
         </div>
       </div>
     </div>
@@ -58,34 +54,37 @@ export default {
     return {
       showInfo: false,
       showModiHead: false,
-      item: "",
+      todoItem: "",
+      index: "",
       memo: "",
-      memoList: [],
+      memoList: {},
       newHead: ""
     };
   },
   props: ["propsdata"],
   methods: {
     removeTodo(todoItem, index) {
+      console.log(todoItem, index)
       this.$emit("removeTodo", todoItem, index);
       this.showInfo = false;
     },
-    moreInfo(index) {
+    moreInfo(todoItem, index) {
       this.showInfo = true;
-      this.item = this.propsdata[index];
+      this.todoItem = todoItem;
+      this.index = index;
+
     },
-    modifyHead() {
-      // localStorage.removeItem(todoItem);
-      console.log(localStorage)
-      console.log(this.propsdata)
+    modifyHead(todoItem) {
+      localStorage.removeItem(todoItem);
       this.item = "";
       this.showModiHead=true;
-      this.todoItem = this.newHead
+      todoItem = this.newHead
     },
     modify() {
-      localStorage.setItem(this.memo, this.memo);
-      this.memoList.push(this.memo);
-
+      console.log(this.memo);
+      localStorage.setItem(this.todoItem, this.memoList[this.todoItem]);
+      // this.memo=this.memoList[this.todoItem];
+      console.log(this.memoList);
     },
     clearInput() {
       this.memo = '';
@@ -170,13 +169,13 @@ li {
 }
 .removeBtn {
   margin-left: auto;
-  color: #de4343;
+  color: black;
   font-size: 13px;
 }
 .moreinfoBtn {
   display: table-cell;
-  margin-left: auto;
-  color: purple;
+  margin-left: 230px;
+  color: black;
   vertical-align: middle;
 }
 .list-enter-active,
@@ -212,49 +211,4 @@ input:focus {
   font-size: 0.9rem;
 }
 
-</style>
-
-  props: ['propsdata'],
-  methods: {
-    removeTodo(todoItem, index) {
-      this.$emit('removeTodo', todoItem, index);
-    }
-  }
-}
-</script>
-
-<style scoped>
-  ul {
-    list-style-type: none;
-    padding-left: 0px;
-    margin-top: 0;
-    text-align: left;
-  }
-  li {
-    display: flex;
-    min-height: 50px;
-    height: 50px;
-    line-height: 50px;
-    margin: 0.5rem 0;
-    padding: 0 0.9rem;
-    background: white;
-    border-radius: 5px;
-  }
-  .checkBtn {
-    line-height: 45px;
-    color: #62acde;
-    margin-right: 5px;
-  }
-  .removeBtn {
-    margin-left: auto;
-    color: #de4343;
-  }
-
-  .list-enter-active, .list-leave-active {
-    transition: all 1s;
-  }
-  .list-enter, .list-leave-to {
-    opacity: 0;
-    transform: translateY(30px);
-  }
 </style>
