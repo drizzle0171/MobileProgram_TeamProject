@@ -3,7 +3,11 @@
     <div>
       <transition-group name="list" tag="ul">
         <li v-for="(todoItem, index) in propsdata" :key="todoItem" class="shadow">
-          <i class="checkBtn fas fa-check" aria-hidden="true"></i>
+          <!-- <i class="uncheckedBtn fas fa-check" clickaria-hidden="true" @click="checkInfo" id="hidden"></i>
+             <i class="checkedBtn fas fa-check" clickaria-hidden="true" id="hidden"></i> -->
+             <input type="checkbox" id="notify" name="notify" value="on">
+            <!-- <input type="checkbox" v-model="done_check" value="on"> -->
+        
             <div class="todo-item-text">
               <span class="todo-item">{{ todoItem }}</span> <p class="todo-memo"> {{memoList[todoItem]}} </p>
             </div>
@@ -13,6 +17,7 @@
              <span class="removeBtn" @click="removeTodo(todoItem, index)">
             <i class="fas fa-trash-alt" aria-hidden="true"></i>
           </span>
+        
         </li>
       </transition-group>
     </div>
@@ -58,7 +63,8 @@ export default {
       index: "",
       memo: "",
       memoList: {},
-      newHead: ""
+      newHead: "",
+      notify: []
     };
   },
   props: ["propsdata"],
@@ -68,6 +74,7 @@ export default {
       this.$emit("removeTodo", todoItem, index);
       this.showInfo = false;
     },
+
     moreInfo(todoItem, index) {
       this.showInfo = true;
       this.todoItem = todoItem;
@@ -104,7 +111,7 @@ div {
   width: 300px;
   margin: 0px auto;
   padding: 20px 30px;
-  background-color: #fff;
+  background-color: rgb(75, 75, 119);
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
@@ -168,9 +175,14 @@ li {
   color: gray;
 }
  
-.checkBtn {
+.uncheckedBtn {
   line-height: 45px;
-  color: #62acde;
+  color: #04f7ceef;
+  margin-right: 5px;
+}
+.checkedBtn {
+  line-height: 45px;
+  color: #6478FB;
   margin-right: 5px;
 }
 .removeBtn {
@@ -216,6 +228,9 @@ input:focus {
 .memobox {
   border-style: none;
   font-size: 0.9rem;
+}
+#hidden{
+  display:none;
 }
 
 </style>
