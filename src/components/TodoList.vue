@@ -3,10 +3,8 @@
     <div>
       <transition-group name="list" tag="ul">
         <li v-for="(todoItem, index) in propsdata" :key="todoItem" class="shadow">
-          <!-- <i class="uncheckedBtn fas fa-check" clickaria-hidden="true" @click="checkInfo" id="hidden"></i>
-             <i class="checkedBtn fas fa-check" clickaria-hidden="true" id="hidden"></i> -->
-             <input type="checkbox" id="notify" name="notify" value="on">
-            <!-- <input type="checkbox" v-model="done_check" value="on"> -->
+          <i v-if = "notdone" class="checkBtn fas fa-check" aria-hidden="true" @click="checkDone"></i>
+          <i v-if = "done" class="checkBtn_done fas fa-check" aria-hidden="true"></i>
         
             <div class="todo-item-text">
               <span class="todo-item">{{ todoItem }}</span> <p class="todo-memo"> {{memoList[todoItem]}} </p>
@@ -64,7 +62,9 @@ export default {
       memo: "",
       memoList: {},
       newHead: "",
-      notify: []
+      notify: [],
+      done: false,
+      notdone: true
     };
   },
   props: ["propsdata"],
@@ -73,6 +73,10 @@ export default {
       console.log(todoItem, index)
       this.$emit("removeTodo", todoItem, index);
       this.showInfo = false;
+    },
+    checkDone(){
+      this.done=true;
+      this.notdone=false;
     },
 
     moreInfo(todoItem, index) {
@@ -175,12 +179,12 @@ li {
   color: gray;
 }
  
-.uncheckedBtn {
+.checkBtn {
   line-height: 45px;
   color: #04f7ceef;
   margin-right: 5px;
 }
-.checkedBtn {
+.checkBtn_done {
   line-height: 45px;
   color: #6478FB;
   margin-right: 5px;
