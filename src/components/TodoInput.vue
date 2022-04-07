@@ -21,14 +21,15 @@ export default {
   data() {
     return {
       newTodoItem: '',
-      showModal: false
+      showModal: false,
+      memo: ""
     }
   },
   methods: {
     addTodo() {
       if (this.newTodoItem !== "") {
         var value = this.newTodoItem && this.newTodoItem.trim();
-				this.$emit('addTodo', value);
+				this.$emit('addTodo', value, this.memo);
         this.clearInput();
       } else {
         this.showModal = !this.showModal;
@@ -60,7 +61,7 @@ input:focus {
 }
 .addContainer {
   float: right;
-  background: linear-gradient(to right, #6478FB, #8763FB);
+  background: linear-gradient(to right, #209e76, #54cb91);
   width: 3rem;
   border-radius: 0 5px 5px 0;
 }

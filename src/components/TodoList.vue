@@ -2,17 +2,18 @@
   <div>
     <div>
       <transition-group name="list" tag="ul">
-        <li v-for="(todoItem, index) in propsdata" :key="todoItem" class="shadow">
-          <i class="checkBtn fas fa-check" aria-hidden="true"></i>
+        <li v-for="(todoItem, index) in propsdata" :key="todoItem" class="shadow" >
+          <i v-if="notdoneList[index]" class="checkBtn fas fa-check" @click="checkDone(index)"></i>
+          <i v-if="doneList[index]" class="checkBtn_done fas fa-check"></i>
             <div class="todo-item-text">
-              <span class="todo-item">{{ todoItem }}</span> <p class="todo-memo"> {{memoList[todoItem]}} </p>
+              <span>{{ todoItem }}</span> <p class="todo-memo"> {{memoList[todoItem]}} </p>
             </div>
             <span class="moreinfoBtn" type="button" @click="moreInfo(todoItem, index)">
               <i class="fas fa-plus" aria-hidden="true"></i>
             </span>
-             <span class="removeBtn" @click="removeTodo(todoItem, index)">
-            <i class="fas fa-trash-alt" aria-hidden="true"></i>
-          </span>
+            <span class="removeBtn" @click="removeTodo(todoItem, index)">
+              <i class="fas fa-trash-alt" aria-hidden="true"></i>
+            </span>
         </li>
       </transition-group>
     </div>
@@ -24,22 +25,18 @@
           <span class="close" type="button" @click="showInfo = false">
             <i class="fas fa-times" aria-hidden="true"></i>
           </span>
-          <div class = "memobox">
-            <input v-if="showModiHead" v-model="newHead" type = "text" placeholder="Type your goal" style="text-align: left">
-          </div> 
-          <span @click="modifyHead" >
-            <h3 style="text-align: left"> {{ item }} <hr> </h3>
-            </span>
-          <p style="text-align: left"><b>D-day</b> <input type="date" style="width:150px"></p>
+          <input v-if="showModiHead" v-model="newHead" type = "text" placeholder="Type your goal" style="text-align: left" @keyup.enter="toLocalStorage_Head()">
+          <span v-if="oldHead" @click="modifyHead" ><h3 style="text-align: left"> {{ todoItem }} <hr> </h3></span>
+          <span v-if="showNewHead"><h3 style="text-align: left">{{newHeadList[index]}}<hr></h3></span>
+          <p style="text-align: left"> <b>D-day</b> 4월 5일</p>
           <p style="text-align: left"> <b>카테고리</b> 학교</p>
           <p style="text-align: left"> <b>중요도</b> 매우 중요</p>
           <div class = "memobox">
-
             <p style="text-align: left"> <b>메모</b> 
-              <span class="modified" type="button" @keyup.enter="modify()">
+              <span class="modified" type="button">
                 <i class="fas fa-pencil-alt"></i>
               </span>
-                <br> <input type="text" v-model="memoList[todoItem]" placeholder="Memo..." v-on:keyup.enter="modify(todoItem)">
+                <br> <input type="text" v-model="memoList[todoItem]" placeholder="Memo...">
               </p>
           </div>
         </div>
@@ -50,21 +47,32 @@
 
 <script>
 export default {
+  name: 'todoItem',
   data() {
     return {
       showInfo: false,
       showModiHead: false,
       todoItem: "",
-      index: "",
       memo: "",
-      memoList: {},
-      newHead: ""
+      memoList: [],
+      newHead:"",
+      newHeadList: [],
+      information: [],
+      doneList: [false],
+      notdoneList: [true],
+      showNewHead: false,
+      oldHead: true
     };
   },
   props: ["propsdata"],
   methods: {
+    checkDone(index){
+      this.notdoneList[index] = false;
+      this.doneList[index] = true;
+      this.doneList.push(false);
+      this.notdoneList.push(true);
+    },
     removeTodo(todoItem, index) {
-      console.log(todoItem, index)
       this.$emit("removeTodo", todoItem, index);
       this.showInfo = false;
     },
@@ -72,23 +80,23 @@ export default {
       this.showInfo = true;
       this.todoItem = todoItem;
       this.index = index;
-
     },
-    modifyHead(todoItem) {
-      localStorage.removeItem(todoItem);
-      this.item = "";
+    modifyHead() {
+      this.todoItem = "";
       this.showModiHead=true;
-      todoItem = this.newHead
+    },
+    toLocalStorage_Head(){
+      this.newHeadList[this.index] = this.newHead;
+      this.showModiHead=false;
+      this.oldHead=false;
+      this.showNewHead=true;
     },
     modify() {
       console.log(this.memo);
       localStorage.setItem(this.todoItem, this.memoList[this.todoItem]);
-      this.memo=localStorage.getItem(this.todoItem)
+      this.memo=localStorage.getItem(this.todoItem);
       console.log(this.memoList);
     },
-    clearInput() {
-      this.memo = '';
-    }
   },
 };
 </script>
@@ -143,23 +151,17 @@ ul {
 
 li {
   display: flex;
-  margin: 10px;
+  margin: 0.5rem 0;
   padding: 0 0.9rem;
   background: white;
   border-radius: 5px;
   align-items: center;
 }
 
-
 .todo-item-text {
-  margin: 15px;
-  margin-right: 20px;
+  padding: 15px;
   word-break: break-all;
-  display: inline-block;
   align-items: center;
-  overflow: hidden;
-  background-color: antiquewhite;
-  width:200px;
 }
 
 .todo-memo {
@@ -167,22 +169,27 @@ li {
   font-size: 12px;
   color: gray;
 }
- 
+
 .checkBtn {
   line-height: 45px;
-  color: #62acde;
+  color: #c9c9c9;
+  margin-right: 5px;
+}
+
+.checkBtn_done {
+  line-height: 45px;
+  color: #209e76;
   margin-right: 5px;
 }
 .removeBtn {
-  margin-left: auto;
-  color: black;
+  margin-left: 10px;
+  color: #209e76;
   font-size: 13px;
 }
 .moreinfoBtn {
   display: table-cell;
-  margin-left: 230px;
-  margin-right: 10px;
-  color: black;
+  margin-left: auto;
+  color: #209e76;
   vertical-align: middle;
 }
 .list-enter-active,
@@ -203,19 +210,6 @@ li {
   margin-left: auto;
   color: #000000;
   float: right;
-}
-input:focus {
-  outline: none;
-}
-/* .memobox {
-  background: white;
-  height: 50px;
-  line-height: 50px;
-  border-radius: 5px;
-} */
-.memobox {
-  border-style: none;
-  font-size: 0.9rem;
 }
 
 </style>
