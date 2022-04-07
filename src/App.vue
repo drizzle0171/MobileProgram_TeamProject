@@ -24,8 +24,8 @@ export default {
       localStorage.clear();
       this.todoItems = [];
     },
-		addTodo(todoItem) {
-			localStorage.setItem(todoItem, todoItem);
+		addTodo(todoItem, memo) {
+			localStorage.setItem(todoItem, [todoItem, memo]);
 			this.todoItems.push(todoItem);
 		},
     removeTodo(todoItem, index) {
@@ -53,7 +53,7 @@ export default {
 <style>
   body {
     text-align: center;
-    background-color: #F6F6F8;
+    background-color: #f3fff8;
   }
   input {
     border-style: groove;
