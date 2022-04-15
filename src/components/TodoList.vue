@@ -3,10 +3,10 @@
     <div>
       <transition-group name="list" tag="ul">
         <li v-for="(todoItem, index) in propsdata" :key="todoItem" class="shadow" >
-          <i v-if="notdoneList[index]" class="checkBtn fas fa-check" @click="checkDone(index)"></i>
-          <i v-if="doneList[index]" class="checkBtn_done fas fa-check"></i>
+          <i v-if="done=false" class="checkBtn fas fa-check" @click="checkDone(index)"></i>
+          <i v-if="done=true" class="checkBtn_done fas fa-check"></i>
             <div class="todo-item-text">
-              <span>{{ todoItem }}</span> <p class="todo-memo"> {{memoList[todoItem]}} </p>
+              <span>{{ todoItem }} </span> <p class="todo-memo"> {{memoList[todoItem]}} </p>
             </div>
             <span class="moreinfoBtn" type="button" @click="moreInfo(todoItem, index)">
               <i class="fas fa-plus" aria-hidden="true"></i>
@@ -57,11 +57,9 @@ export default {
       memoList: [],
       newHead:"",
       newHeadList: [],
-      information: [],
-      doneList: [false],
-      notdoneList: [true],
       showNewHead: false,
-      oldHead: true
+      oldHead: true,
+      done: JSON.parse(localStorage.getItem(this.todoItem))['done']
     };
   },
   props: ["propsdata"],
@@ -80,6 +78,7 @@ export default {
       this.showInfo = true;
       this.todoItem = todoItem;
       this.index = index;
+      console.log(JSON.parse(localStorage.getItem(todoItem))['done'])
     },
     modifyHead() {
       this.todoItem = "";
