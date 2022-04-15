@@ -16,7 +16,8 @@ import TodoFooter from './components/TodoFooter.vue'
 export default {
   data() {
     return {
-      todoItems: []
+      todoItems: [],
+
     }
   },
   methods: {
@@ -24,9 +25,10 @@ export default {
       localStorage.clear();
       this.todoItems = [];
     },
-		addTodo(todoItem, memo) {
-			localStorage.setItem(todoItem, [todoItem, memo]);
+		addTodo(todoItem, information) {
+			localStorage.setItem(todoItem, information);
 			this.todoItems.push(todoItem);
+      console.log(this.todoItems)
 		},
     removeTodo(todoItem, index) {
       localStorage.removeItem(todoItem);
@@ -53,7 +55,7 @@ export default {
 <style>
   body {
     text-align: center;
-    background-color: #f3fff8;
+    background-color: #ffffff;
   }
   input {
     border-style: groove;
