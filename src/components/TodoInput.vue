@@ -55,8 +55,7 @@ export default {
       showHead:false,
       information: {
         done:false, 
-        oldHead:"",
-        newHead:"",
+        Head:"",
         memo:"",
         category:"학교",
         date:"4월 14일",
@@ -72,19 +71,19 @@ export default {
       this.addtodo=true;
     },
     storeHead(){
-      this.information['oldHead'] = this.Head;
+      this.information.Head = this.Head;
       this.typeHead=false;
       this.showHead=true;
       console.log(this.information)
     },
     storeMemo(){
-      this.information['memo'] = this.Memo;
+      this.information.memo = this.Memo;
       console.log(this.information)
     },
     addTodo() {
       if (this.Head !== "") {
         let information = JSON.stringify(this.information);
-				this.$emit('addTodo', this.Head, information);
+				this.$emit('addTodo', this.Head, information, this.Memo);
         this.clearInput();
       } else {
         this.showModal = !this.showModal;
@@ -95,8 +94,7 @@ export default {
       this.showHead = false,
       this.information =  {
         done:false, 
-        oldHead:"",
-        newHead:"",
+        Head:"",
         memo:"",
         category:"학교",
         date:"4월 14일",
