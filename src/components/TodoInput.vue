@@ -17,14 +17,27 @@
           <input v-if="typeHead" v-model="Head" type = "text" placeholder="Type your goal" style="text-align: left" @keyup.enter="storeHead()">
           <span v-if="showHead"><h3 style="text-align: left"> {{Head}} <hr></h3></span>
           <br>
-          <p style="text-align: left "><b>날짜</b></p> <input type = "date" v-model="date" style="text-align: left" @change="storeDate()">
-          <p style="text-align: left"> <b>카테고리</b> 학교</p>
-          <p style="text-align: left"> <b>중요도</b> 매우 중요</p>
-          <div class = "memobox">
+          <p style="text-align: left"><b>날짜</b></p> <input type = "date" v-model="date" style="text-align: left" @change="storeDate()">
+          <p style="text-align: left"><b>날짜</b></p> <input type = "time" v-model="time" style="text-align: left" @change="storeTime()">
+          <p style="text-align: left"><b>카테고리</b></p>
+          <form> 
+          <select @change="storeCategory($event)">
+              <option value="학교"> 학교 </option>
+              <option value="동아리"> 동아리 </option>
+              <option value="과제"> 과제 </option>
+              <option value="운동"> 운동 </option>
+              <option value="약속"> 약속 </option>
+              <option value="기타"> 기타 </option>
+            </select>
+          </form>
+          <p style="text-align: left"><b>중요도</b></p> 
+          <select @change="storeImportant($event)">
+              <option value="매우 중요"> 매우 중요 </option>
+              <option value="중요"> 중요 </option>
+              <option value="보통"> 보통 </option>
+            </select>          
+            <div class = "memobox">
             <p style="text-align: left"> <b>메모</b> 
-              <span class="modified" type="button">
-                <i class="fas fa-pencil-alt"></i>
-              </span>
                 <br> <input type="text" v-model="Memo" placeholder="Memo..." @keyup.enter="storeMemo()">
             </p>
             <span @click="addTodo()">
@@ -58,15 +71,18 @@ export default {
         done:false, 
         Head:"",
         memo:"",
-        category:"학교",
-        date:"4월 14일",
-        time:"7:00"
+        category:"",
+        important:"",
+        date:"",
+        time:""
       },
       Head:"",
       Memo:"",
       typeHead:true,
       Done: false,
-      date:""
+      date:"",
+      time:"",
+      category:""
     }
   },
   methods: {
@@ -83,6 +99,21 @@ export default {
     },
     storeDate(){
       this.information.date = `${this.date.slice(0,4)}년 ${this.date.slice(5,7)}월 ${this.date.slice(8,10)}일`
+    },
+    storeTime(){
+      this.information.time = `${this.date.slice(0,4)}년 ${this.date.slice(5,7)}월 ${this.date.slice(8,10)}일`
+      if (Number(this.time.slice(0,2))>12){
+        this.information.time = `오후 ${Number(this.time.slice(0,2))-12}시 ${this.time.slice(3,5)}분`
+      }
+      else{
+        this.information.time = `오전 ${this.time.slice(0,2)}시 ${this.time.slice(3,5)}분`
+      }
+    },
+    storeCategory(event){
+      this.information.category = `${event.target.value}`
+    },
+    storeImportant(event){
+      this.information.important = `${event.target.value}`
     },
     addTodo() {
       if (this.Head !== "") {
@@ -102,8 +133,8 @@ export default {
         Head:"",
         memo:"",
         category:"학교",
-        date:"4월 14일",
-        time:"7:00"
+        date:"",
+        time:""
       },
       this.Head = "",
       this.Memo = "",
