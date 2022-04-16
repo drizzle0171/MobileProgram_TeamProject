@@ -2,7 +2,7 @@
   <div id="app">
     <TodoHeader></TodoHeader>
     <TodoInput v-on:addTodo="addTodo"></TodoInput>
-    <TodoList v-bind:propsdata="todoItems" @removeTodo="removeTodo" @changeHead = "changeHead"></TodoList>
+    <TodoList v-bind:propsdata="todoItems" @removeTodo="removeTodo" @changeHead = "changeHead" @changeMemo = "changeMemo"></TodoList>
     <TodoFooter v-on:removeAll="clearAll"></TodoFooter>
   </div>
 </template>
@@ -34,6 +34,9 @@ export default {
     changeHead(newHead, index) {
       this.todoItems[index][0] = newHead;
     },
+    changeMemo(newMemo, index) {
+      this.todoItems[index][1] = newMemo;
+    },
     removeTodo(todoItem, index) {
       localStorage.removeItem(todoItem);
       this.todoItems.splice(index, 1);
@@ -43,7 +46,6 @@ export default {
   created() {
 		if (localStorage.length > 0) {
 			for (var i = 0; i < localStorage.length; i++) {
-        console.log(JSON.parse(localStorage.getItem(localStorage.key(i))).memo)
 				this.todoItems.push([localStorage.key(i), JSON.parse(localStorage.getItem(localStorage.key(i))).memo]);
 			}
 		}

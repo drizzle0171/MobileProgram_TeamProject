@@ -36,9 +36,9 @@
               <span class="modified" type="button">
                 <i class="fas fa-pencil-alt"></i>
               </span>
-                <br> <input type="text" v-model="memo" placeholder="Memo..." @keyup.enter="modify()">
-                <span v-if="oldMemo" @click="modifyMemo" ><h3 style="text-align: left"> {{memo}} <hr> </h3></span>
-                <span v-if="NewMemo"> <p style="text-align: left">{{propsdata[index]}}</p></span>
+                <br> <input type="text" v-model="memo" placeholder="Memo..." @keyup.enter="modifyMemo(memo, index)">
+                <!-- <span v-if="oldMemo" @click="modifyMemo" ><p style="text-align: left"> {{memo}}</p></span>
+                <span v-if="NewMemo" @click="modifyMemo"> <p style="text-align: left">{{memo}}</p></span> -->
               </p>
           </div>
         </div>
@@ -105,13 +105,15 @@ export default {
       this.showNewHead=true;
       console.log(this.todoItem)
     },
-    modify() {
-      let information = JSON.parse(localStorage.getItem(this.temp));
-      information.memo = this.memo;
+    modifyMemo(memo) {
+      let information = JSON.parse(localStorage.getItem(this.todoItem));
+      information.memo = memo;
+      this.$emit("changeMemo", this.memo, this.index)
       localStorage.setItem(this.todoItem, JSON.stringify(information));
       localStorage.removeItem(this.temp);
     },
   },
+
 };
 </script>
 
