@@ -3,8 +3,8 @@
     <div>
       <transition-group name="list" tag="ul">
         <li v-for="(todoItem, index) in propsdata" :key = todoItem class="shadow" >
-          <!-- <i v-if="notdoneList[index]" class="checkBtn fas fa-check" @click="checkDone(index)"></i>
-          <i v-if="doneList[index]" class="checkBtn_done fas fa-check"></i> -->
+          <i v-if="todoItem[2]=true" class="checkBtn fas fa-check" @click="checkDone(index)"></i>
+          <i v-if="todoItem[2]=true" class="checkBtn_done fas fa-check"></i>
             <div class="todo-item-text">
               <span> {{ todoItem[0] }} </span> <p class="todo-memo"> {{ todoItem[1] }} </p>
             </div>
@@ -36,9 +36,7 @@
               <span class="modified" type="button">
                 <i class="fas fa-pencil-alt"></i>
               </span>
-                <br> <input type="text" v-model="memo" placeholder="Memo..." @keyup.enter="modifyMemo(memo, index)">
-                <!-- <span v-if="oldMemo" @click="modifyMemo" ><p style="text-align: left"> {{memo}}</p></span>
-                <span v-if="NewMemo" @click="modifyMemo"> <p style="text-align: left">{{memo}}</p></span> -->
+                <br> <input type="text" v-model="memo" placeholder="Memo..." @keyup.enter="modifyMemo(memo)">
               </p>
           </div>
         </div>
@@ -78,7 +76,7 @@ export default {
     //   console.log(JSON.parse(localStorage.getItem(this.todoItem)))
     //   },
     removeTodo(todoItem, index) {
-      this.$emit("removeTodo", todoItem, index);
+      this.$emit("removeTodo", todoItem[0], index);
       this.showInfo = false;
     },
     moreInfo(todoItem, index) {
@@ -86,7 +84,7 @@ export default {
       this.todoItem = todoItem[0];      
       this.index = index;
       this.memo = todoItem[1];
-      console.log(this.todoItem)
+      console.log(todoItem)
     },
     modifyHead() {
       this.temp = this.todoItem;

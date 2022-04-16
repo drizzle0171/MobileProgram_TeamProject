@@ -24,12 +24,13 @@ export default {
       localStorage.clear();
       this.todoItems = [];
     },
-		addTodo(todoItem, information, memo) {
+		addTodo(todoItem, information, memo, done) {
+      console.log(done)
 			localStorage.setItem(todoItem, information);
-      let todoItemMemo = [todoItem, memo]
-			this.todoItems.push(todoItemMemo);
-      // this.todoItems.push(todoItem);
-      console.log(this.todoItems);
+      let todo = [todoItem, memo, String(done)]
+      console.log(todo)
+			this.todoItems.push(todo);
+      console.log(this.todoItems)
 		},
     changeHead(newHead, index) {
       this.todoItems[index][0] = newHead;
@@ -39,14 +40,12 @@ export default {
     },
     removeTodo(todoItem, index) {
       localStorage.removeItem(todoItem);
-      this.todoItems.splice(index, 1);
-      this.todoItems.splice(index, 1)
-    }
+      this.todoItems.splice(index, 1);    }
   },
   created() {
 		if (localStorage.length > 0) {
 			for (var i = 0; i < localStorage.length; i++) {
-				this.todoItems.push([localStorage.key(i), JSON.parse(localStorage.getItem(localStorage.key(i))).memo]);
+				this.todoItems.push([localStorage.key(i), JSON.parse(localStorage.getItem(localStorage.key(i))).memo, JSON.parse(localStorage.getItem(localStorage.key(i))).done]);
 			}
 		}
   },
