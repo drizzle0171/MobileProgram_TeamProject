@@ -2,7 +2,7 @@
   <div id="app">
     <TodoHeader></TodoHeader>
     <TodoInput v-on:addTodo="addTodo"></TodoInput>
-    <TodoList v-bind:propsdata="todoItems" @removeTodo="removeTodo" @changeHead = "changeHead" @changeMemo = "changeMemo"></TodoList>
+    <TodoList v-bind:propsdata="todoItems" @removeTodo="removeTodo" @changeHead = "changeHead" @changeMemo = "changeMemo" @check = "check" @checkagain = "checkagain"></TodoList>
     <TodoFooter v-on:removeAll="clearAll"></TodoFooter>
   </div>
 </template>
@@ -16,7 +16,8 @@ import TodoFooter from './components/TodoFooter.vue'
 export default {
   data() {
     return {
-      todoItems: []
+      todoItems: [],
+      notdone: true
     }
   },
   methods: {
@@ -25,18 +26,21 @@ export default {
       this.todoItems = [];
     },
 		addTodo(todoItem, information, memo, done) {
-      console.log(done)
 			localStorage.setItem(todoItem, information);
-      let todo = [todoItem, memo, String(done)]
-      console.log(todo)
+      let todo = [todoItem, memo, done, this.notdone]
 			this.todoItems.push(todo);
-      console.log(this.todoItems)
 		},
     changeHead(newHead, index) {
       this.todoItems[index][0] = newHead;
     },
     changeMemo(newMemo, index) {
       this.todoItems[index][1] = newMemo;
+    },
+    check(done, index) {
+      this.todoItems[index][2] = done;
+    },
+    checkagain(done, index) {
+      this.todoItems[index][2] = done;
     },
     removeTodo(todoItem, index) {
       localStorage.removeItem(todoItem);
@@ -46,7 +50,7 @@ export default {
   created() {
 		if (localStorage.length > 0) {
 			for (var i = 0; i < localStorage.length; i++) {
-				this.todoItems.push([localStorage.key(i), JSON.parse(localStorage.getItem(localStorage.key(i))).memo, JSON.parse(localStorage.getItem(localStorage.key(i))).done]);
+				this.todoItems.push([localStorage.key(i), JSON.parse(localStorage.getItem(localStorage.key(i))).memo, JSON.parse(localStorage.getItem(localStorage.key(i))).done, !JSON.parse(localStorage.getItem(localStorage.key(i))).done]);
 			}
 		}
   },

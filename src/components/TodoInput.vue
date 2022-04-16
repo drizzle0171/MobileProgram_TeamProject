@@ -16,7 +16,8 @@
           </span>
           <input v-if="typeHead" v-model="Head" type = "text" placeholder="Type your goal" style="text-align: left" @keyup.enter="storeHead()">
           <span v-if="showHead"><h3 style="text-align: left"> {{Head}} <hr></h3></span>
-          <p style="text-align: left"> <b>D-day</b> 4월 5일</p>
+          <br>
+          <p style="text-align: left "><b>날짜</b></p> <input type = "date" v-model="date" style="text-align: left" @change="storeDate()">
           <p style="text-align: left"> <b>카테고리</b> 학교</p>
           <p style="text-align: left"> <b>중요도</b> 매우 중요</p>
           <div class = "memobox">
@@ -65,6 +66,7 @@ export default {
       Memo:"",
       typeHead:true,
       Done: false,
+      date:""
     }
   },
   methods: {
@@ -75,11 +77,12 @@ export default {
       this.information.Head = this.Head;
       this.typeHead=false;
       this.showHead=true;
-      console.log(this.information)
     },
     storeMemo(){
       this.information.memo = this.Memo;
-      console.log(this.information)
+    },
+    storeDate(){
+      this.information.date = `${this.date.slice(0,4)}년 ${this.date.slice(5,7)}월 ${this.date.slice(8,10)}일`
     },
     addTodo() {
       if (this.Head !== "") {
