@@ -40,7 +40,8 @@ export default {
     },
     removeTodo(todoItem, index) {
       localStorage.removeItem(todoItem);
-      this.todoItems.splice(index, 1);    }
+      this.todoItems.splice(index, 1);
+    }
   },
   created() {
 		if (localStorage.length > 0) {
