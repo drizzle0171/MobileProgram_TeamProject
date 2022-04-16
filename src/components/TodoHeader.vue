@@ -1,7 +1,7 @@
 <template>
   <header>
     <h1>TodoForDays</h1>
-    <!-- <img src="../assets/calender.png" width="370px"> -->
+    <img src="../assets/calender.png" width="300px">
   </header>
 </template>
 

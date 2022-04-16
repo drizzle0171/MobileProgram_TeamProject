@@ -3,8 +3,8 @@
     <div>
       <transition-group name="list" tag="ul">
         <li v-for="(todoItem, index) in propsdata" :key = todoItem class="shadow" >
-          <i v-if="todoItem[2]=true" class="checkBtn fas fa-check" @click="checkDone(index)"></i>
-          <i v-if="todoItem[2]=true" class="checkBtn_done fas fa-check"></i>
+          <i v-if="notdoneList[index]" class="checkBtn fas fa-check" aria-hidden="true" @click="check(todoItem, index)"></i>
+          <i v-if="doneList[index]" class="checkBtn_done fas fa-check" aria-hidden="true"></i>
             <div class="todo-item-text">
               <span> {{ todoItem[0] }} </span> <p class="todo-memo"> {{ todoItem[1] }} </p>
             </div>
@@ -28,7 +28,7 @@
           <input v-if="showModiHead" v-model="newHead" type = "text" placeholder="Type your goal" style="text-align: left" @keyup.enter="toLocalStorage_Head()">
           <span v-if="oldHead" @click="modifyHead" ><h3 style="text-align: left"> {{ todoItem }} <hr> </h3></span>
           <span v-if="showNewHead" @click="modifyHead"><h3 style="text-align: left">{{todoItem}}<hr></h3></span>
-          <p style="text-align: left"> <b>D-day</b> 4월 5일</p>
+          <p style="text-align: left "><b>날짜</b> {{date}}</p>
           <p style="text-align: left"> <b>카테고리</b> 학교</p>
           <p style="text-align: left"> <b>중요도</b> 매우 중요</p>
           <div class = "memobox">
@@ -48,6 +48,13 @@
 <script>
 
 export default {
+  mounted(){
+    if (localStorage.length==0){
+      this.refreshAll()
+    }
+    this.doneList.push(false);
+    this.notdoneList.push(true);
+  },
   props: ['propsdata'],
   data() {
     return {
@@ -62,31 +69,59 @@ export default {
       oldHead: true,
       temp:"",
       newMemo:"",
-      oldMemo:""
+      oldMemo:"",
+      doneList: [false],
+      notdoneList: [true],
+      date:""
     };
   },
+
   methods: {
-    // check(todoItem, index){
-    //   this.todoItem = todoItem;
+    refreshAll(){
+      this.$router.go();
+    },
+    check(todoItem, index){
+      this.todoItem = todoItem[0];      
+      this.index = index;
+      this.done = todoItem[2]
+      let information = JSON.parse(localStorage.getItem(this.todoItem));
+      information.done = true;
+      localStorage.setItem(this.todoItem, JSON.stringify(information));
+      this.notdoneList[index] = false;
+      this.doneList[index] = true;
+      this.doneList.push(false);
+      this.notdoneList.push(true);
+      console.log(this.doneList)
+      console.log(this.notdoneList)
+      },
+    // checkagain(todoItem, index){
+    //   console.log(todoItem)
+    //   this.todoItem = todoItem[0];      
     //   this.index = index;
     //   let information = JSON.parse(localStorage.getItem(this.todoItem));
-    //   information.done = true;
-      
+    //   information.done = false;
     //   localStorage.setItem(this.todoItem, JSON.stringify(information));
-    //   console.log(JSON.parse(localStorage.getItem(this.todoItem)))
+    //   this.$emit("checkagain", todoItem[2], index);
+    //   this.notdoneList[index] = true;
+    //   this.doneList[index] = false;
     //   },
     removeTodo(todoItem, index) {
+      this.doneList.pop(index);
+      this.notdoneList.pop(index);
       this.$emit("removeTodo", todoItem[0], index);
-      this.showInfo = false;
+      console.log(this.notdoneList);
+      console.log(this.doneList);
     },
     moreInfo(todoItem, index) {
       this.showInfo = true;
       this.todoItem = todoItem[0];      
       this.index = index;
       this.memo = todoItem[1];
-      console.log(todoItem)
+      let information = JSON.parse(localStorage.getItem(this.todoItem));
+      this.date = information.date;
     },
     modifyHead() {
+      console.log(this.todoItem)
       this.temp = this.todoItem;
       this.todoItem = "";
       this.showModiHead=true;
@@ -101,18 +136,30 @@ export default {
       this.showModiHead=false;
       this.oldHead=false;
       this.showNewHead=true;
-      console.log(this.todoItem)
     },
     modifyMemo(memo) {
       let information = JSON.parse(localStorage.getItem(this.todoItem));
       information.memo = memo;
       this.$emit("changeMemo", this.memo, this.index)
-      localStorage.setItem(this.todoItem, JSON.stringify(information));
-      localStorage.removeItem(this.temp);
-    },
+      localStorage.setItem(this.todoItem, JSON.stringify(information));    },
   },
-
+  created() {
+		if (localStorage.length > 0) {
+			for (var i = 0; i < localStorage.length; i++) {
+        this.doneList[i]= (JSON.parse(localStorage.getItem(localStorage.key(i))).done);
+        this.notdoneList[i]= (!JSON.parse(localStorage.getItem(localStorage.key(i))).done);
+      }
+      this.doneList.push(false);
+      this.notdoneList.push(true);
+		}
+    if (localStorage.length==0){
+      this.refreshAll()
+    }
+    console.log(this.doneList)
+    console.log(this.notdoneList)
+  },
 };
+
 </script>
 
 <style scoped>
