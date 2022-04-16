@@ -63,7 +63,8 @@ export default {
       },
       Head:"",
       Memo:"",
-      typeHead:true
+      typeHead:true,
+      Done: false,
     }
   },
   methods: {
@@ -83,7 +84,8 @@ export default {
     addTodo() {
       if (this.Head !== "") {
         let information = JSON.stringify(this.information);
-				this.$emit('addTodo', this.Head, information, this.Memo);
+        console.log(this.Done)
+				this.$emit('addTodo', this.Head, information, this.Memo, this.Done);
         this.clearInput();
       } else {
         this.showModal = !this.showModal;
