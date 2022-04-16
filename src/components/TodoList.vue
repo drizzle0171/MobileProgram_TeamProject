@@ -2,11 +2,11 @@
   <div>
     <div>
       <transition-group name="list" tag="ul">
-        <li v-for="(todoItem, index) in propsdata" :key="todoItem" class="shadow" >
-          <i v-if="done=false" class="checkBtn fas fa-check" @click="checkDone(index)"></i>
-          <i v-if="done=true" class="checkBtn_done fas fa-check"></i>
+        <li v-for="(todoItem, index) in propsdata" :key = todoItem class="shadow" >
+          <!-- <i v-if="notdoneList[index]" class="checkBtn fas fa-check" @click="checkDone(index)"></i>
+          <i v-if="doneList[index]" class="checkBtn_done fas fa-check"></i> -->
             <div class="todo-item-text">
-              <span>{{ todoItem }} </span> <p class="todo-memo"> {{memoList[todoItem]}} </p>
+              <span> {{ todoItem[0] }} </span> <p class="todo-memo"> {{ todoItem[1] }} </p>
             </div>
             <span class="moreinfoBtn" type="button" @click="moreInfo(todoItem, index)">
               <i class="fas fa-plus" aria-hidden="true"></i>
@@ -27,7 +27,7 @@
           </span>
           <input v-if="showModiHead" v-model="newHead" type = "text" placeholder="Type your goal" style="text-align: left" @keyup.enter="toLocalStorage_Head()">
           <span v-if="oldHead" @click="modifyHead" ><h3 style="text-align: left"> {{ todoItem }} <hr> </h3></span>
-          <span v-if="showNewHead"><h3 style="text-align: left">{{newHeadList[index]}}<hr></h3></span>
+          <span v-if="showNewHead" @click="modifyHead"><h3 style="text-align: left">{{todoItem}}<hr></h3></span>
           <p style="text-align: left"> <b>D-day</b> 4월 5일</p>
           <p style="text-align: left"> <b>카테고리</b> 학교</p>
           <p style="text-align: left"> <b>중요도</b> 매우 중요</p>
@@ -36,7 +36,9 @@
               <span class="modified" type="button">
                 <i class="fas fa-pencil-alt"></i>
               </span>
-                <br> <input type="text" v-model="memoList[todoItem]" placeholder="Memo...">
+                <br> <input type="text" v-model="memo" placeholder="Memo..." @keyup.enter="modify()">
+                <span v-if="oldMemo" @click="modifyMemo" ><h3 style="text-align: left"> {{memo}} <hr> </h3></span>
+                <span v-if="NewMemo"> <p style="text-align: left">{{propsdata[index]}}</p></span>
               </p>
           </div>
         </div>
@@ -46,55 +48,68 @@
 </template>
 
 <script>
+
 export default {
-  name: 'todoItem',
+  props: ['propsdata'],
   data() {
     return {
       showInfo: false,
       showModiHead: false,
       todoItem: "",
-      memo: "",
-      memoList: [],
+      index:"",
+      memo:"",
       newHead:"",
       newHeadList: [],
       showNewHead: false,
       oldHead: true,
-      done: JSON.parse(localStorage.getItem(this.todoItem))['done']
+      temp:"",
+      newMemo:"",
+      oldMemo:""
     };
   },
-  props: ["propsdata"],
   methods: {
-    checkDone(index){
-      this.notdoneList[index] = false;
-      this.doneList[index] = true;
-      this.doneList.push(false);
-      this.notdoneList.push(true);
-    },
+    // check(todoItem, index){
+    //   this.todoItem = todoItem;
+    //   this.index = index;
+    //   let information = JSON.parse(localStorage.getItem(this.todoItem));
+    //   information.done = true;
+      
+    //   localStorage.setItem(this.todoItem, JSON.stringify(information));
+    //   console.log(JSON.parse(localStorage.getItem(this.todoItem)))
+    //   },
     removeTodo(todoItem, index) {
       this.$emit("removeTodo", todoItem, index);
       this.showInfo = false;
     },
     moreInfo(todoItem, index) {
       this.showInfo = true;
-      this.todoItem = todoItem;
+      this.todoItem = todoItem[0];      
       this.index = index;
-      console.log(JSON.parse(localStorage.getItem(todoItem))['done'])
+      this.memo = todoItem[1];
+      console.log(this.todoItem)
     },
     modifyHead() {
+      this.temp = this.todoItem;
       this.todoItem = "";
       this.showModiHead=true;
     },
     toLocalStorage_Head(){
-      this.newHeadList[this.index] = this.newHead;
+      let information = JSON.parse(localStorage.getItem(this.temp));
+      information.Head = this.newHead;
+      this.todoItem = this.newHead;
+      localStorage.setItem(this.todoItem, JSON.stringify(information));
+      localStorage.removeItem(this.temp);
+      this.$emit("changeHead", this.newHead, this.index);
       this.showModiHead=false;
       this.oldHead=false;
       this.showNewHead=true;
+      console.log(this.todoItem)
     },
     modify() {
-      console.log(this.memo);
-      localStorage.setItem(this.todoItem, this.memoList[this.todoItem]);
-      this.memo=localStorage.getItem(this.todoItem);
-      console.log(this.memoList);
+      let information = JSON.parse(localStorage.getItem(this.temp));
+      information.memo = this.memo;
+      localStorage.setItem(this.todoItem, JSON.stringify(information));
+      localStorage.removeItem(this.temp);
     },
   },
 };
