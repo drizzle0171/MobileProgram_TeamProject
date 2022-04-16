@@ -29,8 +29,10 @@
           <span v-if="oldHead" @click="modifyHead" ><h3 style="text-align: left"> {{ todoItem }} <hr> </h3></span>
           <span v-if="showNewHead" @click="modifyHead"><h3 style="text-align: left">{{todoItem}}<hr></h3></span>
           <p style="text-align: left "><b>날짜</b> {{date}}</p>
-          <p style="text-align: left"> <b>카테고리</b> 학교</p>
-          <p style="text-align: left"> <b>중요도</b> 매우 중요</p>
+          <p style="text-align: left "><b>D-day</b> D-{{result}}</p>
+          <p style="text-align: left "><b>시간</b> {{time}}</p>
+          <p style="text-align: left"> <b>카테고리</b> {{category}} </p>
+          <p style="text-align: left"> <b>중요도</b> {{important}} </p>
           <div class = "memobox">
             <p style="text-align: left"> <b>메모</b> 
               <span class="modified" type="button">
@@ -72,7 +74,11 @@ export default {
       oldMemo:"",
       doneList: [false],
       notdoneList: [true],
-      date:""
+      date:"",
+      time:"",
+      category:"",
+      important:"",
+      result:"",
     };
   },
 
@@ -112,6 +118,13 @@ export default {
       console.log(this.notdoneList);
       console.log(this.doneList);
     },
+    calculateDday(){
+      let day = new Date();
+      let today = new Date(day.getFullYear(), day.getMonth()+1, day.getDate())
+      let dday = new Date(Number(this.date.slice(0,4)), Number(this.date.slice(5,8)), Number(this.date.slice(10,12)))
+      let gap = dday.getTime() - today.getTime();
+      this.result = Math.ceil(gap/(1000*60*60*24))
+    },
     moreInfo(todoItem, index) {
       this.showInfo = true;
       this.todoItem = todoItem[0];      
@@ -119,6 +132,10 @@ export default {
       this.memo = todoItem[1];
       let information = JSON.parse(localStorage.getItem(this.todoItem));
       this.date = information.date;
+      this.time = information.time;
+      this.category = information.category;
+      this.important = information.important;
+      this.calculateDday()
     },
     modifyHead() {
       console.log(this.todoItem)
