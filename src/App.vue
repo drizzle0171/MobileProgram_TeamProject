@@ -66,7 +66,7 @@ export default {
 <style>
   body {
     text-align: center;
-    background-color: #ffffff;
+    background-color: #f2f2f2;
   }
   input {
     border-style: groove;

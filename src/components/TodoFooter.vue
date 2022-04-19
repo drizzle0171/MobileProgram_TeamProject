@@ -17,18 +17,16 @@ export default {
 
 <style scoped>
   .clearAllContainer {
-    width: 400px;
+    width: 100%;
     height: 50px;
     line-height: 50px;
-    background-color: white;
-    border-radius: 5px;
-    /* margin: 0 auto; */
+    background-color: #7ca3bb;
     position: fixed;
-    right: 1px;
     bottom: 0;
   }
   .clearAllBtn {
-    color: #54cb91;
+    font-size: 20px;
+    color: white;
     display: block;
   }
 </style>
