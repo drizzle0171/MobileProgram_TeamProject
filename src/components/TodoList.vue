@@ -9,8 +9,8 @@
               <span> {{ todoItem[0] }} </span> <p class="todo-memo"> {{ todoItem[1] }} </p>
             </div>
             <span class="moreinfoBtn" type="button" @click="moreInfo(todoItem, index)">
-              <i class="fas fa-plus" aria-hidden="true"></i>
-            </span>
+              <i class="fas fa-bars" aria-hidden="true"></i>
+              </span>
             <span class="removeBtn" @click="removeTodo(todoItem, index)">
               <i class="fas fa-trash-alt" aria-hidden="true"></i>
             </span>
@@ -25,20 +25,22 @@
           <span class="close" type="button" @click="showInfo = false">
             <i class="fas fa-times" aria-hidden="true"></i>
           </span>
-          <input v-if="showModiHead" v-model="newHead" type = "text" placeholder="Type your goal" style="text-align: left" @keyup.enter="toLocalStorage_Head()">
-          <span v-if="oldHead" @click="modifyHead" ><h3 style="text-align: left"> {{ todoItem }} <hr> </h3></span>
-          <span v-if="showNewHead" @click="modifyHead"><h3 style="text-align: left">{{todoItem}}<hr></h3></span>
-          <p style="text-align: left "><b>날짜</b> {{date}}</p>
-          <p style="text-align: left "><b>D-day</b> D-{{result}}</p>
-          <p style="text-align: left "><b>시간</b> {{time}}</p>
-          <p style="text-align: left"> <b>카테고리</b> {{category}} </p>
-          <p style="text-align: left"> <b>중요도</b> {{important}} </p>
+          <input class="ModiHead" v-if="showModiHead" v-model="newHead" type = "text" placeholder="Type your goal" style="text-align: left" @keyup.enter="toLocalStorage_Head()">
+          <span v-if="oldHead" @click="modifyHead" ><h3 style="text-align: left"> {{ todoItem }} <hr style="border: 1px solid #7ca3bb;"></h3></span>
+          <span v-if="showNewHead" @click="modifyHead"><h3 style="padding:5px; text-align: left">{{todoItem}} <hr style="border: 1px solid #7ca3bb;"></h3></span>
+          <p style="text-align: left "><b>날짜</b> <span class="subValue"> {{date}} </span></p>
+          <p style="text-align: left "><b>D-day</b> <span class="subValue"> D-{{result}} </span> </p>
+          <p style="text-align: left "><b>시간</b> <span class="subValue">{{time}}</span></p>
+          <p style="text-align: left"> <b>카테고리</b> <span class="category">{{category}}</span> </p>
+          <p style="text-align: left"> <b>중요도</b> <span class="subValue"> {{important}} </span></p>
           <div class = "memobox">
             <p style="text-align: left"> <b>메모</b> 
-              <span class="modified" type="button">
-                <i class="fas fa-pencil-alt"></i>
+              <span class="modified" type="button" @click="modifyMemo(newMemo)">
+                <i class="fas fa-pencil-alt" style="color: #7ca3bb"></i>
               </span>
-                <br> <input type="text" v-model="memo" placeholder="Memo..." @keyup.enter="modifyMemo(memo)">
+                <br> <input class="ModiMemo" type="text" v-if="showModiMemo" v-model="newMemo" placeholder="Memo..." @keyup.enter="toLocalStorage_Memo(newMemo)">
+                <span v-if="oldMemo" @click="modifyMemo()" ><p style="text-align: left"> {{ memo }}</p></span>
+                <span v-if="showNewMemo" @click="modifyMemo()"><p style="margin:0; text-align: left">{{ newMemo }}</p></span>
               </p>
           </div>
         </div>
@@ -60,18 +62,22 @@ export default {
   props: ['propsdata'],
   data() {
     return {
+      today_year:'',
+      today_month:'',
+      today_day:'',
       showInfo: false,
       showModiHead: false,
+      showModiMemo: false,
       todoItem: "",
       index:"",
       memo:"",
       newHead:"",
-      newHeadList: [],
-      showNewHead: false,
-      oldHead: true,
-      temp:"",
       newMemo:"",
-      oldMemo:"",
+      showNewHead: false,
+      showNewMemo: false,
+      oldHead: true,
+      oldMemo: true,
+      temp:"",
       doneList: [false],
       notdoneList: [true],
       date:"",
@@ -79,6 +85,7 @@ export default {
       category:"",
       important:"",
       result:"",
+      option:'all'
     };
   },
 
@@ -100,17 +107,6 @@ export default {
       console.log(this.doneList)
       console.log(this.notdoneList)
       },
-    // checkagain(todoItem, index){
-    //   console.log(todoItem)
-    //   this.todoItem = todoItem[0];      
-    //   this.index = index;
-    //   let information = JSON.parse(localStorage.getItem(this.todoItem));
-    //   information.done = false;
-    //   localStorage.setItem(this.todoItem, JSON.stringify(information));
-    //   this.$emit("checkagain", todoItem[2], index);
-    //   this.notdoneList[index] = true;
-    //   this.doneList[index] = false;
-    //   },
     removeTodo(todoItem, index) {
       this.doneList.pop(index);
       this.notdoneList.pop(index);
@@ -154,13 +150,30 @@ export default {
       this.oldHead=false;
       this.showNewHead=true;
     },
-    modifyMemo(memo) {
+    modifyMemo() {
+      console.log(this.todoItem)
+      this.showModiMemo=true;
+      this.memo="";
+      this.oldMemo=false;
+      this.showNewMemo=false;
+    },
+    toLocalStorage_Memo(newMemo) {
       let information = JSON.parse(localStorage.getItem(this.todoItem));
-      information.memo = memo;
-      this.$emit("changeMemo", this.memo, this.index)
-      localStorage.setItem(this.todoItem, JSON.stringify(information));    },
+      information.memo = newMemo;
+      this.memo= newMemo;
+      this.$emit("changeMemo", this.newMemo, this.index)
+      localStorage.setItem(this.todoItem, JSON.stringify(information));   
+      this.showModiMemo=false;
+      this.oldMemo=false;
+      this.showNewMemo=true;
+    },
   },
+
   created() {
+    let day = new Date()
+    this.today_year = day.getFullYear();
+    this.today_month = day.getMonth();
+    this.today_day = day.getDate();
 		if (localStorage.length > 0) {
 			for (var i = 0; i < localStorage.length; i++) {
         this.doneList[i]= (JSON.parse(localStorage.getItem(localStorage.key(i))).done);
@@ -180,6 +193,20 @@ export default {
 </script>
 
 <style scoped>
+.ModiHead{
+  border: 0px;
+  float: left;
+}
+.ModiMemo{
+  width: 96%;
+  border: 0px;
+  float: left;
+  border: 1px solid #7ca3bb;
+  border-radius: 3px;
+  margin: 5px 0;
+  padding: 5px;
+}
+
 body {
   margin: 0;
 }
@@ -189,7 +216,7 @@ div {
 .info-container {
   width: 300px;
   margin: 0px auto;
-  padding: 20px 30px;
+  padding: 20px 30px 50px 30px;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
@@ -225,6 +252,7 @@ ul {
   padding: 0px;
   margin: 0;
   text-align: left;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 li {
@@ -256,18 +284,19 @@ li {
 
 .checkBtn_done {
   line-height: 45px;
-  color: #209e76;
+  color: #7ca3bb;
   margin-right: 5px;
 }
 .removeBtn {
   margin-left: 10px;
-  color: #209e76;
-  font-size: 13px;
+  color: #7ca3bb;
+  font-size: 14px;
 }
 .moreinfoBtn {
   display: table-cell;
   margin-left: auto;
-  color: #209e76;
+  color: #7ca3bb;
+  font-size: 14px;
   vertical-align: middle;
 }
 .list-enter-active,
@@ -287,6 +316,20 @@ li {
 .modified {
   margin-left: auto;
   color: #000000;
+  float: right;
+}
+
+.category{
+  border: 1px solid #7ca3bb;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  color: #7ca3bb;
+  font-size: 15px;
+  float: right;
+  text-align: center;
+  vertical-align: middle;
+}
+.subValue{
   float: right;
 }
 

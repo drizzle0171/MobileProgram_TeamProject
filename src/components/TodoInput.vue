@@ -1,27 +1,30 @@
 <template>
   <div class="inputBox shadow">
-    <!-- <input type="text" v-model="newTodoItem" placeholder="Type what you have to do" v-on:keyup.enter="addTodo"> -->
-    <!-- <span class="addContainer" @click="addtodo">
-      <i class="addBtn fas fa-plus" aria-hidden="true"></i>
-    </span> -->
-    <span type="button" @click="add()">
+  <div class="Today">
+      <span class="Today-text">
+      {{today_year}}년 {{today_month+1}}월 {{today_day}}일
+      </span>
+    <span class="add" type="button" @click="add()">
       <i class="addBtn fas fa-plus"></i>
     </span>
-
+    </div>
     <div class="info-mask" v-if="addtodo==true">
       <div class="info-wrapper">
         <div class="info-container">
           <span class="close" type="button" @click="addtodo = false">
             <i class="fas fa-times" aria-hidden="true"></i>
           </span>
-          <input v-if="typeHead" v-model="Head" type = "text" placeholder="Type your goal" style="text-align: left" @keyup.enter="storeHead()">
-          <span v-if="showHead"><h3 style="text-align: left"> {{Head}} <hr></h3></span>
-          <br>
-          <p style="text-align: left"><b>날짜</b></p> <input type = "date" v-model="date" style="text-align: left" @change="storeDate()">
-          <p style="text-align: left"><b>날짜</b></p> <input type = "time" v-model="time" style="text-align: left" @change="storeTime()">
-          <p style="text-align: left"><b>카테고리</b></p>
-          <form> 
-          <select @change="storeCategory($event)">
+          <input class="Head" v-if="typeHead" v-model="Head" type = "text" placeholder="Type your goal" style="text-align: left" @keyup.enter="storeHead()">
+          <span v-if="showHead"><h3 style="text-align: left"> {{Head}} <hr style="border: 1px solid #7ca3bb;"></h3></span>
+          <div>
+          <input type = "date" v-model="date" style="text-align: left" @change="storeDate()">
+          <p class="subTitle" style="text-align: left"><b>날짜</b></p>           
+          <input class = "selectTime" type = "time" v-model="time" style="text-align: left" @change="storeTime()">
+          <p class="subTitle" style="text-align: left"><b>시간</b></p>          
+          </div>
+          <form>
+          <p class="subTitle" style="text-align: left"><b>카테고리</b>
+          <select class="category" @change="storeCategory($event)">
               <option value="학교"> 학교 </option>
               <option value="동아리"> 동아리 </option>
               <option value="과제"> 과제 </option>
@@ -29,19 +32,23 @@
               <option value="약속"> 약속 </option>
               <option value="기타"> 기타 </option>
             </select>
+          </p>
           </form>
-          <p style="text-align: left"><b>중요도</b></p> 
-          <select @change="storeImportant($event)">
+          <form>
+          <p class="subTitle" style="text-align: left"><b>중요도</b>
+          <select class="important" @change="storeImportant($event)">
               <option value="매우 중요"> 매우 중요 </option>
               <option value="중요"> 중요 </option>
               <option value="보통"> 보통 </option>
-            </select>          
+            </select>
+          </p>
+          </form>          
             <div class = "memobox">
-            <p style="text-align: left"> <b>메모</b> 
-                <br> <input type="text" v-model="Memo" placeholder="Memo..." @keyup.enter="storeMemo()">
+            <p class="subTitle" style="text-align: left"> <b>메모</b> 
+                <br> <input class="Memo" type="text" v-model="Memo" placeholder="Memo..." @keyup.enter="storeMemo()">
             </p>
-            <span @click="addTodo()">
-              <p>저장하기</p>
+            <span class="addbtn" type="button" @click="addTodo()">
+              저장하기
             </span>
           </div>
         </div>
@@ -63,6 +70,9 @@ import Modal from './common/AlertModal.vue'
 export default {
   data() {
     return {
+      today_year:'',
+      today_month:'',
+      today_day:'',
       newTodoItem: '',
       showModal: false,
       addtodo: false,
@@ -141,6 +151,12 @@ export default {
       this.typeHead = true
     }
   },
+  created(){
+    let day = new Date()
+    this.today_year = day.getFullYear();
+    this.today_month = day.getMonth();
+    this.today_day = day.getDate();
+  },
   components: {
     Modal: Modal
   }
@@ -148,34 +164,56 @@ export default {
 </script>
 
 <style scoped>
-/* input:focus {
-  outline: none;
-}
-.inputBox {
-  background: white;
+input[type="date"] { 
+ background: white; 
+ color: #7ca3bb;;
+ float: right;
+ border: 0px;
+ height: 15px;
+ }
+
+input[type="time"] { 
+ background: white; 
+ color: #7ca3bb;;
+ float: right;
+ border: 0px;
+ height: 15px;
+
+ }
+.Today{
+  background-color: #fff;
+  margin: 20px 0 10px;
   height: 50px;
   line-height: 50px;
-  border-radius: 5px;
+  text-align: center;
+  font-size: 20px;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+  letter-spacing: 5px;
 }
-.inputBox input {
-  border-style: none;
-  font-size: 0.9rem;
+.Today-text{
+  margin-left: 20px;
 }
-.addContainer {
+.add{
   float: right;
-  background: linear-gradient(to right, #209e76, #54cb91);
-  width: 3rem;
-  border-radius: 0 5px 5px 0;
-}
-.addBtn {
-  color: white;
+  margin-right: 20px;
+  color: #7ca3bb;
   vertical-align: middle;
+  font-size: 17px;
 }
-
-input::placeholder {
-  text-align: right;
-} */
-
+.Head{
+  width: 100%;
+  margin-right: 20px;
+  background-color: #fff;
+  border-top:none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid #7ca3bb;
+  height: 30px;
+}
+Head::placeholder{
+  height: 30px;
+  line-height: 30px;
+}
 body {
   margin: 0;
 }
@@ -185,7 +223,7 @@ div {
 .info-container {
   width: 300px;
   margin: 0px auto;
-  padding: 20px 30px;
+  padding: 20px 30px 70px 30px;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
@@ -284,6 +322,36 @@ li {
   margin-left: auto;
   color: #000000;
   float: right;
+}
+.subTitle{
+  margin-top: 10px;
+  margin-bottom: 0px;
+  font-size: 16px;
+}
+.important{
+  float: right;
+}
+.category{
+  float: right;
+}
+.Memo{
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #7ca3bb;
+  border-radius: 5px;
+  height: 30px;
+  margin-top: 5px;
+}
+.addbtn{
+  float: right;
+  padding: 3px;
+  border-radius: 5px;
+  background-color: #7ca3bb;
+  color: white;
+  margin-top: 10px;
+}
+.selectTime{
+  padding-top:10px
 }
 
 </style>
