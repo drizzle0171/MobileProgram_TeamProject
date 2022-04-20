@@ -2,13 +2,12 @@
   <div>
     <div>
       <transition-group name="list" tag="ul">
-        <li v-for="(todoItem, index) in propsdata" :key = todoItem class="shadow" >
-          <i v-if="notdoneList[index]" class="checkBtn fas fa-check" aria-hidden="true" @click="check(todoItem, index)"></i>
-          <i v-if="doneList[index]" class="checkBtn_done fas fa-check" aria-hidden="true"></i>
+        <li v-for="(todoItem, index) in propsdata" :key = "todoItem.Head" class="shadow" >
+          <i class="checkBtn fas fa-check" :class="{checkBtn_done: todoItem.done}" aria-hidden="true" @click="check(todoItem)"></i>
             <div class="todo-item-text">
-              <span> {{ todoItem[0] }} </span> <p class="todo-memo"> {{ todoItem[1] }} </p>
+              <span> {{ todoItem.Head }} </span> <span :class="{category_school: (todoItem.category=='학교'), category_appointment: (todoItem.category=='약속'), category_assignment: (todoItem.category=='과제'), category_club: (todoItem.category=='동아리'), category_exercise: (todoItem.category=='운동'), category_etc: (todoItem.category=='기타')}">{{todoItem.category}}</span> <p class="todo-memo"> {{ todoItem.memo }} </p>
             </div>
-            <span class="moreinfoBtn" type="button" @click="moreInfo(todoItem, index)">
+            <span class="moreinfoBtn" type="button" @click="moreInfo(todoItem)">
               <i class="fas fa-bars" aria-hidden="true"></i>
               </span>
             <span class="removeBtn" @click="removeTodo(todoItem, index)">
@@ -29,7 +28,7 @@
           <span v-if="oldHead" @click="modifyHead" ><h3 style="text-align: left"> {{ todoItem }} <hr style="border: 1px solid #7ca3bb;"></h3></span>
           <span v-if="showNewHead" @click="modifyHead"><h3 style="padding:5px; text-align: left">{{todoItem}} <hr style="border: 1px solid #7ca3bb;"></h3></span>
           <p style="text-align: left "><b>날짜</b> <span class="subValue"> {{date}} </span></p>
-          <p style="text-align: left "><b>D-day</b> <span class="subValue"> D-{{result}} </span> </p>
+          <p style="text-align: left "><b>D-day</b> <span class="subValue"> D{{result}} </span> </p>
           <p style="text-align: left "><b>시간</b> <span class="subValue">{{time}}</span></p>
           <p style="text-align: left"> <b>카테고리</b> <span class="category">{{category}}</span> </p>
           <p style="text-align: left"> <b>중요도</b> <span class="subValue"> {{important}} </span></p>
@@ -50,18 +49,12 @@
 </template>
 
 <script>
-
 export default {
-  mounted(){
-    if (localStorage.length==0){
-      this.refreshAll()
-    }
-    this.doneList.push(false);
-    this.notdoneList.push(true);
-  },
   props: ['propsdata'],
   data() {
     return {
+      activeColor:'',
+      todoItems:[],
       today_year:'',
       today_month:'',
       today_day:'',
@@ -78,59 +71,52 @@ export default {
       oldHead: true,
       oldMemo: true,
       temp:"",
-      doneList: [false],
-      notdoneList: [true],
       date:"",
       time:"",
       category:"",
       important:"",
-      result:"",
-      option:'all'
+      done:{},
+      todo_done: false,
+      result:''
     };
   },
 
   methods: {
-    refreshAll(){
-      this.$router.go();
-    },
-    check(todoItem, index){
-      this.todoItem = todoItem[0];      
-      this.index = index;
-      this.done = todoItem[2]
-      let information = JSON.parse(localStorage.getItem(this.todoItem));
-      information.done = true;
-      localStorage.setItem(this.todoItem, JSON.stringify(information));
-      this.notdoneList[index] = false;
-      this.doneList[index] = true;
-      this.doneList.push(false);
-      this.notdoneList.push(true);
-      console.log(this.doneList)
-      console.log(this.notdoneList)
+    check(todoItem){
+      console.log(todoItem.Head)
+      todoItem.done = !todoItem.done;
+      localStorage.removeItem(todoItem.Head);
+      localStorage.setItem(todoItem.Head, JSON.stringify(todoItem));
+      console.log(todoItem.done);  
       },
     removeTodo(todoItem, index) {
-      this.doneList.pop(index);
-      this.notdoneList.pop(index);
-      this.$emit("removeTodo", todoItem[0], index);
-      console.log(this.notdoneList);
-      console.log(this.doneList);
+      this.$emit("removeTodo", todoItem.Head, index);
     },
     calculateDday(){
       let day = new Date();
       let today = new Date(day.getFullYear(), day.getMonth()+1, day.getDate())
       let dday = new Date(Number(this.date.slice(0,4)), Number(this.date.slice(5,8)), Number(this.date.slice(10,12)))
       let gap = dday.getTime() - today.getTime();
-      this.result = Math.ceil(gap/(1000*60*60*24))
+      let ddaynum = Math.ceil(gap/(1000*60*60*24))
+      if (ddaynum<0) {
+        this.result = `+${Math.abs(ddaynum)+1}`;
+      }
+      else if (ddaynum==0){
+        this.result = ' - day';
+      }
+      else{
+        this.result = `-${Math.abs(ddaynum)}`;
+      }
+      
     },
-    moreInfo(todoItem, index) {
+    moreInfo(todoItem) {
       this.showInfo = true;
-      this.todoItem = todoItem[0];      
-      this.index = index;
-      this.memo = todoItem[1];
-      let information = JSON.parse(localStorage.getItem(this.todoItem));
-      this.date = information.date;
-      this.time = information.time;
-      this.category = information.category;
-      this.important = information.important;
+      this.todoItem = todoItem.Head;      
+      this.memo = todoItem.memo;
+      this.date = todoItem.date;
+      this.time = todoItem.time;
+      this.category = todoItem.category;
+      this.important = todoItem.important;
       this.calculateDday()
     },
     modifyHead() {
@@ -166,39 +152,27 @@ export default {
       this.showModiMemo=false;
       this.oldMemo=false;
       this.showNewMemo=true;
-    },
-  },
-
-  created() {
-    let day = new Date()
-    this.today_year = day.getFullYear();
-    this.today_month = day.getMonth();
-    this.today_day = day.getDate();
-		if (localStorage.length > 0) {
-			for (var i = 0; i < localStorage.length; i++) {
-        this.doneList[i]= (JSON.parse(localStorage.getItem(localStorage.key(i))).done);
-        this.notdoneList[i]= (!JSON.parse(localStorage.getItem(localStorage.key(i))).done);
-      }
-      this.doneList.push(false);
-      this.notdoneList.push(true);
-		}
-    if (localStorage.length==0){
-      this.refreshAll()
     }
-    console.log(this.doneList)
-    console.log(this.notdoneList)
   },
+  // created(){
+
+  // }
 };
 
 </script>
 
 <style scoped>
+
+.memobox{
+  width: 240px;
+  height: 100px;
+}
 .ModiHead{
   border: 0px;
   float: left;
 }
 .ModiMemo{
-  width: 96%;
+  width: 225px;
   border: 0px;
   float: left;
   border: 1px solid #7ca3bb;
@@ -209,19 +183,25 @@ export default {
 
 body {
   margin: 0;
+  padding: 0;
 }
 div {
   box-sizing: border-box;
+  overflow: auto;
+  width: 360px;
+  height: 1000px;
+
 }
 .info-container {
+  margin: 0px auto 250px;
   width: 300px;
-  margin: 0px auto;
-  padding: 20px 30px 50px 30px;
+  padding: 20px 30px 20px 30px;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
+  height:400px
 }
 
 .info-mask {
@@ -250,28 +230,34 @@ div {
 ul {
   list-style-type: none;
   padding: 0px;
-  margin: 0;
+  margin: 5px;
   text-align: left;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
 }
 
 li {
   display: flex;
-  margin: 0.5rem 0;
+  margin: 7px;
   padding: 0 0.9rem;
   background: white;
   border-radius: 5px;
   align-items: center;
+  border-radius: 7px;
+  width: 90%;  
 }
 
 .todo-item-text {
   padding: 15px;
   word-break: break-all;
   align-items: center;
+  height: 65px;
+  overflow-y: hidden;
+
 }
 
 .todo-memo {
-  margin: 0px 2px;
+  margin: 2px 2px;
   font-size: 12px;
   color: gray;
 }
@@ -329,8 +315,71 @@ li {
   text-align: center;
   vertical-align: middle;
 }
+.category_club{
+  border: 1px solid blue;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: blue;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+}
+.category_school{
+  border: 1px solid red;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: red;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+}
+.category_appointment{
+  border: 1px solid purple;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: purple;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+}
+.category_assignment{
+  border: 1px solid yellow;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: yellow;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+}
+.category_exercise{
+  border: 1px solid green;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: green;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+}
+.category_etc{
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: black;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+}
 .subValue{
   float: right;
 }
+/* .category_color{
+  
+} */
 
 </style>
