@@ -1,9 +1,61 @@
 <template>
-  <div class="inputBox shadow">
-    <input type="text" v-model="newTodoItem" placeholder="Type what you have to do" v-on:keyup.enter="addTodo">
-    <span class="addContainer" v-on:click="addTodo">
-      <i class="addBtn fas fa-plus" aria-hidden="true"></i>
+  <div class="inputBox">
+  <div class="Today">
+      <span class="Today-text">
+      {{propsdata2[0]}}년 {{propsdata2[1]}}월 {{propsdata2[2]}}일
+      </span>
+    <span class="add" type="button" @click="add()">
+      <i class="addBtn fas fa-plus"></i>
     </span>
+    </div>
+    <div class="info-mask" v-if="addtodo==true">
+      <div class="info-wrapper">
+        <div class="info-container">
+          <span class="close" type="button" @click="addtodo = false">
+            <i class="fas fa-times" aria-hidden="true"></i>
+          </span>
+          <input class="Head" v-if="typeHead" v-model="Head" type = "text" placeholder="Type your goal" style="text-align: left" @keyup.enter="storeHead()">
+          <span v-if="showHead"><h3 style="text-align: left"> {{Head}} <hr style="border: 1px solid #7ca3bb;"></h3></span>
+          <div>
+          <input type = "date" v-model="date" style="text-align: left" @change="storeDate()">
+          <p class="subTitle" style="text-align: left"><b>날짜</b></p>           
+          <input class = "selectTime" type = "time" v-model="time" style="text-align: left" @change="storeTime()">
+          <p class="subTitle" style="text-align: left"><b>시간</b></p>          
+          </div>
+          <form>
+          <p class="subTitle" style="text-align: left"><b>카테고리</b>
+          <select class="category" @change="storeCategory($event)">
+              <option value="선택"> 선택 </option>
+              <option value="학교"> 학교 </option>
+              <option value="동아리"> 동아리 </option>
+              <option value="과제"> 과제 </option>
+              <option value="운동"> 운동 </option>
+              <option value="약속"> 약속 </option>
+              <option value="기타"> 기타 </option>
+            </select>
+          </p>
+          </form>
+          <form>
+          <p class="subTitle" style="text-align: left"><b>중요도</b>
+          <select class="important" @change="storeImportant($event)">
+              <option value="선택"> 선택 </option>
+              <option value="매우 중요"> 매우 중요 </option>
+              <option value="중요"> 중요 </option>
+              <option value="보통"> 보통 </option>
+            </select>
+          </p>
+          </form>          
+            <div class = "memobox">
+            <p class="subTitle" style="text-align: left"> <b>메모</b> 
+                <br> <input class="Memo" type="text" v-model="Memo" placeholder="Memo..." @keyup.enter="storeMemo()">
+            </p>
+            <span class="addbtn" type="button" @click="addTodo()">
+              저장하기
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <modal v-if="showModal" @close="showModal = false">
       <h3 slot="header">경고</h3>
@@ -18,24 +70,113 @@
 import Modal from './common/AlertModal.vue'
 
 export default {
+  props: ['propsdata2'],
   data() {
     return {
+      today_year:'',
+      today_month:'',
+      today_day:'',
       newTodoItem: '',
-      showModal: false
+      showModal: false,
+      addtodo: false,
+      showHead:false,
+      information: {
+        done:false, 
+        Head:"",
+        memo:"",
+        category:"",
+        important:"",
+        date:"",
+        time:""
+      },
+      Head:"",
+      Memo:"",
+      typeHead:true,
+      Done: false,
+      date:"",
+      time:"",
+      category:""
     }
   },
   methods: {
+    add(){
+      this.addtodo=true;
+      console.log(this.today_year)
+    },
+    storeHead(){
+      this.information.Head = this.Head;
+      this.typeHead=false;
+      this.showHead=true;
+    },
+    storeMemo(){
+      this.information.memo = this.Memo;
+    },
+    storeDate(){
+      this.information.date = `${this.date.slice(0,4)}년 ${this.date.slice(5,7)}월 ${this.date.slice(8,10)}일`
+    },
+    storeTime(){
+      this.information.time = `${this.date.slice(0,4)}년 ${this.date.slice(5,7)}월 ${this.date.slice(8,10)}일`
+      if (Number(this.time.slice(0,2))>12){
+        this.information.time = `오후 ${Number(this.time.slice(0,2))-12}시 ${this.time.slice(3,5)}분`
+      }
+      else{
+        this.information.time = `오전 ${this.time.slice(0,2)}시 ${this.time.slice(3,5)}분`
+      }
+    },
+    storeCategory(event){
+      if (event.target.value == "선택") {
+        this.information.category = "선택 안함"
+      }
+      else{ 
+        this.information.category = `${event.target.value}`
+      }
+    },
+    storeImportant(event){
+      if (event.target.value == "선택") {
+        this.information.important = "선택 안함"
+      }
+      else{
+        this.information.important = `${event.target.value}`
+
+      }
+    },
     addTodo() {
-      if (this.newTodoItem !== "") {
-        var value = this.newTodoItem && this.newTodoItem.trim();
-				this.$emit('addTodo', value);
+      if (this.Head !== "") {
+        let information = JSON.stringify(this.information);
+				this.$emit('addTodo', this.Head, information);
         this.clearInput();
       } else {
         this.showModal = !this.showModal;
       }
     },
     clearInput() {
-      this.newTodoItem = '';
+      this.addtodo = false,
+      this.showHead = false,
+      this.information =  {
+        done:false, 
+        Head:"",
+        memo:"",
+        category:"학교",
+        date:"",
+        time:""
+      },
+      this.Head = "",
+      this.Memo = "",
+      this.typeHead = true
+    }
+  },
+  created(){
+    if (this.propsdata2.length==0) {
+      let today = new Date();
+      let year = today.getFullYear();
+      let month = today.getMonth()+1;
+      let day = today.getDate();
+      this.$emit('changeDate',year, month, day)
+    }
+    else{
+      this.today_year=this.propsdata2[0];
+      this.today_month=this.propsdata2[1];
+      this.today_day=this.propsdata2[2];
     }
   },
   components: {
@@ -45,32 +186,198 @@ export default {
 </script>
 
 <style scoped>
-input:focus {
-  outline: none;
-}
-.inputBox {
-  background: white;
+input[type="date"] { 
+ background: white; 
+ color: #7ca3bb;;
+ float: right;
+ border: 0px;
+ height: 15px;
+ }
+
+input[type="time"] { 
+ background: white; 
+ color: #7ca3bb;;
+ float: right;
+ border: 0px;
+ height: 15px;
+
+ }
+.Today{
+  background-color: #fff;
+  margin: 20px 13px 10px;
   height: 50px;
   line-height: 50px;
-  border-radius: 5px;
+  text-align: center;
+  font-size: 20px;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+  letter-spacing: 5px;
+  border-radius: 7px;
+  width: 95%;
+  box-shadow: none;
+
 }
-.inputBox input {
-  border-style: none;
-  font-size: 0.9rem;
+.Today-text{
+  margin-left: 20px;
 }
-.addContainer {
+.add{
   float: right;
-  background: linear-gradient(to right, #6478FB, #8763FB);
-  width: 3rem;
-  border-radius: 0 5px 5px 0;
+  margin-right: 20px;
+  color: #7ca3bb;
+  vertical-align: middle;
+  font-size: 17px;
 }
-.addBtn {
-  color: white;
+.Head{
+  width: 100%;
+  margin-right: 20px;
+  background-color: #fff;
+  border-top:none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid #7ca3bb;
+  height: 30px;
+}
+Head::placeholder{
+  height: 30px;
+  line-height: 30px;
+}
+body {
+  margin: 0;
+}
+div {
+  box-sizing: border-box;
+}
+.info-container {
+  width: 300px;
+  margin: 0px auto;
+  padding: 20px 30px 70px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.info-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: table;
+  transition: opacity 0.3s ease;
+}
+
+.info-wrapper {
+  display: table-cell;
   vertical-align: middle;
 }
 
-input::placeholder {
-  text-align: right;
+.white-bg {
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+}
+ul {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0;
+  text-align: left;
+}
+
+li {
+  display: flex;
+  margin: 0.5rem 0;
+  padding: 0 0.9rem;
+  background: white;
+  border-radius: 5px;
+  align-items: center;
+}
+
+.todo-item-text {
+  padding: 15px;
+  word-break: break-all;
+  align-items: center;
+}
+
+.todo-memo {
+  margin: 0px 2px;
+  font-size: 12px;
+  color: gray;
+}
+
+.checkBtn {
+  line-height: 45px;
+  color: #c9c9c9;
+  margin-right: 5px;
+}
+
+.checkBtn_done {
+  line-height: 45px;
+  color: #209e76;
+  margin-right: 5px;
+}
+.removeBtn {
+  margin-left: 10px;
+  color: #209e76;
+  font-size: 13px;
+}
+.moreinfoBtn {
+  display: table-cell;
+  margin-left: auto;
+  color: #209e76;
+  vertical-align: middle;
+}
+.list-enter-active,
+.list-leave-active {
+  transition: all 1s;
+}
+.list-enter,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.close {
+  margin-left: auto;
+  color: #de4343;
+  float: right;
+}
+.modified {
+  margin-left: auto;
+  color: #000000;
+  float: right;
+}
+.subTitle{
+  margin-top: 10px;
+  margin-bottom: 0px;
+  font-size: 16px;
+}
+.important{
+  float: right;
+}
+.category{
+  float: right;
+}
+.Memo{
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #7ca3bb;
+  border-radius: 5px;
+  height: 30px;
+  margin-top: 5px;
+}
+.addbtn{
+  float: right;
+  padding: 3px;
+  border-radius: 5px;
+  background-color: #7ca3bb;
+  color: white;
+  margin-top: 10px;
+}
+.selectTime{
+  padding-top:10px
 }
 
 </style>

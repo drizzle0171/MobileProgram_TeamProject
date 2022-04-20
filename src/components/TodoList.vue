@@ -2,20 +2,20 @@
   <div>
     <div>
       <transition-group name="list" tag="ul">
-        <li v-for="(todoItem, index) in propsdata" :key="todoItem" class="shadow">
-          <i v-if = "notdone" class="checkBtn fas fa-check" aria-hidden="true" @click="checkDone"></i>
-          <i v-if = "done" class="checkBtn_done fas fa-check" aria-hidden="true"></i>
-        
+        <li v-for="(todoItem, index) in propsdata" :key = "todoItem.Head" class="shadow" >
+          <i class="checkBtn fas fa-check" :class="{checkBtn_done: todoItem.done}" aria-hidden="true" @click="check(todoItem)"></i>
             <div class="todo-item-text">
-              <span class="todo-item">{{ todoItem }}</span> <p class="todo-memo"> {{memoList[todoItem]}} </p>
+              <span> {{ todoItem.Head }} </span> <span :class="{category_school: (todoItem.category=='학교'), category_appointment: (todoItem.category=='약속'), category_assignment: (todoItem.category=='과제'), category_club: (todoItem.category=='동아리'), category_exercise: (todoItem.category=='운동'), category_etc: (todoItem.category=='기타')}">{{todoItem.category}}</span> <p class="todo-memo"> {{ todoItem.memo }} </p>
             </div>
-            <span class="moreinfoBtn" type="button" @click="moreInfo(todoItem, index)">
-              <i class="fas fa-plus" aria-hidden="true"></i>
+            <span>
+              <i class="fas fa-circle" :class="{important_red: (todoItem.important=='매우 중요'), important_yellow: (todoItem.important=='중요'), important_green: (todoItem.important=='보통')}"></i>
             </span>
-             <span class="removeBtn" @click="removeTodo(todoItem, index)">
-            <i class="fas fa-trash-alt" aria-hidden="true"></i>
-          </span>
-        
+            <span class="moreinfoBtn" type="button" @click="moreInfo(todoItem)">
+              <i class="fas fa-bars" aria-hidden="true"></i>
+              </span>
+            <span class="removeBtn" @click="removeTodo(todoItem, index)">
+              <i class="fas fa-trash-alt" aria-hidden="true"></i>
+            </span>
         </li>
       </transition-group>
     </div>
@@ -27,22 +27,22 @@
           <span class="close" type="button" @click="showInfo = false">
             <i class="fas fa-times" aria-hidden="true"></i>
           </span>
+          <input class="ModiHead" v-if="showModiHead" v-model="newHead" type = "text" placeholder="Type your goal" style="text-align: left" @keyup.enter="toLocalStorage_Head()">
+          <span v-if="oldHead" @click="modifyHead" ><h3 style="text-align: left"> {{ todoItem }} <hr style="border: 1px solid #7ca3bb;"></h3></span>
+          <span v-if="showNewHead" @click="modifyHead"><h3 style="padding:5px; text-align: left">{{todoItem}} <hr style="border: 1px solid #7ca3bb;"></h3></span>
+          <p style="text-align: left "><b>날짜</b> <span class="subValue"> {{date}} </span></p>
+          <p style="text-align: left "><b>D-day</b> <span class="subValue"> D{{result}} </span> </p>
+          <p style="text-align: left "><b>시간</b> <span class="subValue">{{time}}</span></p>
+          <p style="text-align: left"> <b>카테고리</b> <span :class="{category_school_moreinfo: (category=='학교'), category_appointment_moreinfo: (category=='약속'), category_assignment_moreinfo: (category=='과제'), category_club_moreinfo: (category=='동아리'), category_exercise_moreinfo: (category=='운동'), category_etc_moreinfo: (category=='기타')}">{{category}}</span> </p>
+          <p style="text-align: left"> <b>중요도</b> <span class="subValue"> {{important}} </span></p>
           <div class = "memobox">
-            <input v-if="showModiHead" v-model="newHead" type = "text" placeholder="Type your goal" style="text-align: left">
-          </div> 
-          <span @click="modifyHead" >
-            <h3 style="text-align: left"> {{ item }} <hr> </h3>
-            </span>
-          <p style="text-align: left"><b>D-day</b> <input type="date" style="width:150px"></p>
-          <p style="text-align: left"> <b>카테고리</b> 학교</p>
-          <p style="text-align: left"> <b>중요도</b> 매우 중요</p>
-          <div class = "memobox">
-
             <p style="text-align: left"> <b>메모</b> 
-              <span class="modified" type="button" @keyup.enter="modify()">
-                <i class="fas fa-pencil-alt"></i>
+              <span class="modified" type="button" @click="modifyMemo(newMemo)">
+                <i class="fas fa-pencil-alt" style="color: #7ca3bb"></i>
               </span>
-                <br> <input type="text" v-model="memoList[todoItem]" placeholder="Memo..." v-on:keyup.enter="modify(todoItem)">
+                <br> <input class="ModiMemo" type="text" v-if="showModiMemo" v-model="newMemo" placeholder="Memo..." @keyup.enter="toLocalStorage_Memo(newMemo)">
+                <span v-if="oldMemo" @click="modifyMemo()" ><p style="text-align: left"> {{ memo }}</p></span>
+                <span v-if="showNewMemo" @click="modifyMemo()"><p style="margin:0; text-align: left">{{ newMemo }}</p></span>
               </p>
           </div>
         </div>
@@ -53,73 +53,158 @@
 
 <script>
 export default {
+  props: ['propsdata'],
   data() {
     return {
+      activeColor:'',
+      todoItems:[],
+      today_year:'',
+      today_month:'',
+      today_day:'',
       showInfo: false,
       showModiHead: false,
+      showModiMemo: false,
       todoItem: "",
-      index: "",
-      memo: "",
-      memoList: {},
-      newHead: "",
-      notify: [],
-      done: false,
-      notdone: true
+      index:"",
+      memo:"",
+      newHead:"",
+      newMemo:"",
+      showNewHead: false,
+      showNewMemo: false,
+      oldHead: true,
+      oldMemo: true,
+      temp:"",
+      date:"",
+      time:"",
+      category:"",
+      important:"",
+      done:{},
+      todo_done: false,
+      result:''
     };
   },
-  props: ["propsdata"],
+
   methods: {
+    check(todoItem){
+      console.log(todoItem.Head)
+      todoItem.done = !todoItem.done;
+      localStorage.removeItem(todoItem.Head);
+      localStorage.setItem(todoItem.Head, JSON.stringify(todoItem));
+      console.log(todoItem.done);  
+      },
     removeTodo(todoItem, index) {
-      console.log(todoItem, index)
-      this.$emit("removeTodo", todoItem, index);
-      this.showInfo = false;
+      this.$emit("removeTodo", todoItem.Head, index);
     },
-    checkDone(){
-      this.done=true;
-      this.notdone=false;
+    calculateDday(){
+      let day = new Date();
+      let today = new Date(day.getFullYear(), day.getMonth()+1, day.getDate())
+      let dday = new Date(Number(this.date.slice(0,4)), Number(this.date.slice(5,8)), Number(this.date.slice(10,12)))
+      let gap = dday.getTime() - today.getTime();
+      let ddaynum = Math.ceil(gap/(1000*60*60*24))
+      if (ddaynum<0) {
+        this.result = `+${Math.abs(ddaynum)+1}`;
+      }
+      else if (ddaynum==0){
+        this.result = ' - day';
+      }
+      else{
+        this.result = `-${Math.abs(ddaynum)}`;
+      }
+      
     },
-
-    moreInfo(todoItem, index) {
+    moreInfo(todoItem) {
       this.showInfo = true;
-      this.todoItem = todoItem;
-      this.index = index;
-
+      this.todoItem = todoItem.Head;      
+      this.memo = todoItem.memo;
+      this.date = todoItem.date;
+      this.time = todoItem.time;
+      this.category = todoItem.category;
+      this.important = todoItem.important;
+      this.calculateDday()
     },
-    modifyHead(todoItem) {
-      localStorage.removeItem(todoItem);
-      this.item = "";
+    modifyHead() {
+      console.log(this.todoItem)
+      this.temp = this.todoItem;
+      this.todoItem = "";
       this.showModiHead=true;
-      todoItem = this.newHead
     },
-    modify() {
-      console.log(this.memo);
-      localStorage.setItem(this.todoItem, this.memoList[this.todoItem]);
-      this.memo=localStorage.getItem(this.todoItem)
-      console.log(this.memoList);
+    toLocalStorage_Head(){
+      let information = JSON.parse(localStorage.getItem(this.temp));
+      information.Head = this.newHead;
+      this.todoItem = this.newHead;
+      localStorage.setItem(this.todoItem, JSON.stringify(information));
+      localStorage.removeItem(this.temp);
+      this.$emit("changeHead", this.newHead, this.index);
+      this.showModiHead=false;
+      this.oldHead=false;
+      this.showNewHead=true;
     },
-    clearInput() {
-      this.memo = '';
+    modifyMemo() {
+      console.log(this.todoItem)
+      this.showModiMemo=true;
+      this.memo="";
+      this.oldMemo=false;
+      this.showNewMemo=false;
+    },
+    toLocalStorage_Memo(newMemo) {
+      let information = JSON.parse(localStorage.getItem(this.todoItem));
+      information.memo = newMemo;
+      this.memo= newMemo;
+      this.$emit("changeMemo", this.newMemo, this.index)
+      localStorage.setItem(this.todoItem, JSON.stringify(information));   
+      this.showModiMemo=false;
+      this.oldMemo=false;
+      this.showNewMemo=true;
     }
   },
+  // created(){
+
+  // }
 };
+
 </script>
 
 <style scoped>
+
+.memobox{
+  width: 240px;
+  height: 100px;
+}
+.ModiHead{
+  border: 0px;
+  float: left;
+}
+.ModiMemo{
+  width: 225px;
+  border: 0px;
+  float: left;
+  border: 1px solid #7ca3bb;
+  border-radius: 3px;
+  margin: 5px 0;
+  padding: 5px;
+}
+
 body {
   margin: 0;
+  padding: 0;
 }
 div {
   box-sizing: border-box;
+  overflow: auto;
+  width: 360px;
+  height: 1000px;
+
 }
 .info-container {
+  margin: 0px auto 250px;
   width: 300px;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: rgb(75, 75, 119);
+  padding: 20px 30px 20px 30px;
+  background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
+  height:400px
 }
 
 .info-mask {
@@ -148,57 +233,59 @@ div {
 ul {
   list-style-type: none;
   padding: 0px;
-  margin: 0;
+  margin: 5px;
   text-align: left;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
 }
 
 li {
   display: flex;
-  margin: 10px;
+  margin: 7px;
   padding: 0 0.9rem;
   background: white;
   border-radius: 5px;
   align-items: center;
+  border-radius: 7px;
+  width: 90%;  
 }
 
-
 .todo-item-text {
-  margin: 15px;
-  margin-right: 20px;
+  padding: 15px;
   word-break: break-all;
-  display: inline-block;
   align-items: center;
-  overflow: hidden;
-  background-color: antiquewhite;
-  width:200px;
+  height: 65px;
+  overflow-y: hidden;
+
 }
 
 .todo-memo {
-  margin: 0px 2px;
+  margin: 2px 2px;
   font-size: 12px;
   color: gray;
 }
- 
+
 .checkBtn {
   line-height: 45px;
-  color: #04f7ceef;
+  color: #c9c9c9;
   margin-right: 5px;
 }
+
 .checkBtn_done {
   line-height: 45px;
-  color: #6478FB;
+  color: #7ca3bb;
   margin-right: 5px;
 }
 .removeBtn {
-  margin-left: auto;
-  color: black;
-  font-size: 13px;
+  margin-left: 10px;
+  color: #7ca3bb;
+  font-size: 14px;
 }
 .moreinfoBtn {
   display: table-cell;
-  margin-left: 230px;
-  margin-right: 10px;
-  color: black;
+  margin-left: auto;
+  color: #7ca3bb;
+  font-size: 14px;
   vertical-align: middle;
 }
 .list-enter-active,
@@ -220,21 +307,165 @@ li {
   color: #000000;
   float: right;
 }
-input:focus {
-  outline: none;
-}
-/* .memobox {
-  background: white;
-  height: 50px;
-  line-height: 50px;
-  border-radius: 5px;
-} */
-.memobox {
-  border-style: none;
-  font-size: 0.9rem;
-}
-#hidden{
-  display:none;
-}
 
+.category{
+  border: 1px solid #7ca3bb;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  color: #7ca3bb;
+  font-size: 15px;
+  float: right;
+  text-align: center;
+  vertical-align: middle;
+}
+.category_club{
+  border: 1px solid #363D8E;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #363D8E;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+}
+.category_school{
+  border: 1px solid #FF4F4F;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #FF4F4F;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+}
+.category_appointment{
+  border: 1px solid #7C588E;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #7C588E;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+}
+.category_assignment{
+  border: 1px solid #FFBA33;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #FFBA33;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+}
+.category_exercise{
+  border: 1px solid #009917;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #009917;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+}
+.category_etc{
+  border: 1px solid #606168;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #606168;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+}
+.category_club_moreinfo{
+  border: 1px solid #363D8E;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #363D8E;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+
+}
+.category_school_moreinfo{
+  border: 1px solid #FF4F4F;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #FF4F4F;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+
+}
+.category_appointment_moreinfo{
+  border: 1px solid #7C588E;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #7C588E;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+
+}
+.category_assignment_moreinfo{
+  border: 1px solid #FFBA33;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #FFBA33;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+
+}
+.category_exercise_moreinfo{
+  border: 1px solid #009917;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #009917;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+
+}
+.category_etc_moreinfo{
+  border: 1px solid #606168;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #606168;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+
+}
+.subValue{
+  float: right;
+}
+.important_red{
+  font-size: 13px;
+  margin: 9px;
+  color:#FF4F4F;
+} 
+.important_yellow{
+  font-size: 13px;
+  margin: 9px;
+  color: #FFBA33;
+}
+.important_green{
+  font-size: 13px;
+  margin: 9px;
+  color:#009917;
+}
 </style>
