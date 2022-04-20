@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <TodoHeader></TodoHeader>
-    <TodoInput v-on:addTodo="addTodo"></TodoInput>
+    <TodoHeader @changeDate="changeDate"></TodoHeader>
+    <TodoInput v-bind:propsdata2="date" @changeDate="changeDate" @addTodo="addTodo"></TodoInput>
     <TodoList v-bind:propsdata="todoItems" @removeTodo="removeTodo" @changeHead = "changeHead" @changeMemo = "changeMemo" @check = "check" @checkagain = "checkagain"></TodoList>
-    <TodoFooter v-on:removeAll="clearAll"></TodoFooter>
+    <TodoFooter @removeAll="clearAll"></TodoFooter>
   </div>
 </template>
 
@@ -16,43 +16,42 @@ import TodoFooter from './components/TodoFooter.vue'
 export default {
   data() {
     return {
+      date: [],
       todoItems: [],
-      notdone: true
-    }
+      }
   },
   methods: {
     clearAll() {
       localStorage.clear();
       this.todoItems = [];
     },
-		addTodo(todoItem, information, memo, done) {
+		addTodo(todoItem, information) {
 			localStorage.setItem(todoItem, information);
-      let todo = [todoItem, memo, done, this.notdone]
-			this.todoItems.push(todo);
+      console.log(todoItem)
+			this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(todoItem))));
+      console.log(this.todoItems)
 		},
     changeHead(newHead, index) {
-      this.todoItems[index][0] = newHead;
+      this.todoItems[index].Head = newHead;
     },
     changeMemo(newMemo, index) {
-      this.todoItems[index][1] = newMemo;
-    },
-    check(done, index) {
-      this.todoItems[index][2] = done;
-    },
-    checkagain(done, index) {
-      this.todoItems[index][2] = done;
+      this.todoItems[index].memo = newMemo;
     },
     removeTodo(todoItem, index) {
       localStorage.removeItem(todoItem);
       this.todoItems.splice(index, 1);
+    },
+    changeDate(Year, Month, Day){
+      this.date = []
+      this.date.push(Year, Month, Day)
     }
   },
-  created() {
-		if (localStorage.length > 0) {
-			for (var i = 0; i < localStorage.length; i++) {
-				this.todoItems.push([localStorage.key(i), JSON.parse(localStorage.getItem(localStorage.key(i))).memo, JSON.parse(localStorage.getItem(localStorage.key(i))).done, !JSON.parse(localStorage.getItem(localStorage.key(i))).done]);
-			}
-		}
+    created() {
+      if (localStorage.length > 0) {
+        for (var i = 0; i < localStorage.length; i++) {
+          this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+        }
+      }
   },
   components: {
     'TodoHeader': TodoHeader,

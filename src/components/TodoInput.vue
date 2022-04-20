@@ -1,8 +1,8 @@
 <template>
-  <div class="inputBox shadow">
+  <div class="inputBox">
   <div class="Today">
       <span class="Today-text">
-      {{today_year}}년 {{today_month+1}}월 {{today_day}}일
+      {{propsdata2[0]}}년 {{propsdata2[1]}}월 {{propsdata2[2]}}일
       </span>
     <span class="add" type="button" @click="add()">
       <i class="addBtn fas fa-plus"></i>
@@ -25,6 +25,7 @@
           <form>
           <p class="subTitle" style="text-align: left"><b>카테고리</b>
           <select class="category" @change="storeCategory($event)">
+              <option value="선택"> 선택 </option>
               <option value="학교"> 학교 </option>
               <option value="동아리"> 동아리 </option>
               <option value="과제"> 과제 </option>
@@ -37,6 +38,7 @@
           <form>
           <p class="subTitle" style="text-align: left"><b>중요도</b>
           <select class="important" @change="storeImportant($event)">
+              <option value="선택"> 선택 </option>
               <option value="매우 중요"> 매우 중요 </option>
               <option value="중요"> 중요 </option>
               <option value="보통"> 보통 </option>
@@ -68,6 +70,7 @@
 import Modal from './common/AlertModal.vue'
 
 export default {
+  props: ['propsdata2'],
   data() {
     return {
       today_year:'',
@@ -98,6 +101,7 @@ export default {
   methods: {
     add(){
       this.addtodo=true;
+      console.log(this.today_year)
     },
     storeHead(){
       this.information.Head = this.Head;
@@ -120,16 +124,26 @@ export default {
       }
     },
     storeCategory(event){
-      this.information.category = `${event.target.value}`
+      if (event.target.value == "선택") {
+        this.information.category = "선택 안함"
+      }
+      else{ 
+        this.information.category = `${event.target.value}`
+      }
     },
     storeImportant(event){
-      this.information.important = `${event.target.value}`
+      if (event.target.value == "선택") {
+        this.information.important = "선택 안함"
+      }
+      else{
+        this.information.important = `${event.target.value}`
+
+      }
     },
     addTodo() {
       if (this.Head !== "") {
         let information = JSON.stringify(this.information);
-        console.log(this.Done)
-				this.$emit('addTodo', this.Head, information, this.Memo, this.Done);
+				this.$emit('addTodo', this.Head, information);
         this.clearInput();
       } else {
         this.showModal = !this.showModal;
@@ -152,10 +166,18 @@ export default {
     }
   },
   created(){
-    let day = new Date()
-    this.today_year = day.getFullYear();
-    this.today_month = day.getMonth();
-    this.today_day = day.getDate();
+    if (this.propsdata2.length==0) {
+      let today = new Date();
+      let year = today.getFullYear();
+      let month = today.getMonth()+1;
+      let day = today.getDate();
+      this.$emit('changeDate',year, month, day)
+    }
+    else{
+      this.today_year=this.propsdata2[0];
+      this.today_month=this.propsdata2[1];
+      this.today_day=this.propsdata2[2];
+    }
   },
   components: {
     Modal: Modal
@@ -182,13 +204,17 @@ input[type="time"] {
  }
 .Today{
   background-color: #fff;
-  margin: 20px 0 10px;
+  margin: 20px 13px 10px;
   height: 50px;
   line-height: 50px;
   text-align: center;
   font-size: 20px;
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
   letter-spacing: 5px;
+  border-radius: 7px;
+  width: 95%;
+  box-shadow: none;
+
 }
 .Today-text{
   margin-left: 20px;
