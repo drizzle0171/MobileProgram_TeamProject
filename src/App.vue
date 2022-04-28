@@ -27,12 +27,11 @@ export default {
     },
 		addTodo(todoItem, information) {
 			localStorage.setItem(todoItem, information);
-      console.log(todoItem)
 			this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(todoItem))));
-      console.log(this.todoItems)
 		},
     changeHead(newHead, index) {
       this.todoItems[index].Head = newHead;
+      console.log(this.todoItems)
     },
     changeMemo(newMemo, index) {
       this.todoItems[index].memo = newMemo;

@@ -2,6 +2,7 @@
   <header>
     <img class ="background" src="../assets/header.png">
     <h1><i>TodoForDays!</i></h1>
+    <!-- 달력 -->
     <VdatePicker   
       trim-weeks
       locale="en"

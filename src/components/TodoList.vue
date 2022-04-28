@@ -7,6 +7,9 @@
             <div class="todo-item-text">
               <span> {{ todoItem.Head }} </span> <span :class="{category_school: (todoItem.category=='학교'), category_appointment: (todoItem.category=='약속'), category_assignment: (todoItem.category=='과제'), category_club: (todoItem.category=='동아리'), category_exercise: (todoItem.category=='운동'), category_etc: (todoItem.category=='기타')}">{{todoItem.category}}</span> <p class="todo-memo"> {{ todoItem.memo }} </p>
             </div>
+            <span>
+              <i class="fas fa-circle" :class="{important_red: (todoItem.important=='매우 중요'), important_yellow: (todoItem.important=='중요'), important_green: (todoItem.important=='보통')}"></i>
+            </span>
             <span class="moreinfoBtn" type="button" @click="moreInfo(todoItem)">
               <i class="fas fa-bars" aria-hidden="true"></i>
               </span>
@@ -30,7 +33,7 @@
           <p style="text-align: left "><b>날짜</b> <span class="subValue"> {{date}} </span></p>
           <p style="text-align: left "><b>D-day</b> <span class="subValue"> D{{result}} </span> </p>
           <p style="text-align: left "><b>시간</b> <span class="subValue">{{time}}</span></p>
-          <p style="text-align: left"> <b>카테고리</b> <span class="category">{{category}}</span> </p>
+          <p style="text-align: left"> <b>카테고리</b> <span :class="{category_school_moreinfo: (category=='학교'), category_appointment_moreinfo: (category=='약속'), category_assignment_moreinfo: (category=='과제'), category_club_moreinfo: (category=='동아리'), category_exercise_moreinfo: (category=='운동'), category_etc_moreinfo: (category=='기타')}">{{category}}</span> </p>
           <p style="text-align: left"> <b>중요도</b> <span class="subValue"> {{important}} </span></p>
           <div class = "memobox">
             <p style="text-align: left"> <b>메모</b> 
@@ -83,7 +86,7 @@ export default {
 
   methods: {
     check(todoItem){
-      console.log(todoItem.Head)
+      console.log(this.propsdata)
       todoItem.done = !todoItem.done;
       localStorage.removeItem(todoItem.Head);
       localStorage.setItem(todoItem.Head, JSON.stringify(todoItem));
@@ -154,9 +157,6 @@ export default {
       this.showNewMemo=true;
     }
   },
-  // created(){
-
-  // }
 };
 
 </script>
@@ -316,70 +316,153 @@ li {
   vertical-align: middle;
 }
 .category_club{
-  border: 1px solid blue;
+  border: 1px solid #363D8E;
   border-radius: 5px;
   padding: 1px 2px 1px 2px;
   margin: 4px 5px 0px 0px;
-  color: blue;
+  color: #363D8E;
   font-size: 13px;
   text-align: center;
   vertical-align: middle;
 }
 .category_school{
-  border: 1px solid red;
+  border: 1px solid #FF4F4F;
   border-radius: 5px;
   padding: 1px 2px 1px 2px;
   margin: 4px 5px 0px 0px;
-  color: red;
+  color: #FF4F4F;
   font-size: 13px;
   text-align: center;
   vertical-align: middle;
 }
 .category_appointment{
-  border: 1px solid purple;
+  border: 1px solid #7C588E;
   border-radius: 5px;
   padding: 1px 2px 1px 2px;
   margin: 4px 5px 0px 0px;
-  color: purple;
+  color: #7C588E;
   font-size: 13px;
   text-align: center;
   vertical-align: middle;
 }
 .category_assignment{
-  border: 1px solid yellow;
+  border: 1px solid #FFBA33;
   border-radius: 5px;
   padding: 1px 2px 1px 2px;
   margin: 4px 5px 0px 0px;
-  color: yellow;
+  color: #FFBA33;
   font-size: 13px;
   text-align: center;
   vertical-align: middle;
 }
 .category_exercise{
-  border: 1px solid green;
+  border: 1px solid #009917;
   border-radius: 5px;
   padding: 1px 2px 1px 2px;
   margin: 4px 5px 0px 0px;
-  color: green;
+  color: #009917;
   font-size: 13px;
   text-align: center;
   vertical-align: middle;
 }
 .category_etc{
-  border: 1px solid black;
+  border: 1px solid #606168;
   border-radius: 5px;
   padding: 1px 2px 1px 2px;
   margin: 4px 5px 0px 0px;
-  color: black;
+  color: #606168;
   font-size: 13px;
   text-align: center;
   vertical-align: middle;
 }
+.category_club_moreinfo{
+  border: 1px solid #363D8E;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #363D8E;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+
+}
+.category_school_moreinfo{
+  border: 1px solid #FF4F4F;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #FF4F4F;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+
+}
+.category_appointment_moreinfo{
+  border: 1px solid #7C588E;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #7C588E;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+
+}
+.category_assignment_moreinfo{
+  border: 1px solid #FFBA33;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #FFBA33;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+
+}
+.category_exercise_moreinfo{
+  border: 1px solid #009917;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #009917;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+
+}
+.category_etc_moreinfo{
+  border: 1px solid #606168;
+  border-radius: 5px;
+  padding: 1px 2px 1px 2px;
+  margin: 4px 5px 0px 0px;
+  color: #606168;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+
+}
 .subValue{
   float: right;
 }
-/* .category_color{
-  
-} */
-
+.important_red{
+  font-size: 13px;
+  margin: 9px;
+  color:#FF4F4F;
+} 
+.important_yellow{
+  font-size: 13px;
+  margin: 9px;
+  color: #FFBA33;
+}
+.important_green{
+  font-size: 13px;
+  margin: 9px;
+  color:#009917;
+}
 </style>
