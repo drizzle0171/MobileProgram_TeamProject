@@ -86,7 +86,7 @@ export default {
 
   methods: {
     check(todoItem){
-      console.log(todoItem.Head)
+      console.log(this.propsdata)
       todoItem.done = !todoItem.done;
       localStorage.removeItem(todoItem.Head);
       localStorage.setItem(todoItem.Head, JSON.stringify(todoItem));
@@ -157,9 +157,6 @@ export default {
       this.showNewMemo=true;
     }
   },
-  // created(){
-
-  // }
 };
 
 </script>
