@@ -1,11 +1,16 @@
 <template>
   <div>
-    <div>
-      <input class='id' type="text" placeholder="example@gmail.com" @keyup.enter="toApp">
+    <div v-if="showLogin" class="login">
+      <input class='id' v-model="email" type="text" placeholder="example@gmail.com">
+      <input class='password' v-model="password" type="password" placeholder="Password">
+      <button @click="addUser">Sign Up</button>
+      <button @click="login">Sign In</button>
     </div>
     <div v-if="show">
       <TodoHeader @changeDate="changeDate"></TodoHeader>
       <TodoInput v-bind:propsdata2 = "date" @changeDate="changeDate" @addTodo="addTodo"></TodoInput>
+      <button @click="logout"> Logout </button>
+      <button @click="deleteuser"> Delete </button>
       <TodoList v-bind:propsdata = "todoItems" @removeTodo="removeTodo" @changeHead = "changeHead" @changeMemo = "changeMemo"></TodoList>
       <TodoFooter @removeAll="clearAll"></TodoFooter>
     </div>
@@ -22,6 +27,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
+  signOut,
+  deleteUser,
 } from "firebase/auth";
 
 export default {
@@ -35,12 +42,10 @@ export default {
       show: false,
       password: "",
       email: "",
+      showLogin:true,
       }
   },
   methods: {
-    toApp(){
-      this.show = true;
-    },
     clearAll() {
       localStorage.clear();
       this.todoItems = [];
@@ -83,15 +88,37 @@ export default {
       signInWithEmailAndPassword(this.auth, this.email, this.password)
         .then((userCredential) => {
           // Signed in
-          console.log(userCredential.user);
           this.name = userCredential.user.email;
-
+          this.showLogin = false;
+          this.show = true;
+          console.log(getAuth().currentUser)
           // ...
         })
         .catch((error) => {
+          console.log('회원가입')
           console.log(error);
         });
     },
+     logout(){
+        signOut(this.auth)
+        .then(() => {
+          this.show = false;
+          this.showLogin = true;
+          // Sign-out successful.
+        }).catch((error) => {
+          console.log(error)
+          // An error happened.
+        });
+    },
+      deleteuser(){
+        deleteUser(getAuth().currentUser)
+          .then(() => {
+          // User deleted.
+          console.log('success')
+        }).catch((error) => {
+          console.log(error)
+        });
+      }
   },
     created() {
       if (localStorage.length > 0) {
@@ -104,6 +131,8 @@ export default {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         this.name = user.email;
+        this.show = true;
+        this.showLogin = false;
         // ...
       } else {
         // User is signed out
