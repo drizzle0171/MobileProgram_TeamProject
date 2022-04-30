@@ -1,9 +1,14 @@
 <template>
-  <div id="app">
-    <TodoHeader @changeDate="changeDate"></TodoHeader>
-    <TodoInput v-bind:propsdata2 = "date" @changeDate="changeDate" @addTodo="addTodo"></TodoInput>
-    <TodoList v-bind:propsdata = "todoItems" @removeTodo="removeTodo" @changeHead = "changeHead" @changeMemo = "changeMemo"></TodoList>
-    <TodoFooter @removeAll="clearAll"></TodoFooter>
+  <div>
+    <div>
+      <input class='id' type="text" placeholder="example@gmail.com" @keyup.enter="toApp">
+    </div>
+    <div v-if="show">
+      <TodoHeader @changeDate="changeDate"></TodoHeader>
+      <TodoInput v-bind:propsdata2 = "date" @changeDate="changeDate" @addTodo="addTodo"></TodoInput>
+      <TodoList v-bind:propsdata = "todoItems" @removeTodo="removeTodo" @changeHead = "changeHead" @changeMemo = "changeMemo"></TodoList>
+      <TodoFooter @removeAll="clearAll"></TodoFooter>
+    </div>
   </div>
 </template>
 
@@ -12,15 +17,30 @@ import TodoHeader from './components/TodoHeader.vue'
 import TodoInput from './components/TodoInput.vue'
 import TodoList from './components/TodoList.vue'
 import TodoFooter from './components/TodoFooter.vue'
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
 
 export default {
+  name: 'App',
   data() {
     return {
       date: [],
       todoItems: [],
+      name: "",
+      auth: getAuth(),
+      show: false,
+      password: "",
+      email: "",
       }
   },
   methods: {
+    toApp(){
+      this.show = true;
+    },
     clearAll() {
       localStorage.clear();
       this.todoItems = [];
@@ -43,7 +63,35 @@ export default {
     changeDate(Year, Month, Day){
       this.date = []
       this.date.push(Year, Month, Day)
-    }
+    },
+    addUser() {
+      createUserWithEmailAndPassword(this.auth, this.email, this.password)
+        .then((userCredential) => {
+          // Signed in
+          var user = userCredential.user;
+          console.log(user);
+          // ...
+        })
+        .catch((error) => {
+          console.log(error);
+          // var errorCode = error.code;
+          // var errorMessage = error.message;
+          // ..
+        });
+    },
+    login() {
+      signInWithEmailAndPassword(this.auth, this.email, this.password)
+        .then((userCredential) => {
+          // Signed in
+          console.log(userCredential.user);
+          this.name = userCredential.user.email;
+
+          // ...
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
     created() {
       if (localStorage.length > 0) {
@@ -51,6 +99,17 @@ export default {
           this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
         }
       }
+      onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        this.name = user.email;
+        // ...
+      } else {
+        // User is signed out
+        // ...
+      }
+    });
   },
   components: {
     'TodoHeader': TodoHeader,
@@ -65,6 +124,8 @@ export default {
   body {
     text-align: center;
     background-color: #f2f2f2;
+    overflow-x: hidden;
+
   }
   input {
     border-style: groove;
