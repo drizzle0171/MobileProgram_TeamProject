@@ -20,7 +20,6 @@
       </transition-group>
     </div>
 
-    <!-- modal_info -->
     <div class="info-mask" v-if="showInfo == true">
       <div class="info-wrapper">
         <div class="info-container">
@@ -184,13 +183,14 @@ export default {
 body {
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+
 }
 div {
   box-sizing: border-box;
   overflow: auto;
   width: 360px;
   height: 1000px;
-
 }
 .info-container {
   margin: 0px auto 250px;
