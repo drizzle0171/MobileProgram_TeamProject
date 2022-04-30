@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <TodoHeader @changeDate="changeDate"></TodoHeader>
-    <TodoInput v-bind:propsdata2="date" @changeDate="changeDate" @addTodo="addTodo"></TodoInput>
-    <TodoList v-bind:propsdata="todoItems" @removeTodo="removeTodo" @changeHead = "changeHead" @changeMemo = "changeMemo" @check = "check" @checkagain = "checkagain"></TodoList>
+    <TodoInput v-bind:propsdata2 = "date" @changeDate="changeDate" @addTodo="addTodo"></TodoInput>
+    <TodoList v-bind:propsdata = "todoItems" @removeTodo="removeTodo" @changeHead = "changeHead" @changeMemo = "changeMemo"></TodoList>
     <TodoFooter @removeAll="clearAll"></TodoFooter>
   </div>
 </template>
@@ -27,7 +27,7 @@ export default {
     },
 		addTodo(todoItem, information) {
 			localStorage.setItem(todoItem, information);
-			this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(todoItem))));
+			this.todoItems.push(JSON.parse(information));
 		},
     changeHead(newHead, index) {
       this.todoItems[index].Head = newHead;
