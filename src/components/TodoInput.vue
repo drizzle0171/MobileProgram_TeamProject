@@ -144,14 +144,17 @@ export default {
       if (this.Head !== "") {
         let information = JSON.stringify(this.information);
 				this.$emit('addTodo', this.Head, information);
+        console.log(this.Head)
         this.clearInput();
+        console.log(this.Head)
       } else {
         this.showModal = !this.showModal;
       }
     },
     clearInput() {
-      this.addtodo = false,
-      this.showHead = false,
+      this.Head = "";
+      this.addtodo = false;
+      this.showHead = false;
       this.information =  {
         done:false, 
         Head:"",
