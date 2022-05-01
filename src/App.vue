@@ -9,6 +9,14 @@
         <i class="passwordIcon fas fa-lock"></i>
       <input class='password' v-model="password" type="password" placeholder="Password">
       </div>
+
+      <modal v-if="pleaseSignUp" @click="pleaseSignUp = false">
+      <h3 slot="header"> 경고 </h3>
+      <span slot="footer" @click="pleaseSignUp = false"> 회원가입 후 로그인 해주세요.
+        <i class="closeModalBtn fas fa-times" aria-hidden="true"></i>
+      </span>
+    </modal>
+
       <span class = "signUp" @click="addUser"> Sign Up </span> 
       <span class = "signIn" @click="login"> Sign In </span>
       <span class = "googleSignin" @click="googleSignIn">
@@ -32,6 +40,7 @@ import TodoHeader from './components/TodoHeader.vue'
 import TodoInput from './components/TodoInput.vue'
 import TodoList from './components/TodoList.vue'
 import TodoFooter from './components/TodoFooter.vue'
+import Modal from './components/common/AlertModal.vue'
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -55,6 +64,7 @@ export default {
       password: "",
       email: "",
       showLogin:true,
+      pleaseSignUp: false,
       }
   },
   methods: {
@@ -107,6 +117,7 @@ export default {
           // ...
         })
         .catch((error) => {
+          this.pleaseSignUp=true;
           console.log('회원가입')
           console.log(error);
         });
@@ -185,7 +196,8 @@ export default {
     'TodoHeader': TodoHeader,
     'TodoInput': TodoInput,
     'TodoList': TodoList,
-    'TodoFooter': TodoFooter
+    'TodoFooter': TodoFooter,
+    Modal: Modal,
   }
 }
 </script>
