@@ -3,8 +3,10 @@
     <div v-if="showLogin" class="login">
       <input class='id' v-model="email" type="text" placeholder="example@gmail.com">
       <input class='password' v-model="password" type="password" placeholder="Password">
-      <button @click="addUser">Sign Up</button>
-      <button @click="login">Sign In</button>
+      <button class = "signup" @click="addUser">Sign Up</button>
+      <button class = "signin" @click="login">Sign In</button>
+      <button class = "googleSignin" @click="googleSignIn">Sign In using Google</button>
+      <!-- <div class="g-signin2" id="google-signin-btn" data-onsuccess="onSignIn"></div> -->
     </div>
     <div v-if="show">
       <TodoHeader @changeDate="changeDate"></TodoHeader>
@@ -29,6 +31,8 @@ import {
   onAuthStateChanged,
   signOut,
   deleteUser,
+  signInWithPopup, 
+  GoogleAuthProvider,
 } from "firebase/auth";
 
 export default {
@@ -118,7 +122,35 @@ export default {
         }).catch((error) => {
           console.log(error)
         });
-      }
+      },
+    googleSignIn(){
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(this.auth, provider)
+        .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          // The signed-in user info.
+          const user = result.user;
+          console.log(token, user)
+        // ...
+        }).catch((error) => {
+        // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+           // The email of the user's account used.
+          const email = error.email;
+          // The AuthCredential type that was used.
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          console.log(errorCode, errorMessage, email, credential)
+          // ...
+  });
+    },
+    onSignIn(googleUser){
+      const profile = googleUser.getBasicProfile();
+      console.log('Email: '+profile.getEmail());
+    }
+
   },
     created() {
       if (localStorage.length > 0) {
@@ -139,6 +171,7 @@ export default {
         // ...
       }
     });
+    window.onSignIn = this.onSignIn;
   },
   components: {
     'TodoHeader': TodoHeader,
@@ -166,4 +199,20 @@ export default {
   .shadow {
     box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.03)
   }
+  .id {
+  width: 250px;
+  margin-right: 20px;
+  margin-bottom: ;
+  padding: 0 10px;
+  background-color: #f2f2f2;
+  border-top:none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid #7ca3bb;
+  height: 30px;
+}
+ id::placeholder{
+  height: 30px;
+  line-height: 30px;
+}
 </style>
