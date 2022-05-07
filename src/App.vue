@@ -306,4 +306,11 @@ export default {
     margin-left: 50px;
     margin-right: 50px;
   }
+          .container {
+          padding:
+            env(safe-area-inset-top)
+            env(safe-area-inset-right)
+            env(safe-area-inset-bottom)
+            env(safe-area-inset-left);
+        }
 </style>
