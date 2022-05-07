@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div v-if="showLogin" class="login">
       <img src="./assets/todofordays.png" width="120px">
       <div>
@@ -306,11 +306,11 @@ export default {
     margin-left: 50px;
     margin-right: 50px;
   }
-          .container {
-          padding:
-            env(safe-area-inset-top)
-            env(safe-area-inset-right)
-            env(safe-area-inset-bottom)
-            env(safe-area-inset-left);
-        }
+  .container {
+    padding:
+      env(safe-area-inset-top)
+      env(safe-area-inset-right)
+      env(safe-area-inset-bottom)
+      env(safe-area-inset-left);
+    }
 </style>
