@@ -11,9 +11,10 @@
       </div>
 
       <modal v-if="pleaseSignUp" @click="pleaseSignUp = false">
-      <h3 slot="header"> 경고 </h3>
-      <span slot="footer" @click="pleaseSignUp = false"> 회원가입 후 로그인 해주세요.
-        <i class="closeModalBtn fas fa-times" aria-hidden="true"></i>
+      <h3 slot="header" @click="pleaseSignUp = false"> 경고 </h3>
+      <span slot="footer" @click="pleaseSignUp = false"> 회원가입 후 로그인 해주세요. </span>
+        <span slot="footer" @click="pleaseSignUp = false">
+          <i class="closeModalBtn fas fa-times"></i>
       </span>
     </modal>
 
@@ -300,4 +301,16 @@ export default {
   .login{
     margin-top: 230px;
   }
+  .closeModalBtn{
+    margin-top: 10px;
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+          .container {
+          padding:
+            env(safe-area-inset-top)
+            env(safe-area-inset-right)
+            env(safe-area-inset-bottom)
+            env(safe-area-inset-left);
+        }
 </style>
