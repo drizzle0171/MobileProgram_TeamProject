@@ -16,25 +16,24 @@ export default {
 </script>
 
 <style scoped>
-  .clearAllContainer {
-    width: 100%;
-    position: fixed;
+  /* .clearAllContainer {
     height: 50px;
     background-color: #7ca3bb;
-    position: fixed;
-    bottom: 0;
     opacity: 0.9;
-  }
+  } */
   .clearAllBtn {
+    position: fixed;
+    display: table-cell;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     position: fixed;
     font-size: 20px;
     color: white;
-    display: block;
     width: 100%;
-    height: 50px;
-    line-height: 50px;
+    height: 80px;
+    line-height: 70px;
     background-color: #7ca3bb;
     bottom: 0;
+    left:0;
+    opacity: 0.8;
   }
 </style>

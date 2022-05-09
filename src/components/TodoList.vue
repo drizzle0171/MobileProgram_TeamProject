@@ -188,9 +188,9 @@ body {
 }
 div {
   box-sizing: border-box;
-  overflow: auto;
   width: 360px;
   height: 1000px;
+  overflow-y: auto;
 }
 .info-container {
   margin: 0px auto 250px;

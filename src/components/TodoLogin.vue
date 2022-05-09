@@ -89,6 +89,7 @@ export default {
           // The signed-in user info.
           const user = result.user;
           console.log(token, user)
+          this.$router.push({path: "todo"});
         // ...
         }).catch((error) => {
         // Handle Errors here.
