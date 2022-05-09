@@ -206,8 +206,9 @@ input[type="time"] {
 
  }
 .Today{
-  background-color: #fff;
-  margin: 20px 13px 10px;
+  background-color: #ffffff;
+  left: 0;
+  margin: 10px 0px 10px 12px;
   height: 50px;
   line-height: 50px;
   text-align: center;
@@ -215,8 +216,10 @@ input[type="time"] {
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
   letter-spacing: 5px;
   border-radius: 7px;
-  width: 95%;
+  width: 370px;
   box-shadow: none;
+  position: absolute;
+  top: 370px
 
 }
 .Today-text{
