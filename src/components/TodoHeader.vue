@@ -227,8 +227,8 @@ export default {
   }
   .closeBtn{
     color:#7ca3bb;
-    font-size: 40px;
-    margin-top: 2px;
+    font-size: 38px;
+    margin-top: 3px;
     margin-left: 4px;
   }
   .side-container-blue {
