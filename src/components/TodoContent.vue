@@ -27,6 +27,11 @@ export default {
       pleaseSignUp: false,
       }
   },
+  computed:{
+    hasResult: function() {
+      return this.posts.length >0
+    }
+  },
   methods: {
     clearAll() {
       localStorage.clear();
