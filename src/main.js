@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './route/index.js'
+import axios from 'axios'
 import './registerServiceWorker'
 
 Vue.config.productionTip = false
+Vue.prototype.$http = axios
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
