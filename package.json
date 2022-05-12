@@ -5,10 +5,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "proxy": "http://finance.naver.com/item/main.naver?code=035720"
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "cheerio": "^1.0.0-rc.10",
     "core-js": "^3.8.3",
     "firebase": "^9.7.0",
     "register-service-worker": "^1.7.2",
