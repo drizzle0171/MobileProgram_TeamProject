@@ -6,7 +6,7 @@
       </div>
       <div>
         <i class="passwordIcon fas fa-lock"></i>
-      <input class='password' v-model="password" type="password" placeholder="Password">
+      <input class='password' v-model="password" type="password" placeholder="Password" @keyup.enter="addUser">
       </div>
 
       <modal v-if="pleaseSignUp" @click="pleaseSignUp = false">
@@ -52,6 +52,7 @@ export default {
         .then((userCredential) => {
           // Signed in
           var user = userCredential.user;
+          this.$router.push({path: "todo"});
           console.log(user);
           // ...
         })

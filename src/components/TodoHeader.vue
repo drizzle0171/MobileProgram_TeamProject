@@ -114,6 +114,22 @@ export default {
         }
       })
     },
+    // searchStock(){
+    //   const axios = require('axios');
+    //   const cheerio = require('cheerio');
+
+    //   //카카오
+    //   async function gethtml(url, selector) {
+    //     let html = await axios.get(url);
+    //     let $ = cheerio.load(html.data);
+    //     let result = $(selector).text();
+    //     console.log(result)
+    //   }
+    //   let url = 'http://finance.naver.com/item/main.naver?code=035720';
+    //   let selector = '
+
+    //   gethtml(url, selector).then((result) => {console.log(result)});
+    // },
     dayClicked(day){
       this.selectedYear = Number(day.id.slice(0, 4));
       this.selectedMonth = Number(day.id.slice(6, 7));
@@ -123,6 +139,7 @@ export default {
     openSidebar(){
       this.showSidebar= !this.showSidebar;
       this.searchWeather();
+      // this.searchStock();
     },
 
     logout(){
