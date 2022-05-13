@@ -55,6 +55,7 @@ export default {
   props: ['propsdata'],
   data() {
     return {
+      todayCnt:0,
       activeColor:'',
       todoItems:[],
       today_year:'',
@@ -93,6 +94,8 @@ export default {
       },
     removeTodo(todoItem, index) {
       this.$emit("removeTodo", todoItem.Head, index);
+      this.todayCnt+=1;
+      this.$emit("countTodo", this.todayCnt)
     },
     calculateDday(){
       let day = new Date();

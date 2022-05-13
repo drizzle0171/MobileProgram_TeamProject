@@ -1,9 +1,9 @@
 <template>
   <div>
     <div>
-      <TodoHeader @changeDate="changeDate"></TodoHeader>
+      <TodoHeader @changeDate="changeDate" :propsdata="cnt" :propsdata2="todoItems"></TodoHeader>
       <TodoInput v-bind:propsdata2 = "date" @changeDate="changeDate" @addTodo="addTodo"></TodoInput>
-      <TodoList v-bind:propsdata = "todoItems" @removeTodo="removeTodo" @changeHead = "changeHead" @changeMemo = "changeMemo"></TodoList>
+      <TodoList v-bind:propsdata = "todoItems" @countTodo="countTodo" @removeTodo="removeTodo" @changeHead = "changeHead" @changeMemo = "changeMemo"></TodoList>
       <TodoFooter @removeAll="clearAll"></TodoFooter>
     </div>
   </div>
@@ -19,6 +19,7 @@ export default {
   name: 'App',
   data() {
     return {
+      cnt:0,
       date: [],
       todoItems: [],
       name: "",
@@ -27,12 +28,10 @@ export default {
       pleaseSignUp: false,
       }
   },
-  computed:{
-    hasResult: function() {
-      return this.posts.length >0
-    }
-  },
   methods: {
+    countTodo(count){
+      this.cnt = count;
+    },
     clearAll() {
       localStorage.clear();
       this.todoItems = [];
