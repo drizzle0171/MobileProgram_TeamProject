@@ -84,7 +84,7 @@ export default {
   },
   methods: {
      searchWeather() {
-      const BASE_URL = 'http://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=5dc753fbb35d7e99e7fd80b06a9a18a7'
+      const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=5dc753fbb35d7e99e7fd80b06a9a18a7'
       this.$http.get(`${BASE_URL}`)
       .then((result) => {
         this.currentTemp = (result.data.main.temp - 273.15).toFixed(1)
@@ -114,22 +114,6 @@ export default {
         }
       })
     },
-    // searchStock(){
-    //   const axios = require('axios');
-    //   const cheerio = require('cheerio');
-
-    //   //카카오
-    //   async function gethtml(url, selector) {
-    //     let html = await axios.get(url);
-    //     let $ = cheerio.load(html.data);
-    //     let result = $(selector).text();
-    //     console.log(result)
-    //   }
-    //   let url = 'http://finance.naver.com/item/main.naver?code=035720';
-    //   let selector = '
-
-    //   gethtml(url, selector).then((result) => {console.log(result)});
-    // },
     dayClicked(day){
       this.selectedYear = Number(day.id.slice(0, 4));
       this.selectedMonth = Number(day.id.slice(6, 7));
@@ -139,15 +123,13 @@ export default {
     openSidebar(){
       this.showSidebar= !this.showSidebar;
       this.searchWeather();
-      // this.searchStock();
     },
 
     logout(){
         signOut(this.auth)
         .then(() => {
-          // this.show = false;
-          // this.showLogin = true;
-          // Sign-out successful.
+          this.$router.replace({path: "/"});
+
         }).catch((error) => {
           console.log(error)
           // An error happened.

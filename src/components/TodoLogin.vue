@@ -1,6 +1,11 @@
 <template>
-    <div class="login">
-      <img src="../assets/todofordays.png" width="120px">
+    <div>
+      <div class="logo">
+        <span class="subtitle">세상에서 제일 <br></span>
+        <img src="../assets/todofordays.png" width="120px">
+        <span class="subtitle"> <br >완벽한 TODO <br></span>
+      </div>
+      <div class="login">
       <div>
         <i class="idIcon fas fa-envelope"></i> <input class='id' v-model="email" type="text" placeholder="example@gmail.com">
       </div>
@@ -22,7 +27,9 @@
       <span class = "googleSignin" @click="googleSignIn">
         <img src="../assets/googleLogo.png" width=10px>
            &nbsp; Sign In using Google</span>
-  </div>
+      </div>
+    <span class="yongseul">made by yongseul</span>
+    </div>
 </template>
 
 <script>
@@ -70,13 +77,11 @@ export default {
           this.name = userCredential.user.email;
           this.showLogin = false;
           this.show = true;
-          console.log('로그인 성공~')
           this.$router.push({path: "todo"});
           // ...
         })
         .catch((error) => {
           this.pleaseSignUp=true;
-          console.log('회원가입')
           console.log(error);
         });
     },
@@ -134,6 +139,25 @@ export default {
 </script>
 
 <style>
+.logo{
+  margin-top:220px;
+}
+.subtitle{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  color: #7ca3bb;
+  letter-spacing: 5px;
+
+}
+.yongseul{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    color: black;
+    opacity: 0.4;
+    bottom: 35px;
+    left: 140px;
+    position:fixed;
+  }
   body {
     text-align: center;
     background-color: #f2f2f2;
@@ -229,7 +253,7 @@ export default {
       font-family: Arial, Helvetica, sans-serif;
   }
   .login{
-    margin-top: 230px;
+    margin-top: 10px;
   }
   .closeModalBtn{
     margin-top: 10px;
