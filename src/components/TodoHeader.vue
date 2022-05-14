@@ -132,14 +132,12 @@ export default {
 
         }).catch((error) => {
           console.log(error)
-          // An error happened.
         });
     },
       deleteuser(){
         deleteUser(getAuth().currentUser)
           .then(() => {
-          // User deleted.
-          console.log('success')
+          this.$router.replace({path: "/"});
         }).catch((error) => {
           console.log(error)
         });
@@ -173,18 +171,18 @@ export default {
     z-index: 13;
   }
   .logout{
-      font-size: 16px;
-      display: inline-block;
-      margin-right: 10px;
-      width: 65px;
-      height:40px;
-      padding: 4px;
-      background-color: #7ca3bb;
-      opacity: 0.8;
-      color: white;
-      font-family: Arial, Helvetica, sans-serif;
-      border:none;
-      border-radius: 5px;
+    font-size: 16px;
+    display: inline-block;
+    margin-right: 10px;
+    width: 65px;
+    height:40px;
+    padding: 4px;
+    background-color: #7ca3bb;
+    opacity: 0.8;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    border:none;
+    border-radius: 5px;
   }
   /* 패딩 줄여서 양쪽 여백 좀 없애기 */
   .member{
