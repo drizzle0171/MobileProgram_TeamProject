@@ -101,15 +101,14 @@ export default {
   methods: {
     add(){
       this.addtodo=true;
-      console.log(this.today_year)
     },
     storeHead(){
-      this.information.Head = this.Head;
+      this.information.Head = this.Head.trim();
       this.typeHead=false;
       this.showHead=true;
     },
     storeMemo(){
-      this.information.memo = this.Memo;
+      this.information.memo = this.Memo.trim();
     },
     storeDate(){
       this.information.date = `${this.date.slice(0,4)}년 ${this.date.slice(5,7)}월 ${this.date.slice(8,10)}일`
@@ -142,11 +141,9 @@ export default {
     },
     addTodo() {
       if (this.Head !== "") {
-        let information = JSON.stringify(this.information);
-				this.$emit('addTodo', this.Head, information);
+        this.$store.commit('addTodo', this.information);
         console.log(this.Head)
         this.clearInput();
-        console.log(this.Head)
       } else {
         this.showModal = !this.showModal;
       }

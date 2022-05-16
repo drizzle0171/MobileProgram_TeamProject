@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './route/index.js'
 import axios from 'axios'
 import './registerServiceWorker'
+import { store } from './store/store.js'
 
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
@@ -31,6 +32,6 @@ initializeApp(firebaseConfig);
 
 new Vue({  
   router,
-  render: h => h(App)
+  store,
+  render: h => h(App),
 }).$mount('#app')
-
