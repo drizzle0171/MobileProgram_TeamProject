@@ -1,10 +1,10 @@
 <template>
   <div>
     <div>
-      <TodoHeader @changeDate="changeDate" :propsdata="cnt" :propsdata2="todoItems"></TodoHeader>
-      <TodoInput v-bind:propsdata2 = "date" @changeDate="changeDate"></TodoInput>
-      <TodoList @changeHead = "changeHead" @changeMemo = "changeMemo"></TodoList>
-      <TodoFooter @removeAll="clearAll"></TodoFooter>
+      <TodoHeader></TodoHeader>
+      <TodoInput></TodoInput>
+      <TodoList></TodoList>
+      <TodoFooter ></TodoFooter>
     </div>
   </div>
 </template>
@@ -20,8 +20,6 @@ export default {
   data() {
     return {
       cnt:0,
-      date: [],
-      // todoItems: [],
       name: "",
       show: false,
       showLogin:true,
@@ -30,11 +28,11 @@ export default {
   },
   methods: {
 
-    },
+  },
     created() {
       if (localStorage.length > 0) {
         for (var i = 0; i < localStorage.length; i++) {
-          this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+          this.$store.commit('addTodo', localStorage.getItem(localStorage.key(i)));
         }
       }
   },

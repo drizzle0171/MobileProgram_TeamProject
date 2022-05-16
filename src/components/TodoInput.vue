@@ -2,7 +2,7 @@
   <div class="inputBox">
   <div class="Today">
       <span class="Today-text">
-      {{propsdata2[0]}}년 {{propsdata2[1]}}월 {{propsdata2[2]}}일
+      {{Dates[0]}}년 {{Dates[1]}}월 {{Dates[2]}}일
       </span>
     <span class="add" type="button" @click="add()">
       <i class="addBtn fas fa-plus"></i>
@@ -68,9 +68,9 @@
 
 <script>
 import Modal from './common/AlertModal.vue'
+import { mapGetters } from 'vuex';
 
 export default {
-  props: ['propsdata2'],
   data() {
     return {
       today_year:'',
@@ -97,6 +97,11 @@ export default {
       time:"",
       category:""
     }
+  },
+  computed:{
+    ...mapGetters({
+      'Dates':'getDate'
+    })
   },
   methods: {
     add(){
@@ -141,8 +146,8 @@ export default {
     },
     addTodo() {
       if (this.Head !== "") {
-        this.$store.commit('addTodo', this.information);
-        console.log(this.Head)
+        let information = JSON.stringify(this.information);
+        this.$store.commit('addTodo', information);
         this.clearInput();
       } else {
         this.showModal = !this.showModal;
@@ -166,17 +171,18 @@ export default {
     }
   },
   created(){
-    if (this.propsdata2.length==0) {
+    if (this.Dates.length==0) {
       let today = new Date();
       let year = today.getFullYear();
       let month = today.getMonth()+1;
       let day = today.getDate();
-      this.$emit('changeDate',year, month, day)
+      let date = [year, month, day];
+      this.$store.commit('changeDate', date)
     }
     else{
-      this.today_year=this.propsdata2[0];
-      this.today_month=this.propsdata2[1];
-      this.today_day=this.propsdata2[2];
+      // this.today_year=date[0];
+      // this.today_month=date[1];
+      // this.today_day=date[2];
     }
   },
   components: {
@@ -204,8 +210,8 @@ input[type="time"] {
  }
 .Today{
   background-color: #ffffff;
-  left: 0;
-  margin: 10px 0px 10px 12px;
+  left: 15px;
+  margin: 10px 0px 0px 0px;
   height: 50px;
   line-height: 50px;
   text-align: center;
@@ -213,7 +219,7 @@ input[type="time"] {
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
   letter-spacing: 5px;
   border-radius: 7px;
-  width: 370px;
+  width: 358px;
   box-shadow: none;
   position: absolute;
   top: 370px
