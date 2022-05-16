@@ -2,7 +2,7 @@
   <div>
     <div>
       <transition-group name="list" tag="ul">
-        <li v-for="(todoItem, index) in propsdata" :key = "todoItem.Head" class="shadow" >
+        <li v-for="(todoItem, index) in todos" :key = "todoItem.Head" class="shadow" >
           <i class="checkBtn fas fa-check" :class="{checkBtn_done: todoItem.done}" aria-hidden="true" @click="check(todoItem)"></i>
             <div class="todo-item-text">
               <span> {{ todoItem.Head }} </span> <span :class="{category_school: (todoItem.category=='학교'), category_appointment: (todoItem.category=='약속'), category_assignment: (todoItem.category=='과제'), category_club: (todoItem.category=='동아리'), category_exercise: (todoItem.category=='운동'), category_etc: (todoItem.category=='기타')}">{{todoItem.category}}</span> <p class="todo-memo"> {{ todoItem.memo }} </p>
@@ -51,8 +51,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
-  props: ['propsdata'],
   data() {
     return {
       todayCnt:0,
@@ -83,20 +83,20 @@ export default {
       result:''
     };
   },
-
+  computed:{
+    ...mapGetters({
+      'todos':'getTodos'
+    })
+  },
   methods: {
     check(todoItem){
-      console.log(this.propsdata)
       todoItem.done = !todoItem.done;
       localStorage.removeItem(todoItem.Head);
       localStorage.setItem(todoItem.Head, JSON.stringify(todoItem));
-      console.log(todoItem.done);  
       },
     removeTodo(todoItem, index) {
       this.$emit("removeTodo", todoItem.Head, index);
-      this.todayCnt+=1;
-      this.$emit("countTodo", this.todayCnt)
-    },
+      },
     calculateDday(){
       let day = new Date();
       let today = new Date(day.getFullYear(), day.getMonth()+1, day.getDate())

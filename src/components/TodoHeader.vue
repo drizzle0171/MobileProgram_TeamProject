@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <div>
     <span @click="openSidebar">
       <i class="sidebarBtn fas fa-bars" :class="{hideSidebar: showSidebar==true}"></i>
     </span>
@@ -33,8 +33,11 @@
 
       </div>
     </div>
-
-    <div class="head"><h1> TodoForDays! </h1></div>
+    
+    <div class="head"><h1> TodoForDays </h1></div>
+    <span @click="openMypage">
+      <i class="mypageBtn fas fa-user"></i>
+    </span>
     <VdatePicker   
       trim-weeks
       locale="en"
@@ -46,7 +49,7 @@
       v-model="date"
       @dayclick="dayClicked"
       />
-  </header>
+    </div>
 </template>
 
 <script>
@@ -262,22 +265,25 @@ export default {
     position: fixed;
   }
   .sidebarBtn{
-    margin: 25px 0 0 20px;
     float: left;
     font-size: 20px;
     color: #7ca3bb;
     z-index: 10;
-    position: fixed;
+    margin: 25px 0 0 18px;
   }
   .hideSidebar{
     display: none;
   }
-
+  .mypageBtn{
+    color: #7ca3bb;
+    font-size: 20px;
+    float: right;
+    margin: 25px 18px 0 0;
+  }
   .vc-weeks{
-    margin-left: 6px;
-    left: 0;
-    display: absolute;
-    top: 80px;
+    position: absolute;
+    left: 15px;
+    top: 105px;
     padding: 5px;
     height: 260px;
     width: 370px;

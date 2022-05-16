@@ -2,8 +2,8 @@
   <div>
     <div>
       <TodoHeader @changeDate="changeDate" :propsdata="cnt" :propsdata2="todoItems"></TodoHeader>
-      <TodoInput v-bind:propsdata2 = "date" @changeDate="changeDate" @addTodo="addTodo"></TodoInput>
-      <TodoList v-bind:propsdata = "todoItems" @countTodo="countTodo" @removeTodo="removeTodo" @changeHead = "changeHead" @changeMemo = "changeMemo"></TodoList>
+      <TodoInput v-bind:propsdata2 = "date" @changeDate="changeDate"></TodoInput>
+      <TodoList @changeHead = "changeHead" @changeMemo = "changeMemo"></TodoList>
       <TodoFooter @removeAll="clearAll"></TodoFooter>
     </div>
   </div>
@@ -21,7 +21,7 @@ export default {
     return {
       cnt:0,
       date: [],
-      todoItems: [],
+      // todoItems: [],
       name: "",
       show: false,
       showLogin:true,
@@ -29,32 +29,7 @@ export default {
       }
   },
   methods: {
-    countTodo(count){
-      this.cnt = count;
-    },
-    clearAll() {
-      localStorage.clear();
-      this.todoItems = [];
-    },
-		addTodo(todoItem, information) {
-			localStorage.setItem(todoItem, information);
-			this.todoItems.push(JSON.parse(information));
-		},
-    changeHead(newHead, index) {
-      this.todoItems[index].Head = newHead;
-      console.log(this.todoItems)
-    },
-    changeMemo(newMemo, index) {
-      this.todoItems[index].memo = newMemo;
-    },
-    removeTodo(todoItem, index) {
-      localStorage.removeItem(todoItem);
-      this.todoItems.splice(index, 1);
-    },
-    changeDate(Year, Month, Day){
-      this.date = []
-      this.date.push(Year, Month, Day)
-    }
+
     },
     created() {
       if (localStorage.length > 0) {
