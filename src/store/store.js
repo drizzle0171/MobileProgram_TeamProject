@@ -8,6 +8,7 @@ export const store = new Vuex.Store({
       todoItems: [],
       Dates: [],
       doneCount: [],
+      totalCount: 0
     },
     getters: {
         getTodos: state => {
@@ -19,6 +20,9 @@ export const store = new Vuex.Store({
         getDone: state => {
           return state.doneCount;
         },
+        getTotal: state =>{
+          return state.totalCount;
+        }
     },
     mutations:{
         clearAll(state) {
@@ -29,7 +33,6 @@ export const store = new Vuex.Store({
             let JSONinformation = JSON.parse(information)
             localStorage.setItem(JSONinformation.Head, information);
             state.todoItems.push(JSONinformation);
-            state.doneCount.push(0);
         },
         changeHead(state, value) {
             let newHead = value[0]
@@ -63,10 +66,6 @@ export const store = new Vuex.Store({
             else {
               state.doneCount[index] = 0
             }
-            console.log(state.doneCount);
           },
-
-          
-          
-    }
+}
   });

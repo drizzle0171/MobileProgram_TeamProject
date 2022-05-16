@@ -93,6 +93,8 @@ export default {
   computed:{
     ...mapGetters({
       'checked':'getDone',
+      'Dates':'getDate',
+      'todoItems':'getTodos'
     })
   },
   methods: {
@@ -138,14 +140,13 @@ export default {
       this.showSidebar= !this.showSidebar;
       this.searchWeather();
       this.checkDone();
-      console.log('sum: ', this.Sum(this.checked))
     },
     closeSidebar(){
       this.showSidebar= !this.showSidebar;
+      this.total=0;
     },
     Sum(array){
       let sum = 0;
-      console.log('array: ', array)
         for (let i of array){
           if (i==1) {
             sum += 1
@@ -154,7 +155,13 @@ export default {
       return sum
     },
     checkDone(){
-      this.total = localStorage.length;
+      if (localStorage.length > 0) {
+        for (var i = 0; i < localStorage.length; i++) {
+          if ((this.todoItems[i].addDate[0]==this.Dates[0]) && (this.todoItems[i].addDate[1]==this.Dates[1]) && this.todoItems[i].addDate[2]==this.Dates[2]){
+            this.total+=1;
+          }
+        }
+      }
       this.done = this.Sum(this.checked);
     },
     
