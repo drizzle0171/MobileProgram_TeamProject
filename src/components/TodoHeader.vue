@@ -11,9 +11,9 @@
       <div class="side-container">
         <img src='../assets/todofordays.png' width="100px">
         <h2 style="text-align: center;">안녕하세요<br>슬비님!</h2>
-          <button class="logout" @click="logout"> Logout </button>
-          <button class="member"> 회원정보 </button>
-          <p>{{done}}/ {{total}}</p>
+          <!-- <button class="logout" @click="logout"> Logout </button>
+          <button class="member"> 회원정보 </button> -->
+          <div class="countBox"> <strong>오늘의 할 일은 <br> {{done}} / {{total}}</strong></div>
           <br>
         <div class="side-container-blue">
           <h3 id="text">☀︎ 오늘의 날씨</h3>
@@ -184,6 +184,21 @@ export default {
 </script>
 
 <style scoped>
+  h2{
+    margin: 10px 0;
+  }
+  .countBox{
+    width: 150px;
+    height: 50px;
+    background: #7ca3bb;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 7px;
+    opacity: 0.7;
+    color: #fff;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 17px;
+  }
   #text{
     text-align: left;
     color: #fff;
