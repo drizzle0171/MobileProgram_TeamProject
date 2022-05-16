@@ -9,7 +9,7 @@
 export default {
   methods: {
     clearTodo() {
-      this.$store.commit('removeAll');
+      this.$store.commit('clearAll');
     }
   }
 }

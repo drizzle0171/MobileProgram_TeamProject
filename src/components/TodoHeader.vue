@@ -4,7 +4,7 @@
       <i class="sidebarBtn fas fa-bars" :class="{hideSidebar: showSidebar==true}"></i>
     </span>
     <div class="side-wrapper" v-if="showSidebar">
-      <div class="closeSidebar" @click="openSidebar">
+      <div class="closeSidebar" @click="closeSidebar">
         <i class="closeBtn fas fa-angle-left"></i>
       </div>
       <div class="side-mask" @click="openSidebar"></div>
@@ -13,6 +13,7 @@
         <h2 style="text-align: center;">안녕하세요<br>슬비님!</h2>
           <button class="logout" @click="logout"> Logout </button>
           <button class="member"> 회원정보 </button>
+          <p>{{done}}/ {{total}}</p>
           <br>
         <div class="side-container-blue">
           <h3 id="text">☀︎ 오늘의 날씨</h3>
@@ -54,6 +55,8 @@
 
 <script>
 import VdatePicker from 'v-calendar/lib/components/date-picker.umd'
+import { mapGetters } from 'vuex';
+
 import {
   getAuth,
   signOut,
@@ -63,6 +66,8 @@ import {
 export default {
   data(){
     return{
+      done: 0,
+      total: 0,
       currentTemp:'',
       highestTemp:'',
       lowestTemp:'',
@@ -84,6 +89,11 @@ export default {
         }
       ]
     }
+  },
+  computed:{
+    ...mapGetters({
+      'checked':'getDone',
+    })
   },
   methods: {
      searchWeather() {
@@ -123,13 +133,31 @@ export default {
       this.selectedDay = Number(day.id.slice(8, 10));
       let selectedDate = [this.selectedYear, this.selectedMonth, this.selectedDay]
       this.$store.commit('changeDate', selectedDate);
-      console.log(localStorage.getItem(localStorage.key(0)));
     },
     openSidebar(){
       this.showSidebar= !this.showSidebar;
       this.searchWeather();
+      this.checkDone();
+      console.log('sum: ', this.Sum(this.checked))
     },
-
+    closeSidebar(){
+      this.showSidebar= !this.showSidebar;
+    },
+    Sum(array){
+      let sum = 0;
+      console.log('array: ', array)
+        for (let i of array){
+          if (i==1) {
+            sum += 1
+          }
+        }
+      return sum
+    },
+    checkDone(){
+      this.total = localStorage.length;
+      this.done = this.Sum(this.checked);
+    },
+    
     logout(){
         signOut(this.auth)
         .then(() => {
