@@ -3,6 +3,7 @@
     <div>
       <transition-group name="list" tag="ul">
         <li v-for="(todoItem, index) in todos" :key = "todoItem.Head" class="shadow" >
+          <span class="item" v-if="(todoItem.addDate[0]==Dates[0]) && (todoItem.addDate[1]==Dates[1]) && todoItem.addDate[2]==Dates[2]">
           <i class="checkBtn fas fa-check" :class="{checkBtn_done: todoItem.done}" aria-hidden="true" @click="check(todoItem, index)"></i>
             <div class="todo-item-text">
               <span> {{ todoItem.Head }} </span> <span :class="{category_school: (todoItem.category=='학교'), category_appointment: (todoItem.category=='약속'), category_assignment: (todoItem.category=='과제'), category_club: (todoItem.category=='동아리'), category_exercise: (todoItem.category=='운동'), category_etc: (todoItem.category=='기타')}">{{todoItem.category}}</span> <p class="todo-memo"> {{ todoItem.memo }} </p>
@@ -15,6 +16,7 @@
               </span>
             <span class="removeBtn" @click="removeTodo(todoItem, index)">
               <i class="fas fa-trash-alt" aria-hidden="true"></i>
+            </span>
             </span>
         </li>
       </transition-group>
@@ -86,6 +88,7 @@ export default {
   computed:{
     ...mapGetters({
       'todos':'getTodos',
+      'Dates':'getDate'
     })
   },
   methods: {
@@ -126,6 +129,7 @@ export default {
       this.category = todoItem.category;
       this.important = todoItem.important;
       this.calculateDday()
+      console.log(todoItem)
     },
     modifyHead() {
       console.log(this.todoItem)
@@ -169,7 +173,16 @@ export default {
 </script>
 
 <style scoped>
-
+.item{
+  display: flex;
+  margin: 7px;
+  padding: 0 0.9rem;
+  background: white;
+  border-radius: 5px;
+  align-items: center;
+  border-radius: 7px;
+  width: 328px;  
+}
 .memobox{
   width: 240px;
   height: 100px;
@@ -244,17 +257,6 @@ ul {
   position: absolute;
   top: 435px;
   left: 0px;
-}
-
-li {
-  display: flex;
-  margin: 7px;
-  padding: 0 0.9rem;
-  background: white;
-  border-radius: 5px;
-  align-items: center;
-  border-radius: 7px;
-  width: 328px;  
 }
 
 .todo-item-text {

@@ -87,7 +87,8 @@ export default {
         category:"",
         important:"",
         date:"",
-        time:""
+        time:"",
+        addDate:""
       },
       Head:"",
       Memo:"",
@@ -95,7 +96,8 @@ export default {
       Done: false,
       date:"",
       time:"",
-      category:""
+      category:"",
+      addDate:""
     }
   },
   computed:{
@@ -106,6 +108,11 @@ export default {
   methods: {
     add(){
       this.addtodo=true;
+      this.storeAddDate();
+    },
+    storeAddDate(){
+      this.addDate = [this.Dates[0], this.Dates[1], this.Dates[2]]
+      this.information.addDate = this.addDate
     },
     storeHead(){
       this.information.Head = this.Head.trim();
@@ -161,9 +168,10 @@ export default {
         done:false, 
         Head:"",
         memo:"",
-        category:"학교",
+        category:"",
         date:"",
-        time:""
+        time:"",
+        addDate:""
       },
       this.Head = "",
       this.Memo = "",
@@ -171,19 +179,6 @@ export default {
     }
   },
   created(){
-    if (this.Dates.length==0) {
-      let today = new Date();
-      let year = today.getFullYear();
-      let month = today.getMonth()+1;
-      let day = today.getDate();
-      let date = [year, month, day];
-      this.$store.commit('changeDate', date)
-    }
-    else{
-      // this.today_year=date[0];
-      // this.today_month=date[1];
-      // this.today_day=date[2];
-    }
   },
   components: {
     Modal: Modal
