@@ -3,7 +3,7 @@
     <div>
       <transition-group name="list" tag="ul">
         <li v-for="(todoItem, index) in todos" :key = "todoItem.Head" class="shadow" >
-          <i class="checkBtn fas fa-check" :class="{checkBtn_done: todoItem.done}" aria-hidden="true" @click="check(todoItem)"></i>
+          <i class="checkBtn fas fa-check" :class="{checkBtn_done: todoItem.done}" aria-hidden="true" @click="check(todoItem, index)"></i>
             <div class="todo-item-text">
               <span> {{ todoItem.Head }} </span> <span :class="{category_school: (todoItem.category=='학교'), category_appointment: (todoItem.category=='약속'), category_assignment: (todoItem.category=='과제'), category_club: (todoItem.category=='동아리'), category_exercise: (todoItem.category=='운동'), category_etc: (todoItem.category=='기타')}">{{todoItem.category}}</span> <p class="todo-memo"> {{ todoItem.memo }} </p>
             </div>
@@ -85,14 +85,16 @@ export default {
   },
   computed:{
     ...mapGetters({
-      'todos':'getTodos'
+      'todos':'getTodos',
     })
   },
   methods: {
-    check(todoItem){
+    check(todoItem, index){
       todoItem.done = !todoItem.done;
       localStorage.removeItem(todoItem.Head);
       localStorage.setItem(todoItem.Head, JSON.stringify(todoItem));
+      let value = [todoItem.done, index];
+      this.$store.commit('checkDone', value);
       },
     removeTodo(todoItem, index) {
       let value = [todoItem.Head, index];
