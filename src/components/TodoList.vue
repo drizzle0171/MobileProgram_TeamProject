@@ -95,7 +95,8 @@ export default {
       localStorage.setItem(todoItem.Head, JSON.stringify(todoItem));
       },
     removeTodo(todoItem, index) {
-      this.$emit("removeTodo", todoItem.Head, index);
+      let value = [todoItem.Head, index];
+      this.$store.commit("removeTodo", value);
       },
     calculateDday(){
       let day = new Date();
@@ -136,7 +137,8 @@ export default {
       this.todoItem = this.newHead;
       localStorage.setItem(this.todoItem, JSON.stringify(information));
       localStorage.removeItem(this.temp);
-      this.$emit("changeHead", this.newHead, this.index);
+      let value = [this.newHead, this.index];
+      this.$store.commit("changeHead", value);
       this.showModiHead=false;
       this.oldHead=false;
       this.showNewHead=true;
@@ -152,7 +154,8 @@ export default {
       let information = JSON.parse(localStorage.getItem(this.todoItem));
       information.memo = newMemo;
       this.memo= newMemo;
-      this.$emit("changeMemo", this.newMemo, this.index)
+      let value = [this.newMemo, this.index]
+      this.$store.commit("changeMemo", value)
       localStorage.setItem(this.todoItem, JSON.stringify(information));   
       this.showModiMemo=false;
       this.oldMemo=false;
@@ -233,10 +236,12 @@ div {
 ul {
   list-style-type: none;
   padding: 0px;
-  margin: 5px;
+  margin: 0 5px;
   text-align: left;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
+  position: absolute;
+  top: 435px;
+  left: 0px;
 }
 
 li {
@@ -247,7 +252,7 @@ li {
   border-radius: 5px;
   align-items: center;
   border-radius: 7px;
-  width: 90%;  
+  width: 328px;  
 }
 
 .todo-item-text {

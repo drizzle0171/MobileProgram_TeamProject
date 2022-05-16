@@ -35,9 +35,9 @@
     </div>
     
     <div class="head"><h1> TodoForDays </h1></div>
-    <span @click="openMypage">
+    <!-- <span @click="openMypage">
       <i class="mypageBtn fas fa-user"></i>
-    </span>
+    </span> -->
     <VdatePicker   
       trim-weeks
       locale="en"
@@ -121,7 +121,9 @@ export default {
       this.selectedYear = Number(day.id.slice(0, 4));
       this.selectedMonth = Number(day.id.slice(6, 7));
       this.selectedDay = Number(day.id.slice(8, 10));
-      this.$emit('changeDate', this.selectedYear, this.selectedMonth, this.selectedDay);
+      let selectedDate = [this.selectedYear, this.selectedMonth, this.selectedDay]
+      this.$store.commit('changeDate', selectedDate);
+      console.log(localStorage.getItem(localStorage.key(0)));
     },
     openSidebar(){
       this.showSidebar= !this.showSidebar;
@@ -286,7 +288,7 @@ export default {
     top: 105px;
     padding: 5px;
     height: 260px;
-    width: 370px;
+    width: 358px;
     opacity: 0.9;
     border: 0;
 }
