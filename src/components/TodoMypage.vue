@@ -5,7 +5,7 @@
     </span>
     <div class="head">
       <h1> TodoForDays </h1>
-      <h2><u> MyPage </u></h2>
+      <h2><u> My page </u></h2>
     </div>
     <div class="userInfoTitle"> 회원정보 </div>
     <div class="userInfo">

@@ -14,11 +14,13 @@
           <div class="countBox"> <strong>오늘의 할 일은 <br> {{done}} / {{total}}</strong></div>
           <br>
         <div class="side-container-blue">
+          <div @click="openWeather">
           <h3 id="text">☀︎ 오늘의 날씨</h3>
           <p id="text"><b>현재 온도</b> {{currentTemp}} °C</p>
           <p id="text"><b>최고 온도</b> {{highestTemp}} °C</p>
           <p id="text"><b>최저 온도</b> {{lowestTemp}} °C</p>
           <p id="text"><b>{{description}}</b></p>
+          </div>
           <hr>
           <h3 id="text">♛ 오늘의 주식</h3>
           <p id="text"><b>카카오</b> KRW 82,000</p>
@@ -98,6 +100,9 @@ export default {
   methods: {
     openMypage(){
       this.$router.replace({path: "/mypage"});
+    },
+    openWeather(){
+      this.$router.replace({path: "/weather"});
     },
     searchWeather() {
       const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=5dc753fbb35d7e99e7fd80b06a9a18a7'
