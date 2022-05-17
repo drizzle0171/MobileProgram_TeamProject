@@ -112,7 +112,7 @@ export default {
     onSignIn(googleUser){
       const profile = googleUser.getBasicProfile();
       console.log('Email: '+profile.getEmail());
-    }
+    },
 
   },
     beforecreated() {

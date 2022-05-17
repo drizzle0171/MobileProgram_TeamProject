@@ -11,8 +11,6 @@
       <div class="side-container">
         <img src='../assets/todofordays.png' width="100px">
         <h2 style="text-align: center;">안녕하세요<br>슬비님!</h2>
-          <!-- <button class="logout" @click="logout"> Logout </button>
-          <button class="member"> 회원정보 </button> -->
           <div class="countBox"> <strong>오늘의 할 일은 <br> {{done}} / {{total}}</strong></div>
           <br>
         <div class="side-container-blue">
@@ -36,9 +34,9 @@
     </div>
     
     <div class="head"><h1> TodoForDays </h1></div>
-    <!-- <span @click="openMypage">
+    <span @click="openMypage">
       <i class="mypageBtn fas fa-user"></i>
-    </span> -->
+    </span>
     <VdatePicker   
       trim-weeks
       locale="en"
@@ -98,7 +96,10 @@ export default {
     })
   },
   methods: {
-     searchWeather() {
+    openMypage(){
+      this.$router.replace({path: "/mypage"});
+    },
+    searchWeather() {
       const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=5dc753fbb35d7e99e7fd80b06a9a18a7'
       this.$http.get(`${BASE_URL}`)
       .then((result) => {
@@ -315,6 +316,8 @@ export default {
     font-weight: 900;
     transform: translate(0%, -50%);
     position: fixed;
+    top: 25px;
+    left: 10px;
   }
   .sidebarBtn{
     float: left;
