@@ -10,7 +10,9 @@
     <div class="userInfoTitle"> 회원정보 </div>
     <div class="userInfo">
       <img class="profile" :src="photo">
-      <p class="name"> <b>이름</b><br> {{Name}}</p>
+      <img class="notProfile" v-if="photo==null" src="../assets/user.png"/>
+      <p class="name" v-if="photo!=null"> <b>이름</b><br> {{Name}}</p>
+      <p class="welcome" v-if="photo==null"> <i><b>환영합니다!</b></i><br></p>
       <p class="email"> <b>이메일</b><br> {{email}}</p>
     </div>
     <div class="updatePasswordTitle"> 비밀번호 재설정 </div>
@@ -93,7 +95,6 @@ export default {
         const user = this.auth.currentUser;
         const credential = promptForCredentials();
         reauthenticateWithCredential(user, credential).then(() => {
-            // User re-authenticated.
           }).catch((error) => {
             console.log(error)
           });
@@ -117,6 +118,8 @@ export default {
         this.Name = user.displayName;
         this.email = user.email;
         this.photo = user.photoURL;
+        console.log(this.photo == false)
+        console.log(this.Name, this.email, this.photo)
       }
     }
     
@@ -217,6 +220,12 @@ export default {
     top: 200px;
     left: 70px;
   }
+  .notProfile{
+    width: 90px;
+    position: fixed;
+    top: 200px;
+    left: 70px
+  }
   .name{
     color: #ffffff;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -224,6 +233,15 @@ export default {
     top: 180px;
     left: 180px;
     text-align: left;
+  }
+  .welcome{
+    font-size: 25px;
+    color: #5f8ba7;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    position: fixed;
+    top: 175px;
+    left: 180px;
+
   }
   .email{
     color: #ffffff;
