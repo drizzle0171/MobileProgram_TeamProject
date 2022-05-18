@@ -80,6 +80,9 @@ export default {
     z-index: -10;
   }
   .sidebarBtn{
+    position: fixed;
+    top: 25px;
+    left: 15px;
     float: left;
     font-size: 20px;
     color: #7ca3bb;
