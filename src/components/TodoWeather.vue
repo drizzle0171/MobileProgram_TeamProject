@@ -9,17 +9,24 @@
     </div>
     
     <div class="todayWeather">
-      <div :class="{sunny: description=='오늘은 날씨가 맑네요!', cloud: description=='구름이 있을 예정이에요', lightning: description=='번개가 칠수도!', drizzle: description=='이슬비가 내릴 거에요', umburella: description=='오늘은 우산이 필요할 거에요', snow: description=='눈이 펑펑!', fog: description=='안개가 낄 예정이니 조심!'}"> </div>
+      <img src="../assets/sun.png" class="nothing" :class="{sunny: description=='오늘은 날씨가 맑네요!'}">
+      <img src="../assets/clouds.png" class="nothing" :class="{clouds: description=='구름이 있을 예정이에요'}">
+      <img src="../assets/thunder.png" class="nothing" :class="{lightning: description=='번개가 칠수도!'}">
+      <img src="../assets/drizzle.png" class="nothing" :class="{drizzle: description=='이슬비가 내릴 거에요'}">
+      <img src="../assets/rain.png" class="nothing" :class="{umburella: description=='오늘은 우산이 필요할 거에요'}">
+      <img src="../assets/snowflake.png" class="nothing" :class="{snow: description=='눈이 펑펑!'}">
+      <img src="../assets/fog.png" class="nothing" :class="{fog: description=='안개가 낄 예정이니 조심!'}">
+      <div class="currentTemp"> {{currentTemp}} °C </div>
       <div class="description"><b>{{description}}</b></div>
-        <div class="SummaryWeather1">
-          <b>현재 온도</b> {{currentTemp}} °C <br>
-          <b>최고 온도</b> {{highestTemp}} °C <br>
-          <b>최저 온도</b> {{lowestTemp}} °C <br>
-        </div>
-        <div class="SummaryWeather2">
-          <b>체감 온도</b> {{feelTemp}} °C <br>
-          <b>압력</b> {{pressure}} Pa <br>
-          <b>습도</b> {{humidity}} % <br>
+      <div class="highestTemp">{{highestTemp}} °C &nbsp;</div>
+      <div class="lowestTemp">| &nbsp; {{lowestTemp}} °C</div>
+        <div class="SummaryWeather">
+          <img src="../assets/humidity.png" class="humidityPic">
+          <div class="feel_like"><b>체감 온도</b> <br> {{feelTemp}} °C <br></div>
+          <img src="../assets/blood-pressure.png" class="PressurePic">
+          <div class="pressure"><b>압력</b> <br> {{pressure}} Pa <br></div>
+          <img src="../assets/thermometer.png" class="feel_likePic">
+          <div class="huminity"><b>습도</b> <br> {{humidity}} % <br></div>
         </div>
     </div>
     <div class="updatePasswordTitle"> 예 보 </div>
@@ -143,31 +150,144 @@ export default {
     left: 40px;
     height: 140px;
   }
-  .SummaryWeather1{
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: #fff;
+  .SummaryWeather{
+    width: 311px;
+    background-color: #f1faff;
     line-height: 25px;
     position: fixed;
-    top: 230px;
-    left: 65px
-  }
-  .SummaryWeather2{
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: #fff;
-    position: fixed;
-    line-height: 25px;
-    top: 230px;
-    left: 210px;
-    text-align: left;
+    top: 255px;
+    left: 40px;
+    height: 75px;
   }
   .description{
-    width: 100px;
+    font-size: 13px;
+    text-align: right;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 225px;
+    left: 80px;
+  }
+  .currentTemp{
+    font-size: 28px;
     text-align: right;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     color: #4f6979;
     position: fixed;
     top: 175px;
-    left: 215px;
+    left: 240px;
+  }
+  .highestTemp{
+    font-size: 13px;
+    text-align: right;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #fff;
+    position: fixed;
+    top: 220px;
+    left:230px;    
+  }
+  .lowestTemp{
+    font-size: 13px;
+    text-align: right;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #fff;
+    position: fixed;
+    top: 220px;
+    left: 275px;  
+  }
+  .feel_likePic{
+    position: fixed;
+    top: 277px;
+    left: 57px;
+  }
+  .feel_like{
+    text-align: left;
+    font-size: 17px;
+    color: #4f6979;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    position: fixed;
+    top: 267px;
+    left: 83px;
+  }
+  .PressurePic{
+    position: fixed;
+    top: 277px;
+    left: 163px;
+  }
+    .pressure{
+    text-align: left;
+    font-size: 17px;
+    color: #4f6979;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    position: fixed;
+    top: 267px;
+    left: 193px;
+  }
+  .humidityPic{
+    position: fixed;
+    top: 277px;
+    left: 260px;
+
+  }
+    .huminity{
+    text-align: left;
+    font-size: 17px;
+    color: #4f6979;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    position: fixed;
+    top: 267px;
+    left: 290px;
+  }
+  .nothing{
+    display: none;
+  }
+  .sunny{
+    position: fixed;
+    display: flex;
+    top: 160px;
+    left: 100px;
+    width: 60px;  }
+  .clouds{
+    position: fixed;
+    display: flex;
+    top: 160px;
+    left: 100px;
+    width: 60px;
+  }
+  .lightning{
+    position: fixed;
+    display: flex;
+    top: 160px;
+    left: 100px;
+    width: 60px;
+  }
+  .drizzle{
+    position: fixed;
+    display: flex;
+    top: 160px;
+    left: 100px;
+    width: 60px;
+  }
+  .umburella{
+    position: fixed;
+    display: flex;
+    top: 160px;
+    left: 100px;
+    width: 60px;
+  }
+  .snow{
+    position: fixed;
+    display: flex;
+    top: 160px;
+    left: 100px;
+    width: 60px;
+  }
+  .fog{
+    position: fixed;
+    display: flex;
+    top: 160px;
+    left: 100px;
+    width: 60px;
   }
 
   .updatePasswordTitle{

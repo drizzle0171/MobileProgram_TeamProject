@@ -56,7 +56,7 @@ export default {
     'TodoHeader': TodoHeader,
     'TodoInput': TodoInput,
     'TodoList': TodoList,
-    'TodoFooter': TodoFooter
+    'TodoFooter': TodoFooter,
   }
 }
 </script>

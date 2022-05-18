@@ -187,6 +187,9 @@ export default {
 </script>
 
 <style scoped>
+.addbtn{
+  
+}
 input[type="date"] { 
  background: white; 
  color: #7ca3bb;;
@@ -217,7 +220,7 @@ input[type="time"] {
   width: 358px;
   box-shadow: none;
   position: absolute;
-  top: 370px
+  top: 370px;
 
 }
 .Today-text{
