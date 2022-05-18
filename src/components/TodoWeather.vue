@@ -29,8 +29,27 @@
           <div class="huminity"><b>습도</b> <br> {{humidity}} % <br></div>
         </div>
     </div>
-    <div class="updatePasswordTitle"> 예 보 </div>
-    <div class="updatePassword">
+    <div class="forecastTitle"> 예 보 </div>
+    <div class="forecast">
+      <div class="fourDays">향후 4일간의 날씨입니다</div>
+        <span class="high">최고</span>
+        <span class="low">최저</span>
+       <div class="day1"> {{month[0]}}월 {{day[0]}}일 &nbsp; &nbsp; |
+          <div class="day1low"> <strong>{{daylow[0]}} °C </strong> </div> 
+          <div class="day1high"><strong>{{dayhigh[0]}} °C </strong></div>
+      </div>
+      <div class="day2"> {{month[1]}}월 {{day[1]}}일 &nbsp; &nbsp; |
+          <div class="day2low"> <strong>{{daylow[1]}} °C </strong> </div> 
+          <div class="day2high"><strong>{{dayhigh[1]}} °C </strong></div>
+      </div>
+      <div class="day3"> {{month[2]}}월 {{day[2]}}일 &nbsp; &nbsp; |
+          <div class="day3low"> <strong>{{daylow[2]}} °C </strong> </div> 
+          <div class="day3high"><strong>{{dayhigh[2]}} °C </strong></div>
+      </div>
+      <div class="day4"> {{month[3]}}월 {{day[3]}}일 &nbsp; &nbsp; |
+          <div class="day4low"> <strong>{{daylow[3]}} °C </strong> </div> 
+          <div class="day4high"><strong>{{dayhigh[3]}} °C </strong></div>
+      </div>
     </div>
     </div>
 
@@ -44,6 +63,10 @@ import { mapGetters } from 'vuex';
 export default {
   data(){
     return{
+      month:[],
+      day:[],
+      dayhigh:[],
+      daylow:[],
       currentTemp:'',
       feelTemp:'',
       highestTemp:'',
@@ -69,8 +92,8 @@ export default {
   }
   },
   created(){
+    //Today Weather
     const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=5dc753fbb35d7e99e7fd80b06a9a18a7'
-    // const FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast?q=Seoul&appid=5dc753fbb35d7e99e7fd80b06a9a18a7'  
       this.$http.get(`${BASE_URL}`)
       .then((result) => {
         this.currentTemp = (result.data.main.temp - 273.15).toFixed(1)
@@ -101,6 +124,27 @@ export default {
         }
         else if (weather[0]=='701') {
           this.description = '안개가 낄 예정이니 조심!';
+        }
+      })
+    const FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast?q=Seoul&appid=5dc753fbb35d7e99e7fd80b06a9a18a7'  
+      this.$http.get(`${FORECAST_URL}`)
+      .then((forecast) => {
+        let list = forecast.data.list
+        for(let i in list){
+          // console.log(Number(list[i].main.temp-273.15))
+          // console.log(Number(list[i].main.temp-273.15).toFixed(1))
+          let time = list[i].dt_txt
+          if (time.slice(8, 10)!=list[0].dt_txt.slice(8, 10) && time.slice(8, 10)!=list[list.length-1].dt_txt.slice(8, 10))
+            {
+              if (time.slice(11, 13) == '06'){
+              this.month.push(time.slice(5, 7))
+              this.day.push(time.slice(8, 10))
+              this.dayhigh.push((Number(list[i].main.temp)- 273.15+2).toFixed(1))
+            }
+            else if (time.slice(11, 13) == '21'){
+              this.daylow.push((Number(list[i].main.temp)- 273.15-2).toFixed(1))
+            }
+          }
         }
       })
     },
@@ -214,7 +258,7 @@ export default {
     top: 277px;
     left: 163px;
   }
-    .pressure{
+  .pressure{
     text-align: left;
     font-size: 17px;
     color: #4f6979;
@@ -290,7 +334,7 @@ export default {
     width: 60px;
   }
 
-  .updatePasswordTitle{
+  .forecastTitle{
     border-radius: 10px;
     font-size: 20px;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -304,7 +348,7 @@ export default {
     left: 110px;
     z-index: 10;
   }
-  .updatePassword{
+  .forecast{
     border: solid 1.5px #7ca3bb;
     border-radius: 10px;
     padding: 20px;
@@ -314,19 +358,153 @@ export default {
     left: 40px;
     height: 360px;
   }
-
-
-  .passWord{
-    height: 30px;
-    width: 200px;
-    padding: 0 10px;
-    background-color: #f2f2f2;
-    border-top:none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 2px solid #7ca3bb;
+  .high{
+    font-size: 20px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 435px;
+    left: 205px;
   }
-  .passWord::placeholder{
-    line-height: 30px;
+  .low{
+    font-size: 20px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 435px;
+    left: 270px;
   }
+  .day1{
+    font-size: 17px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 480px;
+    left: 57px;
+    width: 250px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 10px;
+    text-align: left;
+    padding-left: 30px;
+    background-color: #dde7ed;
+  }
+  .day1low{
+    font-size: 17px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 480px;
+    left: 265px;
+  }
+  .day1high{
+    font-size: 17px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 480px;
+    left: 200px;
+  }
+  .day2{
+    font-size: 17px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 550px;
+    left: 57px;
+    width: 250px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 10px;
+    text-align: left;
+    padding-left: 30px;
+    background-color: #dde7ed;
+  }
+  .day2low{
+    font-size: 17px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 550px;
+    left: 265px;
+  }
+  .day2high{
+    font-size: 17px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 550px;
+    left: 200px;
+  }
+  .day3{
+    font-size: 17px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 620px;
+    left: 57px;
+    width: 250px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 10px;
+    text-align: left;
+    padding-left: 30px;
+    background-color: #dde7ed;
+  }
+  .day3low{
+    font-size: 17px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 620px;
+    left: 265px;
+  }
+  .day3high{
+    font-size: 17px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 620px;
+    left: 200px;
+  }
+  .day4{
+    font-size: 17px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 690px;
+    left: 57px;
+    width: 250px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 10px;
+    text-align: left;
+    padding-left: 30px;
+    background-color: #dde7ed;
+  }
+  .day4low{
+    font-size: 17px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 690px;
+    left: 265px;
+  }
+  .day4high{
+    font-size: 17px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #4f6979;
+    position: fixed;
+    top: 690px;
+    left: 200px;
+  }
+  .fourDays{
+    color: #4f6979;
+    font-size: 12px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    position: fixed;
+    top: 442px;
+    left: 70px;
+  }
+
 </style>
