@@ -1,7 +1,7 @@
 <template>
   <div>
       <span @click="openSidebar">
-        <i class="sidebarBtn fas fa-bars" :class="{hideSidebar: showSidebar==true}"></i>
+        <i class="sidebarBtn fas fa-bars"></i>
       </span>
     <div class="head"><h1> TodoForDays </h1></div>
     <span @click="openMypage">
@@ -59,7 +59,6 @@ export default {
       this.$router.replace({path: "/sidebar"});
     },
     closeSidebar(){
-      this.showSidebar= !this.showSidebar;
       this.total=0;
     },
     dayClicked(day){
