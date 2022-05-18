@@ -23,9 +23,21 @@
       <img src="../assets/reload.png" class="newPassword">
       <p class="text"> 새 비밀번호 <br></p>
       <input class="passWord" v-model="newPassword" type="password" placeholder="Type your new password"/> <br>
+      <div v-if="newPassword" class="nothing" :class="{notPerfect: newPassword.length<6}">
+        <img width="12px" src="../assets/exclamation.png">  &nbsp; 6자 이상으로 입력해주세요
+      </div>
+      <div class="nothing" :class="{perfect: newPassword.length>=6}">
+        <img width="12px" src="../assets/check.png"> &nbsp; 사용 가능한 비밀번호입니다
+      </div>
       <img src="../assets/reload.png" class="newPasswordAgain">
       <p class="text"> 새 비밀번호 확인 <br></p>
       <input class="passWord" v-model="newPasswordAgain" type="password" placeholder="Type your new password again"/>
+      <div v-if="newPasswordAgain" class="nothing" :class="{notPerfectAgain: newPassword!=newPasswordAgain}">
+        <img width="12px" src="../assets/exclamation.png">  &nbsp; 비밀번호가 일치하지 않습니다
+      </div>
+      <div v-if="newPasswordAgain" class="nothing" :class="{perfectAgain: newPassword==newPasswordAgain}">
+        <img width="12px" src="../assets/check.png"> &nbsp; 비밀번호가 일치합니다
+      </div>
       <div class="confirm" @click="updatepassword">확인</div>
     </div>
     <modal v-if="showUpdatePasswordSuccess" @click="showUpdatePasswordSuccess = false">
@@ -296,6 +308,8 @@ export default {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 17px;
     margin: 15px 0 3px 0;
+    margin-left: 15px;
+    padding-left: 20px;
     text-align: left;
     color: #7ca3bb;
     margin-left: 25px;
@@ -317,19 +331,66 @@ export default {
   .currentPassword{
     width: 17px;
     position: fixed;
-    top: 457px;
-    left: 75px;
+    top: 427px;
+    left: 85px;
   }
   .newPassword{
     width: 17px;
     position: fixed;
-    top: 537px;
-    left: 75px;
+    top: 508px;
+    left: 85px;
   }
   .newPasswordAgain{
     width: 17px;
     position: fixed;
-    top: 618px;
-    left: 75px;
+    top: 590px;
+    left: 85px;
+  }
+  .nothing{
+    display: none;
+  }
+  .perfect{
+    display: flex;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #32BE5A;
+    font-size: 11px;
+    line-height: 13px;
+    height: 13px;
+    position:fixed;
+    top: 570px;
+    left: 90px;
+  }
+  .notPerfect{
+    display: flex;
+    font-family: 'Fsranklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #FF5757;
+    font-size: 11px;
+    line-height: 13px;
+    height: 13px;
+    position:fixed;
+    top: 570px;
+    left: 90px;
+  }
+  .perfectAgain{
+    display: flex;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #32BE5A;
+    font-size: 11px;
+    line-height: 13px;
+    height: 13px;
+    position:fixed;
+    top: 651px;
+    left: 90px;
+  }
+  .notPerfectAgain{
+    display: flex;
+    font-family: 'Fsranklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #FF5757;
+    font-size: 11px;
+    line-height: 13px;
+    height: 13px;
+    position:fixed;
+    top: 651px;
+    left: 90px;
   }
 </style>
