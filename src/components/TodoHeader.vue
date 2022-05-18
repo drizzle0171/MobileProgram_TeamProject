@@ -28,6 +28,10 @@ import { mapGetters } from 'vuex';
 export default {
   data(){
     return{
+      date:"",
+      selectedDay:'',
+      selectedYear:'',
+      selectedMonth:'',
       attributes:[
         {
           key:'today',
@@ -57,6 +61,13 @@ export default {
     closeSidebar(){
       this.showSidebar= !this.showSidebar;
       this.total=0;
+    },
+    dayClicked(day){
+      this.selectedYear = Number(day.id.slice(0, 4));
+      this.selectedMonth = Number(day.id.slice(6, 7));
+      this.selectedDay = Number(day.id.slice(8, 10));
+      let selectedDate = [this.selectedYear, this.selectedMonth, this.selectedDay]
+      this.$store.commit('changeDate', selectedDate);
     },
   },
   components: {
