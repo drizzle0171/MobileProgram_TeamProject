@@ -179,6 +179,7 @@ export default {
     color: #7ca3bb;
   }
   .id {
+  font-size: 16px;
   width: 250px;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -201,6 +202,7 @@ export default {
     color: #7ca3bb;
   }
   .password {
+  font-size: 16px;
   width: 250px;
   margin-right: 30px;
   margin-left: 5px;

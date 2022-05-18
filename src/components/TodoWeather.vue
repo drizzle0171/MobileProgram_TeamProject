@@ -57,7 +57,6 @@
 
 <script>
 //제공 정보: 현재 온도, 체감 온도, 최고, 최저, 압력, 습도, weather id, 예보
-import Modal from './common/AlertModal.vue'
 import { mapGetters } from 'vuex';
 
 export default {
@@ -87,9 +86,6 @@ export default {
     openTodo(){
       this.$router.replace({path: "/todo"});
     },
-    components: {
-    Modal: Modal,
-  }
   },
   created(){
     //Today Weather
