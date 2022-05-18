@@ -17,10 +17,13 @@
     </div>
     <div class="updatePasswordTitle"> 비밀번호 재설정 </div>
     <div class="updatePassword">
+      <img src="../assets/padlock.png" class="currentPassword">
       <p class="text"> 현재 비밀번호 <br></p>
       <input class="passWord" v-model="currentPassword" type="password" placeholder="Type your password"/> <br>
+      <img src="../assets/reload.png" class="newPassword">
       <p class="text"> 새 비밀번호 <br></p>
       <input class="passWord" v-model="newPassword" type="password" placeholder="Type your new password"/> <br>
+      <img src="../assets/reload.png" class="newPasswordAgain">
       <p class="text"> 새 비밀번호 확인 <br></p>
       <input class="passWord" v-model="newPasswordAgain" type="password" placeholder="Type your new password again"/>
       <div class="confirm" @click="updatepassword">확인</div>
@@ -108,9 +111,9 @@ export default {
           })
         }
       },
+  },
     components: {
     Modal: Modal,
-  }
   },
   created(){
     const user = this.auth.currentUser;
@@ -118,8 +121,6 @@ export default {
         this.Name = user.displayName;
         this.email = user.email;
         this.photo = user.photoURL;
-        console.log(this.photo == false)
-        console.log(this.Name, this.email, this.photo)
       }
     }
     
@@ -142,7 +143,7 @@ export default {
     border:none;
     border-radius: 5px;
     position: fixed;
-    top: 750px;
+    top: 765px;
     left: 80px;
   }
   /* 패딩 줄여서 양쪽 여백 좀 없애기 */
@@ -160,7 +161,7 @@ export default {
       border:none;
       border-radius: 5px;
       position: fixed;
-      top: 750px;
+      top: 765px;
       left: 220px;
 
   }
@@ -273,7 +274,7 @@ export default {
     position: fixed;
     top: 390px;
     left: 40px;
-    height: 280px;
+    height: 300px;
   }
   .confirm{
     font-size: 17px;
@@ -288,7 +289,7 @@ export default {
     border-radius: 5px;
     line-height: 35px;
     position: fixed;
-    top: 650px;
+    top: 670px;
     left: 165px;
   }
   .text{
@@ -302,6 +303,7 @@ export default {
   .passWord{
     height: 30px;
     width: 200px;
+    margin-bottom: 10px;
     padding: 0 10px;
     background-color: #f2f2f2;
     border-top:none;
@@ -311,5 +313,23 @@ export default {
   }
   .passWord::placeholder{
     line-height: 30px;
+  }
+  .currentPassword{
+    width: 17px;
+    position: fixed;
+    top: 457px;
+    left: 75px;
+  }
+  .newPassword{
+    width: 17px;
+    position: fixed;
+    top: 537px;
+    left: 75px;
+  }
+  .newPasswordAgain{
+    width: 17px;
+    position: fixed;
+    top: 618px;
+    left: 75px;
   }
 </style>

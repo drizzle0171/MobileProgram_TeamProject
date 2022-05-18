@@ -38,7 +38,6 @@ export default {
   },
     created() {
       if (this.Dates.length==0) {
-      console.log('yes')
       let today = new Date();
       let year = today.getFullYear();
       let month = today.getMonth()+1;
