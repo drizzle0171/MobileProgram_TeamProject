@@ -69,3 +69,16 @@ export const store = new Vuex.Store({
           },
 }
   });
+
+  export const store2 = Vue.observable({
+    isNavOpen: false
+  });
+
+  export const mutations = {
+    setIsNavOpen(yesno) {
+      store.isNavOpen = yesno;
+    },
+    toggleNav() {
+      store.isNavOpen = !store.isNavOpen;
+    }
+  };

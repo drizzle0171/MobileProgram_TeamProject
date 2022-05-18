@@ -174,6 +174,7 @@ export default {
 
 <style scoped>
 .item{
+  z-index: -10;
   display: flex;
   margin: 7px;
   padding: 0 0.9rem;
