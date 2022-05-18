@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="side-wrapper">
-      <div class="closeSidebar" @click="closeSidebar">
+      <div class="closeSidebar" @click="openTodo">
         <i class="closeBtn fas fa-angle-left"></i>
       </div>
-      <div class="side-mask" @click="openSidebar"></div>
+      <div class="side-mask"></div>
       <div class="side-container">
         <img src='../assets/todofordays.png' width="100px">
         <h2 style="text-align: center;">안녕하세요<br>슬비님!</h2>
@@ -66,7 +66,6 @@ export default {
           }
         }
       }
-      this.done = this.Sum(this.checked);
     this.total=0;
     const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=5dc753fbb35d7e99e7fd80b06a9a18a7'
       this.$http.get(`${BASE_URL}`)
@@ -101,6 +100,9 @@ export default {
   methods: {
     openWeather(){
       this.$router.replace({path: "/weather"});
+    },
+    openTodo(){
+      this.$router.replace({path: "/todo"});
     }
   }
 
@@ -133,11 +135,6 @@ export default {
     color: #fff;
     line-height:10px;
   }
-  /* #subtext{
-    text-align: right;
-    color: #fff;
-    line-height:10px;
-  } */
   .yongseul{
     font-size: 16px;
     color: black;
@@ -147,44 +144,14 @@ export default {
     position:fixed;
     z-index: 13;
   }
-  .logout{
-    font-size: 16px;
-    display: inline-block;
-    margin-right: 10px;
-    width: 65px;
-    height:40px;
-    padding: 4px;
-    background-color: #7ca3bb;
-    opacity: 0.8;
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
-    border:none;
-    border-radius: 5px;
-  }
-  /* 패딩 줄여서 양쪽 여백 좀 없애기 */
-  .member{
-      font-size: 16px;
-      display: inline-block;
-      width: 65px;
-      height: 40px;
-      padding: 4px;
-      margin-left: 10px;
-      background-color: #7ca3bb;
-      opacity: 0.8;
-      color: white;
-      font-family: Arial, Helvetica, sans-serif;
-      border:none;
-      border-radius: 5px;
-
-  }
   .side-container {
-    /* position: fixed; */
-    /* top:0; */
-    /* right:180px; */
+    position: fixed;
+    top:0;
+    right:180px;
     width: 150px;
     height: 100%;
     padding: 20px 30px 0 30px;
-    z-index: 999;
+    z-index: 999999;
     background-color: #fff;
     font-family: Helvetica, Arial, sans-serif;
     display: flex; 
@@ -194,14 +161,14 @@ export default {
   
   .closeSidebar{
     position:fixed;
-    z-index: 15;
+    z-index: 159999999;
     width: 55px;
     height: 45px;
     background-color:#fff;
     left: 200px;
     top: 20px;
     border-radius: 9px;
-        display: flex; 
+      display: flex; 
     flex-direction: column;
     transition: transform 0.4s ease-in-out
   }
@@ -213,7 +180,8 @@ export default {
     display: flex; 
     flex-direction: column;
     transform: translatex(-5px);
-    transition: transform 0.4s ease-in-out
+    transition: transform 0.4s ease-in-out;
+    z-index: 99999;
   }
   .side-container-blue {
     position: fixed;
