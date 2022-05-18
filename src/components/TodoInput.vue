@@ -231,6 +231,7 @@ input[type="time"] {
   font-size: 17px;
 }
 .Head{
+  font-size: 16px;
   width: 100%;
   margin-right: 20px;
   background-color: #fff;
@@ -365,6 +366,7 @@ li {
   float: right;
 }
 .Memo{
+  font-size: 16px;
   width: 100%;
   background-color: #fff;
   border: 1px solid #7ca3bb;
