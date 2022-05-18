@@ -211,7 +211,7 @@ body {
 div {
   box-sizing: border-box;
   width: 360px;
-  height: 1000px;
+  height: 10000px;
   overflow-y: auto;
 }
 .info-container {
