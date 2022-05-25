@@ -155,8 +155,8 @@ export default {
   }
   
   .closeSidebar{
-    position:fixed;
-    z-index: 159999999;
+    position:absolute;
+    z-index: 2;
     width: 55px;
     height: 45px;
     background-color:#fff;
@@ -245,7 +245,6 @@ export default {
     width: 358px;
     opacity: 0.9;
     border: 0;
-
 }
   .background{
     width: 110%;
