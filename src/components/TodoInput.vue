@@ -14,7 +14,7 @@
           <span class="close" type="button" @click="addtodo = false">
             <i class="fas fa-times" aria-hidden="true"></i>
           </span>
-          <input class="Head" v-if="typeHead" v-model="Head" type = "text" placeholder="Type your goal" style="text-align: left" @keyup.enter="storeHead()">
+          <input class="Head" v-if="typeHead" v-model="Head" type = "text" placeholder="Type your goal" style="text-align: left" @change="storeHead()">
           <span v-if="showHead"><h3 style="text-align: left"> {{Head}} <hr style="border: 1px solid #7ca3bb;"></h3></span>
           <div>
           <input type = "date" v-model="date" style="text-align: left" @change="storeDate()">
@@ -47,7 +47,7 @@
           </form>          
             <div class = "memobox">
             <p class="subTitle" style="text-align: left"> <b>메모</b> 
-                <br> <input class="Memo" type="text" v-model="Memo" placeholder="Memo..." @keyup.enter="storeMemo()">
+                <br> <input class="Memo" type="text" v-model="Memo" placeholder="Memo..." @change="storeMemo()">
             </p>
             <span class="addbtn" type="button" @click="addTodo()">
               저장하기

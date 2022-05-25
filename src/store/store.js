@@ -6,6 +6,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
       todoItems: [],
+      todoHeads: [],
       Dates: [],
       doneCount: [],
       totalCount: 0
@@ -32,7 +33,16 @@ export const store = new Vuex.Store({
         addTodo(state, information) {
             let JSONinformation = JSON.parse(information)
             localStorage.setItem(JSONinformation.Head, information);
-            state.todoItems.push(JSONinformation);
+            if (state.todoItems.length < 1) {
+              state.todoItems.push(JSONinformation);
+              state.todoHeads.push(JSONinformation.Head);
+            }
+            else {
+              if (state.todoHeads.includes(JSONinformation.Head) == false){
+                state.todoItems.push(JSONinformation);
+                state.todoHeads.push(JSONinformation.Head);
+              } 
+            }
         },
         changeHead(state, value) {
             let newHead = value[0]

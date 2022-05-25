@@ -31,7 +31,8 @@ export default {
   computed:{
   ...mapGetters({
       'Dates':'getDate',
-      'total':'getTotal'
+      'total':'getTotal',
+      'todos':'getTodos'
     })
   },
   methods: {

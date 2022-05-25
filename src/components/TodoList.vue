@@ -166,8 +166,10 @@ export default {
       this.showModiMemo=false;
       this.oldMemo=false;
       this.showNewMemo=true;
-    }
+    },
   },
+  created(){
+  }
 };
 
 </script>

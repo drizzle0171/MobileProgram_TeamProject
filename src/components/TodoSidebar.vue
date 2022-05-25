@@ -19,11 +19,6 @@
           <p id="text"><b>{{description}}</b></p>
           </div>
           <hr>
-          <h3 id="text">♛ 오늘의 주식</h3>
-          <p id="text"><b>카카오</b> KRW 82,000</p>
-          <p id="text"><b>삼전</b> KRW 65,000</p>
-          <p id="text"><b>네이버</b> KRW 280,000</p>
-          <hr>
           <h3 id="text">✌︎ 머리를 식히자!</h3>
           <p id="text"><b>바로가기</b></p>
         </div>
