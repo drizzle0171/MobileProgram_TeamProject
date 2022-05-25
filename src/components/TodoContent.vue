@@ -2,6 +2,7 @@
   <div>
     <div>
       <TodoHeader></TodoHeader>
+
       <TodoInput></TodoInput>
       <TodoList></TodoList>
       <TodoFooter ></TodoFooter>
@@ -75,5 +76,4 @@ export default {
   button {
     border-style: groove;
   }
-
 </style>

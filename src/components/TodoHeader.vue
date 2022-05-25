@@ -3,6 +3,30 @@
       <span @click="openSidebar">
         <i class="sidebarBtn fas fa-bars"></i>
       </span>
+      <input class="sidebarCheck" type="checkbox">
+      <div class="sidebar">
+          <img src='../assets/todofordays.png' width="100px">
+          <h2 style="text-align: center;">안녕하세요<br>슬비님!</h2>
+          <div class="closeSidebar" @click="openTodo">
+          <input class="sidebarUncheck" type="checkbox">
+            <i class="closeBtn fas fa-angle-left"></i>
+          </div>
+          <div class="countBox"> <strong>오늘의 할 일은 <br> {{done}} / {{total}}</strong></div>
+          <br>
+          <div class="bluebox">
+            <div @click="openWeather">
+            <h3 id="text">☀︎ 오늘의 날씨</h3>
+            <p id="text"><b>현재 온도</b> {{currentTemp}} °C</p>
+            <p id="text"><b>최고 온도</b> {{highestTemp}} °C</p>
+            <p id="text"><b>최저 온도</b> {{lowestTemp}} °C</p>
+            <p id="text"><b>{{description}}</b></p>
+          </div>
+            <hr>
+            <h3 id="text">✌︎ 머리를 식히자!</h3>
+          <p id="text"><b>바로가기</b></p>
+        </div>
+        <span class="yongseul">made by yongseul</span>
+      </div>
     <div class="head"><h1> TodoForDays </h1></div>
     <span @click="openMypage">
       <i class="mypageBtn fas fa-user"></i>
@@ -77,6 +101,135 @@ export default {
 </script>
 
 <style scoped>
+  h2{
+    margin: 10px 0;
+  }
+  .side-wrapper{
+    display: flex; 
+    flex-direction: column;
+  }
+  .bluebox{
+    padding: 30px;
+    width: 150px;
+    height: 70%;
+    left: 0px;
+    background: #7ca3bb;
+    opacity: 0.7;
+    color: #fff;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 15px;
+    position: absolute;
+  }
+  .countBox{
+    width: 150px;
+    height: 50px;
+    background: #7ca3bb;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 7px;
+    opacity: 0.7;
+    color: #fff;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 17px;
+  }
+  #text{
+    text-align: left;
+    color: #fff;
+    line-height:10px;
+  }
+  .yongseul{
+    font-size: 16px;
+    color: black;
+    opacity: 0.5;
+    bottom: 50px;
+    left: 40px;
+    position: absolute;
+    z-index: 13;
+  }
+  .closeSidebar{
+    position:absolute;
+    z-index: 2;
+    width: 55px;
+    height: 45px;
+    background-color:#fff;
+    left: 200px;
+    top: 20px;
+    border-radius: 9px;
+      display: flex; 
+    flex-direction: column;
+    transition: transform 0.4s ease-in-out
+  }
+  .closeBtn{
+    color:#7ca3bb;
+    font-size: 38px;
+    margin-top: 3px;
+    margin-left: 4px;
+    display: flex; 
+    flex-direction: column;
+    transform: translatex(-5px);
+    transition: transform 0.4s ease-in-out;
+    z-index: 3;
+  }
+    .side-mask {
+    position: fixed;
+    top: -30px;
+    left: 180px;
+    z-index: 999;
+    width: 300px;
+    height: 350%;
+    background-color: rgba(0, 0, 0, .5);
+    flex-direction: column;
+    transition: transform 0.4s ease
+  }
+  .sidebarCheck{
+    position: fixed;
+    top: 45px;
+    left: 27px;
+    width: 22px;
+    height: 22px;
+    z-index: 1;
+    opacity: 0;
+  }
+  .sidebarUncheck{
+    position: fixed;
+    z-index: 4;
+    width: 30px;
+    height: 30px;
+    background-color:#fff;
+    left: 210px;
+    top: 27px;
+    /* opacity: 0; */
+  }
+  input[class="sidebarUncheck"]:checked + div{
+  left: -290px;
+  }
+  .sidebar{
+      width: 150px;
+      height: 100%;
+      position: fixed;
+      top:0;
+      padding: 20px 30px 0 30px;
+      z-index: 2;
+      background-color: #fff;
+      font-family: Helvetica, Arial, sans-serif;
+      position: fixed;
+      top: 0;
+      left: -290px;
+      z-index: 1;
+      transition: all .35s;
+    }
+    input[class="sidebarCheck"]:checked + div{
+      left: 0
+    }
+  .blackBox{
+    width: 205px;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 210px;
+    background: #000000;
+    opacity: 0.3;
+  }
   .head{
     display: block;
     margin: 35px 0 0 70px;
@@ -96,7 +249,7 @@ export default {
     float: left;
     font-size: 20px;
     color: #7ca3bb;
-    z-index: 9999999;
+    z-index: 0;
     margin: 25px 0 0 18px;
   }
   .hideSidebar{
