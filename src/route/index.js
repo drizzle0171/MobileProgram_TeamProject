@@ -7,7 +7,6 @@ import TodoLogin from '../components/TodoLogin'
 import TodoContent from '../components/TodoContent'
 import TodoMypage from '../components/TodoMypage'
 import TodoWeather from '../components/TodoWeather'
-import TodoSidebar from '../components/TodoSidebar'
 
 const router = new VueRouter({
     mode: 'history',
@@ -17,7 +16,6 @@ const router = new VueRouter({
         {path: '*', component: TodoLogin},
         {path: '/mypage', component: TodoMypage},
         {path: '/weather', component: TodoWeather},
-        {path: '/Sidebar', component: TodoSidebar}
     ]
 })
 

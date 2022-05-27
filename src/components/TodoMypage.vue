@@ -10,9 +10,9 @@
     <div class="userInfoTitle"> 회원정보 </div>
     <div class="userInfo">
       <img class="profile" :src="photo">
-      <img class="notProfile" v-if="photo==null" src="../assets/user.png"/>
+      <img class="notProfile" v-if="photo==null" :src="picture"/>
       <p class="name" v-if="photo!=null"> <b>이름</b><br> {{Name}}</p>
-      <p class="welcome" v-if="photo==null"> <i><b>환영합니다!</b></i><br></p>
+      <p class="name" v-if="photo==null"> <b>이슬비</b><br> {{name}}!</p>
       <p class="email"> <b>이메일</b><br> {{email}}</p>
     </div>
     <div class="updatePasswordTitle"> 비밀번호 재설정 </div>
@@ -82,7 +82,10 @@ export default {
     ...mapGetters({
       'checked':'getDone',
       'Dates':'getDate',
-      'todoItems':'getTodos'
+      'todoItems':'getTodos',
+      'picture':'getImg',
+      'name':'getName'
+
     })
   },
   methods: {
@@ -101,7 +104,8 @@ export default {
         deleteUser(getAuth().currentUser)
           .then(() => {
             this.showDelete = true;
-          //  this.$router.replace({path: "/"});
+            localStorage.removeItem('img');
+            localStorage.removeItem('name');
         }).catch((error) => {
           console.log(error)
         });
@@ -133,6 +137,13 @@ export default {
         this.Name = user.displayName;
         this.email = user.email;
         this.photo = user.photoURL;
+      }
+    if (localStorage.length > 0) {
+        for (var i = 0; i < localStorage.length; i++) {
+          if (localStorage.key(i) == 'img') {
+          this.$store.commit('userInfo', localStorage.getItem(localStorage.key(i)));
+          }
+        }
       }
     }
     
