@@ -9,7 +9,9 @@ export const store = new Vuex.Store({
       todoHeads: [],
       Dates: [],
       doneCount: [],
-      totalCount: 0
+      totalCount: 0,
+      img:'',
+      name: ''
     },
     getters: {
         getTodos: state => {
@@ -23,6 +25,12 @@ export const store = new Vuex.Store({
         },
         getTotal: state =>{
           return state.totalCount;
+        },
+        getImg: state =>{
+          return state.img;
+        },
+        getName: state =>{
+          return state.name;
         }
     },
     mutations:{
@@ -30,6 +38,14 @@ export const store = new Vuex.Store({
             localStorage.clear();
             state.todoItems = [];
           },
+        userInfo(state, value){
+          let img = value[0]
+          let name = value[1]
+          state.img = img;
+          state.name = name;
+          localStorage.setItem('img', img);
+          localStorage.setItem('name', name);
+        },
         addTodo(state, information) {
             let JSONinformation = JSON.parse(information)
             localStorage.setItem(JSONinformation.Head, information);

@@ -21,8 +21,28 @@
             <i class="closeModalBtn fas fa-times"></i>
         </span>
       </modal>
+      <span class = "signUp" @click="openSignUpPage"> Sign Up </span>
+      <modal v-if="signUpModal" @click="openInfoPage">
+         <h3 slot="header" @click="openInfoPage = false"> 회원가입 페이지 <span @click="signUpModal = false">
+            <i class="closeModalBtn fas fa-times"></i>
+        </span></h3>
+          <span slot="footer"> 
+            이름 <br>
+            <input v-model="name" type="text"/> 
+            <br>
+            프로필 이미지 <br>
+            <input @change="onFileChange($event)" type="file"/>
+            <br>
+            이메일 <br>
+            <i class="idIcon fas fa-envelope"></i> <input class='id' v-model="email" type="text" placeholder="example@gmail.com">
+            비밀번호 <br>
+            <input class='password' v-model="password" type="password" placeholder="Password" @keyup.enter="addUser">
+            <span class="addbtn" type="button">
+            <span @click="addUser"> 회원가입 </span>
+            </span>
+          </span>
 
-      <span class = "signUp" @click="addUser"> Sign Up </span> 
+      </modal>
       <span class = "signIn" @click="login"> Sign In </span>
       <span class = "googleSignin" @click="googleSignIn">
         <img src="../assets/googleLogo.png" width=10px>
@@ -47,14 +67,41 @@ export default {
   name: 'App',
   data() {
     return {
+      image:'',
+      name:'',
       auth: getAuth(),
       password: "",
       email: "",
       pleaseSignUp: false,
+      signUpModal: false,
       }
   },
   methods: {
-    addUser() {
+      set(key){
+          localStorage.setItem(key, this.image);
+      },
+      onFileChange(e) {
+        var files = e.target.files || e.dataTransfer.files;
+        if (!files.length){
+          return;
+        }
+        this.createImage(files[0])
+      },
+      createImage(file) {
+        var reader = new FileReader();
+
+        reader.onload = (e) => {
+          this.image = e.target.result;
+          this.$store.commit('userInfo', this.image)
+          this.set('img');
+        };
+        reader.readAsDataURL(file);
+      },
+      openSignUpPage(){
+        this.signUpModal = true;
+      },
+      addUser() {
+      this.signUpModal = true;
       createUserWithEmailAndPassword(this.auth, this.email, this.password)
         .then((userCredential) => {
           // Signed in
@@ -85,6 +132,9 @@ export default {
           console.log(error);
         });
     },
+    infoPage(){
+      this.signUpModal = true;
+    },
     googleSignIn(){
       const provider = new GoogleAuthProvider();
       signInWithPopup(this.auth, provider)
@@ -113,9 +163,8 @@ export default {
       const profile = googleUser.getBasicProfile();
       console.log('Email: '+profile.getEmail());
     },
-
-  },
-    beforecreated() {
+},
+    beforecreated(){
       onAuthStateChanged(this.auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
@@ -126,11 +175,23 @@ export default {
         console.log(user.email);
         this.$router.push({path: "todo"});
         // ...
-      } else {
+      } 
+      else {
         console.log('not logged in');
       }
     });
-    window.onSignIn = this.onSignIn;
+  },
+  created(){
+      if (localStorage.length > 0) {
+        for (var i = 0; i < localStorage.length; i++) {
+          if (localStorage.key(i) == 'img'){
+            this.image = localStorage.getItem(localStorage.key(i))
+          }
+          else if (localStorage.key(i) == 'name'){
+            this.name = localStorage.getItem(localStorage.key(i))
+          }
+    }
+  }
   },
   components: {
     Modal: Modal,
@@ -262,11 +323,4 @@ export default {
     margin-left: 50px;
     margin-right: 50px;
   }
-  .container {
-    padding:
-      env(safe-area-inset-top)
-      env(safe-area-inset-right)
-      env(safe-area-inset-bottom)
-      env(safe-area-inset-left);
-    }
 </style>
