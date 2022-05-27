@@ -96,9 +96,6 @@ export default {
     openWeather(){
       this.$router.replace({path: "/weather"});
     },
-    openTodo(){
-      this.$router.replace({path: "/todo"});
-    }
   }
 
 }

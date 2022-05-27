@@ -1,16 +1,14 @@
 <template>
   <div>
-      <span @click="openSidebar">
-        <i class="sidebarBtn fas fa-bars"></i>
-      </span>
-      <input class="sidebarCheck" type="checkbox">
+      <input id="sidebarCheck" type="checkbox">
+      <label for = "sidebarCheck">
+        <span></span>
+        <span></span>
+        <span></span>        
+      </label>
       <div class="sidebar">
           <img src='../assets/todofordays.png' width="100px">
           <h2 style="text-align: center;">안녕하세요<br>슬비님!</h2>
-          <div class="closeSidebar" @click="openTodo">
-          <input class="sidebarUncheck" type="checkbox">
-            <i class="closeBtn fas fa-angle-left"></i>
-          </div>
           <div class="countBox"> <strong>오늘의 할 일은 <br> {{done}} / {{total}}</strong></div>
           <br>
           <div class="bluebox">
@@ -26,6 +24,8 @@
           <p id="text"><b>바로가기</b></p>
         </div>
         <span class="yongseul">made by yongseul</span>
+      </div>
+      <div class="mask">
       </div>
     <div class="head"><h1> TodoForDays </h1></div>
     <span @click="openMypage">
@@ -52,6 +52,12 @@ import { mapGetters } from 'vuex';
 export default {
   data(){
     return{
+      done: 0,
+      total: 0,
+      currentTemp:'',
+      highestTemp:'',
+      lowestTemp:'',
+      description:'',
       date:"",
       selectedDay:'',
       selectedYear:'',
@@ -76,6 +82,9 @@ export default {
     })
   },
   methods: {
+    openWeather(){
+      this.$router.replace({path: "/weather"});
+    },
     openMypage(){
       this.$router.replace({path: "/mypage"});
     },
@@ -95,6 +104,37 @@ export default {
   },
   components: {
     VdatePicker: VdatePicker,
+  },
+  created(){
+    const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=5dc753fbb35d7e99e7fd80b06a9a18a7'
+      this.$http.get(`${BASE_URL}`)
+      .then((result) => {
+        this.currentTemp = (result.data.main.temp - 273.15).toFixed(1)
+        this.highestTemp = (result.data.main.temp_max - 273.15).toFixed(1)
+        this.lowestTemp = (result.data.main.temp_min - 273.15).toFixed(1)
+        let weather = (result.data.weather[0].id).toString()
+        if (weather=='800') {
+          this.description = '오늘은 날씨가 맑네요!';
+        }
+        else if (weather[0]=='8') {
+          this.description = '구름이 있을 예정이에요';
+        }
+        else if (weather[0]=='2') {
+          this.description = '번개가 칠수도!';
+        }
+        else if (weather[0]=='3') {
+          this.description = '이슬비가 내릴 거에요';
+        }
+        else if (weather[0]=='5') {
+          this.description = '오늘은 우산이 필요할 거에요';
+        }
+        else if (weather[0]=='6') {
+          this.description = '눈이 펑펑!';
+        }
+        else if (weather[0]=='701') {
+          this.description = '안개가 낄 예정이니 조심!';
+        }
+      })
   }
 }
 
@@ -146,31 +186,7 @@ export default {
     position: absolute;
     z-index: 13;
   }
-  .closeSidebar{
-    position:absolute;
-    z-index: 2;
-    width: 55px;
-    height: 45px;
-    background-color:#fff;
-    left: 200px;
-    top: 20px;
-    border-radius: 9px;
-      display: flex; 
-    flex-direction: column;
-    transition: transform 0.4s ease-in-out
-  }
-  .closeBtn{
-    color:#7ca3bb;
-    font-size: 38px;
-    margin-top: 3px;
-    margin-left: 4px;
-    display: flex; 
-    flex-direction: column;
-    transform: translatex(-5px);
-    transition: transform 0.4s ease-in-out;
-    z-index: 3;
-  }
-    .side-mask {
+  .side-mask {
     position: fixed;
     top: -30px;
     left: 180px;
@@ -181,7 +197,7 @@ export default {
     flex-direction: column;
     transition: transform 0.4s ease
   }
-  .sidebarCheck{
+  #sidebarCheck{
     position: fixed;
     top: 45px;
     left: 27px;
@@ -190,17 +206,57 @@ export default {
     z-index: 1;
     opacity: 0;
   }
-  .sidebarUncheck{
-    position: fixed;
-    z-index: 4;
-    width: 30px;
-    height: 30px;
-    background-color:#fff;
-    left: 210px;
-    top: 27px;
-    /* opacity: 0; */
+  input[id="sidebarCheck"] {
+    display: none;
   }
-  input[class="sidebarUncheck"]:checked + div{
+  input[id="sidebarCheck"] + label {
+    display: block;
+    width: 20px;
+    height: 18px;
+    position: relative;
+    transition: all .35s;
+    top: 25px;
+    left: 21px;
+  }
+  input[id="sidebarCheck"] + label span {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    border-radius: 10px;
+    background: #7ca3bb;
+    transition: all .35s;
+    z-index: 10;
+  }
+  input[id="sidebarCheck"] + label span:nth-child(1){
+    top: 0;
+  }
+  input[id="sidebarCheck"] + label span:nth-child(2){
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  input[id="sidebarCheck"] + label span:nth-child(3){
+    bottom: 0;
+  }
+  input[id="sidebarCheck"]:checked + label span:nth-child(1){
+    left: 10%;
+    width: 20px;    
+    height: 5px;
+    top: 50%;
+    transform: rotate(45deg)
+  }
+  input[id="sidebarCheck"]:checked + label span:nth-child(2){
+    opacity: 0;
+  }
+  input[id="sidebarCheck"]:checked + label span:nth-child(3){
+    left: 10%;
+    width: 20px;
+    height: 5px;
+    top: 50%;
+    transform: rotate(-45deg)
+  }
+
+  input[id="sidebarUncheck"]:checked + div{
   left: -290px;
   }
   .sidebar{
@@ -218,9 +274,18 @@ export default {
       z-index: 1;
       transition: all .35s;
     }
-    input[class="sidebarCheck"]:checked + div{
-      left: 0
-    }
+  input[id="sidebarCheck"]:checked + label + div{
+    left: 0;
+  }
+  input[id="sidebarCheck"]:checked + label{
+    border-radius: 10px;
+    top: 10px;
+    width: 30px;
+    height: 40px;
+    background: #fff;
+    z-index: 2;
+    left: 200px;
+  }
   .blackBox{
     width: 205px;
     height: 100%;
