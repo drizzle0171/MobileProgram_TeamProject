@@ -83,7 +83,7 @@ export const store = new Vuex.Store({
             let Day = date[2];
             state.Dates.push(Year, Month, Day);
           },
-          checkDone(state, value){
+        checkDone(state, value){
             let done = value[0];
             let index = value[1];
             if (done == true){
@@ -93,6 +93,9 @@ export const store = new Vuex.Store({
               state.doneCount[index] = 0
             }
           },
+          checkDoneCam(state, value){
+            console.log(state, value)
+          }
 }
   });
 

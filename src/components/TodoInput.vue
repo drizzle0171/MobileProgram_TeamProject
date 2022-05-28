@@ -42,9 +42,15 @@
               <option value="매우 중요"> 매우 중요 </option>
               <option value="중요"> 중요 </option>
               <option value="보통"> 보통 </option>
-            </select>
+            </select>  
           </p>
-          </form>          
+          </form>
+          <p class="subTitle" style="text-align: left"><b>내 위치 확인</b></p>
+            <select class="position" @change="storePosition($event)">
+              <option value="선택"> 선택 </option>
+              <option value="무궁관"> 무궁관 </option>
+              <option value="랩실 내 책상"> 랩실 내 책상 </option>
+            </select>
             <div class = "memobox">
             <p class="subTitle" style="text-align: left"> <b>메모</b> 
                 <br> <input class="Memo" type="text" v-model="Memo" placeholder="Memo..." @change="storeMemo()">
@@ -88,7 +94,8 @@ export default {
         important:"",
         date:"",
         time:"",
-        addDate:""
+        addDate:"",
+        position:false
       },
       Head:"",
       Memo:"",
@@ -97,7 +104,8 @@ export default {
       date:"",
       time:"",
       category:"",
-      addDate:""
+      addDate:"",
+      position:""
     }
   },
   computed:{
@@ -150,6 +158,14 @@ export default {
         this.information.important = `${event.target.value}`
 
       }
+    },
+    storePosition(event){
+      if (event.target.value == "선택") {
+        this.information.position = "선택 안함"
+      }
+      else{ 
+        this.information.position = `${event.target.value}`
+      }    
     },
     addTodo() {
       if (this.Head !== "") {
@@ -364,6 +380,11 @@ li {
 }
 .category{
   float: right;
+}
+.position{
+  position: fixed;
+  top: 444px;
+  left: 227px;
 }
 .Memo{
   font-size: 16px;

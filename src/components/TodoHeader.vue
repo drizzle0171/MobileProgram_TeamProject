@@ -8,8 +8,8 @@
       </label>
       <div class="sidebar">
           <img src='../assets/todofordays.png' width="100px">
-          <h2 style="text-align: center;">안녕하세요<br>슬비님!</h2>
-          <div class="countBox"> <strong>오늘의 할 일은 <br> {{done}} / {{total}}</strong></div>
+          <h2 style="text-align: center;">안녕하세요<br>{{name}}님!</h2>
+          <div class="countBox"> <strong>오늘도 할 일을 해치우자!</strong></div>
           <br>
           <div class="bluebox">
             <div @click="openWeather">
@@ -19,9 +19,6 @@
             <p id="text"><b>최저 온도</b> {{lowestTemp}} °C</p>
             <p id="text"><b>{{description}}</b></p>
           </div>
-            <hr>
-            <h3 id="text">✌︎ 머리를 식히자!</h3>
-          <p id="text"><b>바로가기</b></p>
         </div>
         <span class="yongseul">made by yongseul</span>
       </div>
@@ -48,10 +45,13 @@
 <script>
 import VdatePicker from 'v-calendar/lib/components/date-picker.umd'
 import { mapGetters } from 'vuex';
+import { getAuth } from "firebase/auth";
 
 export default {
   data(){
     return{
+      auth:getAuth(),
+      name: '',
       done: 0,
       total: 0,
       currentTemp:'',
@@ -87,12 +87,6 @@ export default {
     },
     openMypage(){
       this.$router.replace({path: "/mypage"});
-    },
-    openSidebar(){
-      this.$router.replace({path: "/sidebar"});
-    },
-    closeSidebar(){
-      this.total=0;
     },
     dayClicked(day){
       this.selectedYear = Number(day.id.slice(0, 4));
@@ -135,6 +129,19 @@ export default {
           this.description = '안개가 낄 예정이니 조심!';
         }
       })
+    const user = this.auth.currentUser;
+      if (user !== null) {
+        this.name = user.displayName;
+        this.email = user.email;
+        this.photo = user.photoURL;
+      }
+    if (localStorage.length > 0) {
+        for (var i = 0; i < localStorage.length; i++) {
+          if (localStorage.key(i) == 'name'){
+              this.name = localStorage.getItem(localStorage.key(i));
+          }
+        }
+      }
   }
 }
 
@@ -163,14 +170,14 @@ export default {
   .countBox{
     width: 150px;
     height: 50px;
+    line-height: 50px;
     background: #7ca3bb;
-    padding-top: 10px;
     margin-bottom: 10px;
     border-radius: 7px;
     opacity: 0.7;
     color: #fff;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 17px;
+    font-size: 13px;
   }
   #text{
     text-align: left;

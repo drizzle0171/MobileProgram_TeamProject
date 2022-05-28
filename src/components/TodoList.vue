@@ -4,9 +4,10 @@
       <transition-group name="list" tag="ul">
         <li v-for="(todoItem, index) in todos" :key = "todoItem.Head" class="shadow" >
           <span class="item" v-if="(todoItem.addDate[0]==Dates[0]) && (todoItem.addDate[1]==Dates[1]) && todoItem.addDate[2]==Dates[2]">
-          <i class="checkBtn fas fa-check" :class="{checkBtn_done: todoItem.done}" aria-hidden="true" @click="check(todoItem, index)"></i>
+          <i v-if="(todoItem.position == '선택 안함')" class="checkBtn fas fa-check" :class="{checkBtn_done: todoItem.done}" aria-hidden="true" @click="check(todoItem, index)"></i>
             <div class="todo-item-text">
-              <span> {{ todoItem.Head }} </span> <span :class="{category_school: (todoItem.category=='학교'), category_appointment: (todoItem.category=='약속'), category_assignment: (todoItem.category=='과제'), category_club: (todoItem.category=='동아리'), category_exercise: (todoItem.category=='운동'), category_etc: (todoItem.category=='기타')}">{{todoItem.category}}</span> <p class="todo-memo"> {{ todoItem.memo }} </p>
+          <i v-if="(todoItem.position != '선택 안함')" class="cameraBtn fas fa-camera" :class="{cameraBtn_done: todoItem.position == '완료'}" @click="checkWithCam(todoItem, index)"></i>
+              <span> {{ todoItem.Head }} </span> <span :class="{category_school: (todoItem.category=='학교'), category_appointment: (todoItem.category=='약속'), category_assignment: (todoItem.category=='과제'), category_club: (todoItem.category=='동아리'), category_exercise: (todoItem.category=='운동'), category_etc: (todoItem.category=='기타')}">{{todoItem.category}}</span><p class="todo-memo"> {{ todoItem.memo }} </p>
             </div>
             <span>
               <i class="fas fa-circle" :class="{important_red: (todoItem.important=='매우 중요'), important_yellow: (todoItem.important=='중요'), important_green: (todoItem.important=='보통')}"></i>
@@ -22,7 +23,7 @@
       </transition-group>
     </div>
 
-    <div class="info-mask" v-if="showInfo == true">
+    <div class="info-mask" v-if="showInfo == true" @click="showInfo = false">
       <div class="info-wrapper">
         <div class="info-container">
           <span class="close" type="button" @click="showInfo = false">
@@ -68,6 +69,7 @@ export default {
       showModiMemo: false,
       todoItem: "",
       index:"",
+      position:'',
       memo:"",
       newHead:"",
       newMemo:"",
@@ -99,6 +101,16 @@ export default {
       let value = [todoItem.done, index];
       this.$store.commit('checkDone', value);
       },
+    checkWithCam(todoItem, index){
+      // 캠켜서 사진 찍고
+      // 정답라벨 확인 하고
+      // 예측 라벨 = position 값이면
+      todoItem.position = '완료';
+      localStorage.removeItem(todoItem.Head);
+      localStorage.setItem(todoItem.Head, JSON.stringify(todoItem));
+      let value = [todoItem.done, index];
+      this.$store.commit('checkDoneCam', value);
+    },
     removeTodo(todoItem, index) {
       let value = [todoItem.Head, index];
       this.$store.commit("removeTodo", value);
@@ -129,10 +141,8 @@ export default {
       this.category = todoItem.category;
       this.important = todoItem.important;
       this.calculateDday()
-      console.log(todoItem)
-    },
+},
     modifyHead() {
-      console.log(this.todoItem)
       this.temp = this.todoItem;
       this.todoItem = "";
       this.showModiHead=true;
@@ -225,7 +235,10 @@ div {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
-  height:400px
+  height:400px;
+  top:230px;
+  left:45px;
+  position: fixed;
 }
 
 .info-mask {
@@ -284,6 +297,16 @@ ul {
 }
 
 .checkBtn_done {
+  line-height: 45px;
+  color: #7ca3bb;
+  margin-right: 5px;
+}
+.cameraBtn{
+  line-height: 45px;
+  color: #c9c9c9;
+  margin-right: 5px;
+}
+.cameraBtn_done {
   line-height: 45px;
   color: #7ca3bb;
   margin-right: 5px;
