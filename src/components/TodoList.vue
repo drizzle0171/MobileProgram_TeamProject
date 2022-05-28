@@ -19,6 +19,8 @@
               <i class="fas fa-trash-alt" aria-hidden="true"></i>
             </span>
             </span>
+          <div id="webcam-container"></div>
+          <div id="label-container"></div>
         </li>
       </transition-group>
     </div>
@@ -55,6 +57,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import * as tmImage from '@teachablemachine/image';
+
 export default {
   data() {
     return {
@@ -84,7 +88,11 @@ export default {
       important:"",
       done:{},
       todo_done: false,
-      result:''
+      result:'',
+      webcam:'',
+      model:'',
+      labelContainer:'',
+      maxPredictions:''
     };
   },
   computed:{
@@ -102,7 +110,7 @@ export default {
       this.$store.commit('checkDone', value);
       },
     checkWithCam(todoItem, index){
-      // 캠켜서 사진 찍고
+      this.startCam();
       // 정답라벨 확인 하고
       // 예측 라벨 = position 값이면
       todoItem.position = '완료';
@@ -177,9 +185,45 @@ export default {
       this.oldMemo=false;
       this.showNewMemo=true;
     },
+    async startCam() {
+      this.webcam = new tmImage.Webcam(200, 200, true);
+      await this.webcam.setup(); // request access to the webcam
+      await this.webcam.play();
+      window.requestAnimationFrame(this.loop);
+      document.getElementById("webcam-container").appendChild(this.webcam.canvas);
+      this.labelContainer = document.getElementById("label-container");
+      for (let i = 0; i < this.maxPredictions; i++) { // and class labels
+        this.labelContainer.appendChild(document.createElement("div"));
+      }
+    },
+    async loop() {
+      this.webcam.update();         
+      await this.predict();
+      window.requestAnimationFrame(this.loop);
+    },
+    async predict() {
+      const prediction = await this.model.predict(this.webcam.canvas);
+      for (let i = 0; i < this.maxPredictions; i++) {
+          const classPrediction =
+            prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+          this.labelContainer.childNodes[i].innerHTML = classPrediction;
+          console.log(classPrediction)
+        }
+    }
+    
   },
   created(){
-  }
+  },
+  async mounted() {
+    if (localStorage.getItem("notes"))
+      this.notes = JSON.parse(localStorage.getItem("notes"));
+    let baseURL = "https://teachablemachine.withgoogle.com/models/E6qq8lZzN/";
+    this.model = await tmImage.load(
+      baseURL + "model.json",
+      baseURL + "metadata.json"
+    );
+    this.maxPredictions = this.model.getTotalClasses();
+  },
 };
 
 </script>
