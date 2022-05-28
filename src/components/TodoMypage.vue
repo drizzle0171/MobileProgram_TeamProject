@@ -12,7 +12,7 @@
       <img class="profile" :src="photo">
       <img class="notProfile" v-if="photo==null" :src="picture"/>
       <p class="name" v-if="photo!=null"> <b>이름</b><br> {{Name}}</p>
-      <p class="name" v-if="photo==null"> <b>이슬비</b><br> {{name}}!</p>
+      <p class="name" v-if="photo==null"> <b>이름</b><br> {{name}}</p>
       <p class="email"> <b>이메일</b><br> {{email}}</p>
     </div>
     <div class="updatePasswordTitle"> 비밀번호 재설정 </div>
@@ -141,7 +141,10 @@ export default {
     if (localStorage.length > 0) {
         for (var i = 0; i < localStorage.length; i++) {
           if (localStorage.key(i) == 'img') {
-          this.$store.commit('userInfo', localStorage.getItem(localStorage.key(i)));
+            this.$store.commit('userInfo', localStorage.getItem(localStorage.key(i)));
+          }
+          else if (localStorage.key(i) == 'name'){
+            this.$store.commit('userName', localStorage.getItem(localStorage.key(i)));
           }
         }
       }
@@ -245,6 +248,7 @@ export default {
     left: 70px;
   }
   .notProfile{
+    border-radius: 10px;
     width: 90px;
     position: fixed;
     top: 200px;
