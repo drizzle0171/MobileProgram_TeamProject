@@ -38,13 +38,13 @@ export const store = new Vuex.Store({
             localStorage.clear();
             state.todoItems = [];
           },
-        userInfo(state, value){
-          let img = value[0]
-          let name = value[1]
-          state.img = img;
+        userName(state, name){
           state.name = name;
-          localStorage.setItem('img', img);
           localStorage.setItem('name', name);
+        },
+        userInfo(state, img){
+          state.img = img;
+          localStorage.setItem('img', img);
         },
         addTodo(state, information) {
             let JSONinformation = JSON.parse(information)
