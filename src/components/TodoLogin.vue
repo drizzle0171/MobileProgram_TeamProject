@@ -199,18 +199,6 @@ export default {
       }
     });
   },
-  created(){
-      if (localStorage.length > 0) {
-        for (var i = 0; i < localStorage.length; i++) {
-          if (localStorage.key(i) == 'img'){
-            this.image = localStorage.getItem(localStorage.key(i))
-          }
-          else if (localStorage.key(i) == 'name'){
-            this.name = localStorage.getItem(localStorage.key(i))
-          }
-    }
-  }
-  },
   components: {
     Modal: Modal,
   }
