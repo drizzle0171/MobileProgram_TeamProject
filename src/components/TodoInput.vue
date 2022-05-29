@@ -111,7 +111,7 @@ export default {
   computed:{
     ...mapGetters({
       'Dates':'getDate'
-    })
+    }),
   },
   methods: {
     add(){
@@ -195,6 +195,8 @@ export default {
     }
   },
   created(){
+    console.log(this.dates)
+
   },
   components: {
     Modal: Modal
