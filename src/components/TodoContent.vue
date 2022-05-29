@@ -2,7 +2,6 @@
   <div>
     <div>
       <TodoHeader></TodoHeader>
-
       <TodoInput></TodoInput>
       <TodoList></TodoList>
       <TodoFooter ></TodoFooter>

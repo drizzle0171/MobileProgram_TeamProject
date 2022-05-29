@@ -1,6 +1,9 @@
 <template>
   <div>
     <div>
+      <div>
+      <div :class="{notCam:(openCam==false), webcamContainer: (openCam==true)}"></div>
+      </div>
       <transition-group name="list" tag="ul">
         <li v-for="(todoItem, index) in todos" :key = "todoItem.Head" class="shadow" >
           <span class="item" v-if="(todoItem.addDate[0]==dates[0]) && (todoItem.addDate[1]==dates[1]) && (todoItem.addDate[2]==dates[2])">
@@ -15,15 +18,13 @@
             <span class="moreinfoBtn" type="button" @click="moreInfo(todoItem)">
               <i class="fas fa-bars" aria-hidden="true"></i>
               </span>
-            <span class="removeBtn" @click="removeTodo(todoItem, index)">
+              <span class="removeBtn" @click="removeTodo(todoItem, index)">
               <i class="fas fa-trash-alt" aria-hidden="true"></i>
             </span>
-            </span>
-          <div :class="{nothing: call == 100}" id="webcam-container"></div>
+          </span>
         </li>
       </transition-group>
     </div>
-
     <div class="info-mask" v-if="showInfo == true" @click="showInfo = false">
       <div class="info-wrapper">
         <div class="info-container">
@@ -55,7 +56,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import * as tmImage from '@teachablemachine/image';
 
 export default {
@@ -94,7 +95,8 @@ export default {
       call:0,
       mugung:0,
       desk:0,
-      answer:''
+      answer:'',
+      openCam: false
     };
   },
   computed:{
@@ -102,9 +104,6 @@ export default {
       'todos':'getTodos',
       'dates':'getDate'
     }),
-    ...mapState([
-      'Dates'
-    ])
   },
   methods: {
     check(todoItem, index){
@@ -115,18 +114,9 @@ export default {
       this.$store.commit('checkDone', value);
       },
     checkWithCam(todoItem){
+      this.openCam = true;
+      this.todoItem = todoItem;
       this.startCam();
-      if (this.mugung > this.desk) {
-        this.answer = '무궁관'
-      }
-      else {
-        this.answer = '랩실 내 책상'
-      }
-      if (todoItem.position == this.answer) {
-        todoItem.position = '완료';
-      }
-      localStorage.removeItem(todoItem.Head);
-      localStorage.setItem(todoItem.Head, JSON.stringify(todoItem));
     },
     removeTodo(todoItem, index) {
       let value = [todoItem.Head, index];
@@ -200,7 +190,7 @@ export default {
       await this.webcam.setup(); // request access to the webcam
       await this.webcam.play();
       window.requestAnimationFrame(this.loop);
-      document.getElementById("webcam-container").appendChild(this.webcam.canvas);
+      document.getElementsByClassName("webcamContainer")[0].appendChild(this.webcam.canvas);
     },
     async loop() {
       this.call += 1
@@ -211,12 +201,26 @@ export default {
         window.requestAnimationFrame(this.loop); 
       }
       else {
+        this.openCam = false;
         await this.webcam.pause();
         await this.webcam.stop();
         console.log('완료')
+        console.log(this.openCam)
         this.mugung = (this.mugung/100).toFixed(2)
         this.desk = (this.desk/100).toFixed(2)
-      }
+        if (this.mugung > this.desk) {
+          this.answer = '무궁관'
+          }
+          else {
+            this.answer = '랩실 내 책상'
+          }
+          if (this.todoItem.position == this.answer) {
+            this.todoItem.position = '완료';
+          }
+          console.log(this.mugung, this.desk, this.answer)
+          localStorage.removeItem(this.todoItem.Head);
+          localStorage.setItem(this.todoItem.Head, JSON.stringify(this.todoItem));
+          }
     },
     async predict() {
       const prediction = await this.model.predict(this.webcam.canvas);
@@ -232,9 +236,8 @@ export default {
     
   },
   created(){
-    console.log(this.todos)
-    console.log(this.dates)
-    console.log(this.Dates)
+    console.log(this.openCam)
+    
   },
   async mounted() {
     if (localStorage.getItem("notes"))
@@ -571,5 +574,26 @@ ul {
 }
 .nothing{
   display: none;
+}
+.webcamContainer{
+  z-index: 9999;
+  width: 300px;
+  height: 200px;
+  position: fixed;
+  top: 255px;
+  left: 45px;
+  border-radius: 20px;
+  border: solid 10px #7ca3bb;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background-color: #fff;
+}
+.notCam{
+  width: 300px;
+  height: 200px;
+  position: fixed;
+  top: -250px;
+  left: -200px;
+  border-radius: 20px;
 }
 </style>
