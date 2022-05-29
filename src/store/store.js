@@ -92,9 +92,6 @@ export const store = new Vuex.Store({
             else {
               state.doneCount[index] = 0
             }
-          },
-          checkDoneCam(state, value){
-            console.log(state, value)
           }
 }
   });

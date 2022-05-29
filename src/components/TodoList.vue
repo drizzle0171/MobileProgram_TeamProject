@@ -3,11 +3,11 @@
     <div>
       <transition-group name="list" tag="ul">
         <li v-for="(todoItem, index) in todos" :key = "todoItem.Head" class="shadow" >
-          <span class="item" v-if="(todoItem.addDate[0]==Dates[0]) && (todoItem.addDate[1]==Dates[1]) && todoItem.addDate[2]==Dates[2]">
-          <i v-if="(todoItem.position == '선택 안함')" class="checkBtn fas fa-check" :class="{checkBtn_done: todoItem.done}" aria-hidden="true" @click="check(todoItem, index)"></i>
+          <span class="item" v-if="(todoItem.addDate[0]==dates[0]) && (todoItem.addDate[1]==dates[1]) && (todoItem.addDate[2]==dates[2])">
+            <i v-if="(todoItem.position == '선택 안함')" class="checkBtn fas fa-check" :class="{checkBtn_done: todoItem.done}" aria-hidden="true" @click="check(todoItem, index)"></i>
+            <i v-if="(todoItem.position != '선택 안함')" class="cameraBtn fas fa-camera" :class="{cameraBtn_done: todoItem.position == '완료'}" @click="checkWithCam(todoItem)"></i>
             <div class="todo-item-text">
-          <i v-if="(todoItem.position != '선택 안함')" class="cameraBtn fas fa-camera" :class="{cameraBtn_done: todoItem.position == '완료'}" @click="checkWithCam(todoItem, index)"></i>
-              <span> {{ todoItem.Head }} </span> <span :class="{category_school: (todoItem.category=='학교'), category_appointment: (todoItem.category=='약속'), category_assignment: (todoItem.category=='과제'), category_club: (todoItem.category=='동아리'), category_exercise: (todoItem.category=='운동'), category_etc: (todoItem.category=='기타')}">{{todoItem.category}}</span><p class="todo-memo"> {{ todoItem.memo }} </p>
+              <span> {{ todoItem.Head }} </span> <span :class="{category_school: (todoItem.category=='학교'), category_appointment: (todoItem.category=='약속'), category_assignment: (todoItem.category=='과제'), category_club: (todoItem.category=='동아리'), category_exercise: (todoItem.category=='운동'), category_etc: (todoItem.category=='기타')}">{{todoItem.category}}</span> <p class="todo-memo"> {{ todoItem.memo }} </p>
             </div>
             <span>
               <i class="fas fa-circle" :class="{important_red: (todoItem.important=='매우 중요'), important_yellow: (todoItem.important=='중요'), important_green: (todoItem.important=='보통')}"></i>
@@ -19,8 +19,7 @@
               <i class="fas fa-trash-alt" aria-hidden="true"></i>
             </span>
             </span>
-          <div id="webcam-container"></div>
-          <div id="label-container"></div>
+          <div :class="{nothing: call == 100}" id="webcam-container"></div>
         </li>
       </transition-group>
     </div>
@@ -56,7 +55,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import * as tmImage from '@teachablemachine/image';
 
 export default {
@@ -91,15 +90,21 @@ export default {
       result:'',
       webcam:'',
       model:'',
-      labelContainer:'',
-      maxPredictions:''
+      maxPredictions:'',
+      call:0,
+      mugung:0,
+      desk:0,
+      answer:''
     };
   },
   computed:{
     ...mapGetters({
       'todos':'getTodos',
-      'Dates':'getDate'
-    })
+      'dates':'getDate'
+    }),
+    ...mapState([
+      'Dates'
+    ])
   },
   methods: {
     check(todoItem, index){
@@ -109,15 +114,19 @@ export default {
       let value = [todoItem.done, index];
       this.$store.commit('checkDone', value);
       },
-    checkWithCam(todoItem, index){
+    checkWithCam(todoItem){
       this.startCam();
-      // 정답라벨 확인 하고
-      // 예측 라벨 = position 값이면
-      todoItem.position = '완료';
+      if (this.mugung > this.desk) {
+        this.answer = '무궁관'
+      }
+      else {
+        this.answer = '랩실 내 책상'
+      }
+      if (todoItem.position == this.answer) {
+        todoItem.position = '완료';
+      }
       localStorage.removeItem(todoItem.Head);
       localStorage.setItem(todoItem.Head, JSON.stringify(todoItem));
-      let value = [todoItem.done, index];
-      this.$store.commit('checkDoneCam', value);
     },
     removeTodo(todoItem, index) {
       let value = [todoItem.Head, index];
@@ -186,33 +195,46 @@ export default {
       this.showNewMemo=true;
     },
     async startCam() {
-      this.webcam = new tmImage.Webcam(200, 200, true);
+      this.call = 0;
+      this.webcam = new tmImage.Webcam(350, 200, true);
       await this.webcam.setup(); // request access to the webcam
       await this.webcam.play();
       window.requestAnimationFrame(this.loop);
       document.getElementById("webcam-container").appendChild(this.webcam.canvas);
-      this.labelContainer = document.getElementById("label-container");
-      for (let i = 0; i < this.maxPredictions; i++) { // and class labels
-        this.labelContainer.appendChild(document.createElement("div"));
-      }
     },
     async loop() {
-      this.webcam.update();         
-      await this.predict();
-      window.requestAnimationFrame(this.loop);
+      this.call += 1
+      console.log(this.call)
+      if (this.call < 100) {
+        this.webcam.update();         
+        await this.predict();
+        window.requestAnimationFrame(this.loop); 
+      }
+      else {
+        await this.webcam.pause();
+        await this.webcam.stop();
+        console.log('완료')
+        this.mugung = (this.mugung/100).toFixed(2)
+        this.desk = (this.desk/100).toFixed(2)
+      }
     },
     async predict() {
       const prediction = await this.model.predict(this.webcam.canvas);
       for (let i = 0; i < this.maxPredictions; i++) {
-          const classPrediction =
-            prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-          this.labelContainer.childNodes[i].innerHTML = classPrediction;
-          console.log(classPrediction)
+          if ( i == 0){
+            this.mugung += Number(prediction[i].probability.toFixed(2));
+          }
+          else{
+            this.desk += Number(prediction[i].probability.toFixed(2));
+          }
         }
     }
     
   },
   created(){
+    console.log(this.todos)
+    console.log(this.dates)
+    console.log(this.Dates)
   },
   async mounted() {
     if (localStorage.getItem("notes"))
@@ -546,5 +568,8 @@ ul {
   font-size: 13px;
   margin: 9px;
   color:#009917;
+}
+.nothing{
+  display: none;
 }
 </style>
