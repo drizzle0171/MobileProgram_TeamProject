@@ -195,8 +195,6 @@ export default {
     }
   },
   created(){
-    console.log(this.dates)
-
   },
   components: {
     Modal: Modal
