@@ -201,7 +201,7 @@ export default {
     left: 27px;
     width: 22px;
     height: 22px;
-    z-index: 20;
+    z-index: 1;
     opacity: 0;
   }
   input[id="sidebarCheck"] {
@@ -213,15 +213,14 @@ export default {
     height: 18px;
     position: fixed;
     transition: all .35s;
-    top: 25px;
-    left: 21px;
+    top: 50px;
+    left: 29px;
     z-index: 9;
-
   }
   input[id="sidebarCheck"] + label span {
-    left: 30px;
     display: block;
-    width: 25px;
+    position: absolute;
+    width: 100%;
     height: 3px;
     border-radius: 10px;
     background: #7ca3bb;
@@ -229,41 +228,45 @@ export default {
     z-index: 10;
   }
   input[id="sidebarCheck"] + label span:nth-child(1){
-    top: 50px;
+    top: 0;
   }
   input[id="sidebarCheck"] + label span:nth-child(2){
-    top: 60px;
+    top: 50%;
     transform: translateY(-50%);
   }
   input[id="sidebarCheck"] + label span:nth-child(3){
-    top: 68px;
+    bottom: 0;
   }
   input[id="sidebarCheck"]:checked + label span:nth-child(1){
-    width: 25px;    
+    left: 18%;
+    width: 20px;    
     height: 5px;
-    top: 70px;
-    left: 215px;
+    top: 46%;
     transform: rotate(45deg)
   }
   input[id="sidebarCheck"]:checked + label span:nth-child(2){
     opacity: 0;
   }
   input[id="sidebarCheck"]:checked + label span:nth-child(3){
-    width: 25px;
+    left: 18%;
+    width: 20px;
     height: 5px;
-    top: 70px;
-    left: 215px;
+    top: 46%;
     transform: rotate(-45deg)
   }
+  input[id="sidebarUncheck"]:checked + div{
+  left: -290px;
+  }
   .sidebar{
-      width: 150;
+      width: 150px;
       height: 100%;
       position: fixed;
       top:0;
       padding: 20px 30px 0 30px;
-      z-index: 15;
+      z-index: 20;
       background-color: #fff;
       font-family: Helvetica, Arial, sans-serif;
+      position: fixed;
       top: 0;
       left: -290px;
       transition: all .35s;
@@ -274,12 +277,12 @@ export default {
   input[id="sidebarCheck"]:checked + label{
     border-bottom-right-radius: 10px;
     border-top-right-radius: 10px;
-    top: 50px;
-    width: 45px;
-    height: 45px;
+    top: 30px;
+    width: 40px;
+    height: 40px;
     background: #fff;
-    z-index: 2;
-    left: 200px;
+    z-index: 15;
+    left: 210px;
   }
   .head{
     display: block;
