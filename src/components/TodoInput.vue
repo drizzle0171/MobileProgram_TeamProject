@@ -235,6 +235,8 @@ input[type="time"] {
   position: fixed;
   top: 370px;
   left: 13px;
+  z-index: 11;
+
 }
 .Today-text{
   margin-left: 20px;

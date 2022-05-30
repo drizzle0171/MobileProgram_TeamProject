@@ -24,6 +24,8 @@
       </div>
       <div class="mask">
       </div>
+  <div class="background">
+  </div>
     <div class="head"><h1> TodoForDays </h1></div>
     <span @click="openMypage">
       <i class="mypageBtn fas fa-user"></i>
@@ -193,17 +195,6 @@ export default {
     position: absolute;
     z-index: 13;
   }
-  .side-mask {
-    position: fixed;
-    top: -30px;
-    left: 180px;
-    z-index: 999;
-    width: 300px;
-    height: 350%;
-    background-color: rgba(0, 0, 0, .5);
-    flex-direction: column;
-    transition: transform 0.4s ease
-  }
   #sidebarCheck{
     position: fixed;
     top: 45px;
@@ -220,10 +211,11 @@ export default {
     display: block;
     width: 20px;
     height: 18px;
-    position: relative;
+    position: fixed;
     transition: all .35s;
-    top: 25px;
-    left: 21px;
+    top: 50px;
+    left: 29px;
+    z-index: 9;
   }
   input[id="sidebarCheck"] + label span {
     display: block;
@@ -246,25 +238,22 @@ export default {
     bottom: 0;
   }
   input[id="sidebarCheck"]:checked + label span:nth-child(1){
-    left: 10%;
+    left: 18%;
     width: 20px;    
     height: 5px;
-    top: 45%;
-    left: 12px;
+    top: 46%;
     transform: rotate(45deg)
   }
   input[id="sidebarCheck"]:checked + label span:nth-child(2){
     opacity: 0;
   }
   input[id="sidebarCheck"]:checked + label span:nth-child(3){
-    left: 10%;
+    left: 18%;
     width: 20px;
     height: 5px;
-    top: 45%;
-    left: 12px;
+    top: 46%;
     transform: rotate(-45deg)
   }
-
   input[id="sidebarUncheck"]:checked + div{
   left: -290px;
   }
@@ -274,13 +263,12 @@ export default {
       position: fixed;
       top:0;
       padding: 20px 30px 0 30px;
-      z-index: 2;
+      z-index: 20;
       background-color: #fff;
       font-family: Helvetica, Arial, sans-serif;
       position: fixed;
       top: 0;
       left: -290px;
-      z-index: 1;
       transition: all .35s;
     }
   input[id="sidebarCheck"]:checked + label + div{
@@ -289,21 +277,12 @@ export default {
   input[id="sidebarCheck"]:checked + label{
     border-bottom-right-radius: 10px;
     border-top-right-radius: 10px;
-    top: 10px;
-    width: 45px;
-    height: 45px;
+    top: 30px;
+    width: 40px;
+    height: 40px;
     background: #fff;
-    z-index: 2;
-    left: 200px;
-  }
-  .blackBox{
-    width: 205px;
-    height: 100%;
-    position: absolute;
-    top: 0px;
+    z-index: 15;
     left: 210px;
-    background: #000000;
-    opacity: 0.3;
   }
   .head{
     display: block;
@@ -315,7 +294,7 @@ export default {
     position: fixed;
     top: 25px;
     left: 10px;
-    z-index: -10;
+    z-index: 10;
   }
   .sidebarBtn{
     position: fixed;
@@ -338,6 +317,8 @@ export default {
     font-size: 20px;
     float: right;
     margin: 25px 18px 0 0;
+    z-index: 9;
+
   }
   .vc-weeks{
     position: fixed;
@@ -348,10 +329,16 @@ export default {
     width: 358px;
     opacity: 0.9;
     border: 0;
+    z-index: 11;
 }
   .background{
-    width: 110%;
-    margin: -60px -10.5rem -1rem -10rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #f2f2f2;
+    width: 200%;
+    height: 440px;
+    z-index: 8;
   }
 
 </style>
