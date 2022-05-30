@@ -194,7 +194,6 @@ export default {
     },
     async loop() {
       this.call += 1
-      console.log(this.call)
       if (this.call < 100) {
         this.webcam.update();         
         await this.predict();
@@ -235,9 +234,7 @@ export default {
     }
     
   },
-  created(){
-    console.log(this.openCam)
-    
+  created(){    
   },
   async mounted() {
     if (localStorage.getItem("notes"))
