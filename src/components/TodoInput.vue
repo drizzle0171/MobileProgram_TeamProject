@@ -95,7 +95,7 @@ export default {
         date:"",
         time:"",
         addDate:"",
-        position:false
+        position:'선택 안함'
       },
       Head:"",
       Memo:"",
@@ -105,7 +105,7 @@ export default {
       time:"",
       category:"",
       addDate:"",
-      position:""
+      position:'선택 안함'
     }
   },
   computed:{
