@@ -249,7 +249,8 @@ export default {
     left: 10%;
     width: 20px;    
     height: 5px;
-    top: 50%;
+    top: 45%;
+    left: 12px;
     transform: rotate(45deg)
   }
   input[id="sidebarCheck"]:checked + label span:nth-child(2){
@@ -259,7 +260,8 @@ export default {
     left: 10%;
     width: 20px;
     height: 5px;
-    top: 50%;
+    top: 45%;
+    left: 12px;
     transform: rotate(-45deg)
   }
 
@@ -285,10 +287,11 @@ export default {
     left: 0;
   }
   input[id="sidebarCheck"]:checked + label{
-    border-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
     top: 10px;
-    width: 30px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     background: #fff;
     z-index: 2;
     left: 200px;
