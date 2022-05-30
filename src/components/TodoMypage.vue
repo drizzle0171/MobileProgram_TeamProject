@@ -20,9 +20,16 @@
       <img src="../assets/padlock.png" class="currentPassword">
       <p class="text"> 현재 비밀번호 <br></p>
       <input class="passWord" v-model="currentPassword" type="password" placeholder="Type your password"/> <br>
+      <div class="reauth" @click="reauthUser">재인증</div>   
+      <div v-if="reauth==true" class="perfect">
+        <img width="12px" src="../assets/check.png"> &nbsp; 재인증이 완료되었습니다
+      </div>
       <img src="../assets/reload.png" class="newPassword">
       <p class="text"> 새 비밀번호 <br></p>
       <input class="passWord" v-model="newPassword" type="password" placeholder="Type your new password"/> <br>
+      <div v-if="false" class="notPerfect">
+        <img width="12px" src="../assets/exclamation.png">  &nbsp; <b>필수</b> &nbsp; 재인증해주세요
+      </div>
       <div v-if="newPassword" class="nothing" :class="{notPerfect: newPassword.length<6}">
         <img width="12px" src="../assets/exclamation.png">  &nbsp; 6자 이상으로 입력해주세요
       </div>
@@ -38,12 +45,19 @@
       <div v-if="newPasswordAgain" class="nothing" :class="{perfectAgain: newPassword==newPasswordAgain}">
         <img width="12px" src="../assets/check.png"> &nbsp; 비밀번호가 일치합니다
       </div>
-      <div class="confirm" @click="updatepassword">확인</div>
+      <div class="confirm" @click="updatePasswords">확인</div>
     </div>
     <modal v-if="showUpdatePasswordSuccess" @click="showUpdatePasswordSuccess = false">
         <h3 slot="header" @click="showUpdatePasswordSuccess = false"> 비밀번호 변경 성공 </h3>
         <span slot="footer" @click="showUpdatePasswordSuccess = false"> 비밀번호 변경이 완료되었습니다. </span>
           <span slot="footer" @click="showUpdatePasswordSuccess = false">
+            <i class="closeModalBtn fas fa-times"></i>
+        </span>
+    </modal>
+    <modal v-if="showDelete" @click="showDelete = false">
+        <h3 slot="header" @click="showDelete = false"> 재인증 요구 </h3>
+        <span slot="footer" @click="showDelete = false"> 현재 비밀번호를 <br> 이전 화면에서 재인증해주세요</span>
+          <span slot="footer" @click="showDelete = false">
             <i class="closeModalBtn fas fa-times"></i>
         </span>
     </modal>    
@@ -60,8 +74,8 @@ import {
   signOut,
   deleteUser,
   updatePassword,
+  EmailAuthProvider,
   reauthenticateWithCredential,
-  promptForCredentials
 } from "firebase/auth";
 
 export default {
@@ -75,7 +89,8 @@ export default {
       Name:'',
       email:'',
       photo:'',
-      auth:getAuth(),
+      auth: getAuth(),
+      reauth: false,
     }
   },
   computed:{
@@ -96,6 +111,8 @@ export default {
         signOut(this.auth)
         .then(() => {
           this.$router.replace({path: "/"});
+          localStorage.removeItem('img');
+          localStorage.removeItem('name');
         }).catch((error) => {
           console.log(error)
         });
@@ -107,24 +124,35 @@ export default {
             localStorage.removeItem('img');
             localStorage.removeItem('name');
         }).catch((error) => {
-          console.log(error)
+            this.showDelete = true;
+            console.log(error)
         });
       },
-      updatepassword(){
+      reauthUser(){
         const user = this.auth.currentUser;
-        const credential = promptForCredentials();
-        reauthenticateWithCredential(user, credential).then(() => {
-          }).catch((error) => {
-            console.log(error)
-          });
-        if (this.newPassword==this.newPasswordAgain){
-        updatePassword(user, this.newPassword)
+        const credential = EmailAuthProvider.credential(user.email, this.currentPassword);
+        reauthenticateWithCredential(user, credential)
           .then(() => {
-            this.showUpdatePassword = true;
+            this.reauth = true;
+            console.log('재인증 완료')
           })
           .catch((error) => {
             console.log(error)
-          })
+          });
+        
+      },
+      updatePasswords(){
+        this.showUpdatePasswordSuccess = true;
+        const user = this.auth.currentUser;
+        if (this.newPassword==this.newPasswordAgain){
+          updatePassword(user, this.newPassword)
+            .then(() => {
+              this.showUpdatePassword = true;
+              console.log('비밀번호 업데이트 완료')
+            })
+            .catch((error) => {
+              console.log(error)
+            })
         }
       },
   },
@@ -408,4 +436,20 @@ export default {
     top: 651px;
     left: 90px;
   }
+    .reauth{
+    font-size: 14px;
+    width: 40px;
+    height: 20px;
+    padding: 4px;
+    opacity: 0.8;
+    color: #7ca3bb;
+    font-family: Arial, Helvetica, sans-serif;
+    border: solid 1px #7ca3bb;
+    border-radius: 5px;
+    line-height: 20px;
+    position: fixed;
+    top: 445px;
+    left: 255px;
+  }
+
 </style>

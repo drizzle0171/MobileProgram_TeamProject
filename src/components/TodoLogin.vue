@@ -25,7 +25,7 @@
       <span class = "signUp" @click="signUpModal = true"> Sign Up </span>
     <div class="modal-mask" v-if="signUpModal">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div class="signup-container">
           <h1 class="head"> TodoForDays </h1>
             <p class="subHead"><b> Sign Up for TodoForDays </b></p>
               <p class="userName"><b>이름</b> <br></p>
@@ -346,7 +346,7 @@ export default {
   vertical-align: middle;
 }
 
-.modal-container {
+.signup-container {
   width: 280px;
   height: 550px;
   margin: 0px auto;
@@ -358,16 +358,16 @@ export default {
   font-family: Helvetica, Arial, sans-serif;
 }
 
-.modal-header h3 {
+.signup-header h3 {
   margin-top: 0;
   color: #7ca3bb;
 }
 
-.modal-body {
+.signup-body {
   margin: 20px 0;
 }
 
-.modal-default-button {
+.signup-default-button {
   float: right;
 }
   .head{
