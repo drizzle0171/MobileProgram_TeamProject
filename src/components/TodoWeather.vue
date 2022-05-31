@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="allWeather">
     <span @click="openTodo">
       <i class="backTodo fas fa-angle-left"></i>
     </span>
@@ -502,5 +502,8 @@ export default {
     top: 442px;
     left: 70px;
   }
-
+  .allWeather{
+    height: 1000px;
+    overflow-y: auto;
+  }
 </style>

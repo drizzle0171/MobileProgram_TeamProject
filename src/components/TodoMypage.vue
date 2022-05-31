@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="all">
     <span @click="openTodo">
       <i class="backTodo fas fa-angle-left"></i>
     </span>
@@ -27,7 +27,7 @@
       <img src="../assets/reload.png" class="newPassword">
       <p class="text"> 새 비밀번호 <br></p>
       <input class="passWord" v-model="newPassword" type="password" placeholder="Type your new password"/> <br>
-      <div v-if="false" class="notPerfect">
+      <div v-if="reauth == false" class="notPerfect">
         <img width="12px" src="../assets/exclamation.png">  &nbsp; <b>필수</b> &nbsp; 재인증해주세요
       </div>
       <div v-if="newPassword" class="nothing" :class="{notPerfect: newPassword.length<6}">
@@ -286,9 +286,10 @@ export default {
     color: #ffffff;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     position: fixed;
-    top: 180px;
+    top: 190px;
     left: 180px;
     text-align: left;
+    font-size: 14px;
   }
   .welcome{
     font-size: 25px;
@@ -303,8 +304,9 @@ export default {
     color: #ffffff;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     position: fixed;
-    top: 230px;
+    top: 240px;
     left: 180px;
+    font-size: 14px;
     text-align: left;
   }
   .updatePasswordTitle{
@@ -451,5 +453,8 @@ export default {
     top: 445px;
     left: 255px;
   }
-
+  .all{
+      height: 1000px;
+      overflow-y: auto;
+  }
 </style>

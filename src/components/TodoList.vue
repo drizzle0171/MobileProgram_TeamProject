@@ -186,7 +186,7 @@ export default {
     },
     async startCam() {
       this.call = 0;
-      this.webcam = new tmImage.Webcam(350, 200, true);
+      this.webcam = new tmImage.Webcam(350, 200, false);
       await this.webcam.setup(); // request access to the webcam
       await this.webcam.play();
       window.requestAnimationFrame(this.loop);
