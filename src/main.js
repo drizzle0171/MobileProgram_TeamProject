@@ -12,13 +12,13 @@ Vue.prototype.$http = axios
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAXzSzGbGYTjzC-hj3O1DLZRe5dgbYbRro",
-  authDomain: "todofordays.firebaseapp.com",
-  projectId: "todofordays",
-  storageBucket: "todofordays.appspot.com",
-  messagingSenderId: "523310030065",
-  appId: "1:523310030065:web:836bf0bdf5d7e727815d50",
-  measurementId: "G-Z7SGLL14B4"
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
+  measurementId: ""
 };
 
 initializeApp(firebaseConfig);
