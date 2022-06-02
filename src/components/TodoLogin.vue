@@ -134,9 +134,6 @@ export default {
         .catch((error) => {
           console.log('warning')
           console.log(error);
-          // var errorCode = error.code;
-          // var errorMessage = error.message;
-          // ..
         });
     },
     login() {

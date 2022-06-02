@@ -129,9 +129,12 @@ export default {
     },
     storeMemo(){
       this.information.memo = this.Memo.trim();
+      console.log(this.position)
     },
     storeDate(){
       this.information.date = `${this.date.slice(0,4)}년 ${this.date.slice(5,7)}월 ${this.date.slice(8,10)}일`
+          console.log(this.position)
+
     },
     storeTime(){
       this.information.time = `${this.date.slice(0,4)}년 ${this.date.slice(5,7)}월 ${this.date.slice(8,10)}일`
@@ -159,15 +162,16 @@ export default {
 
       }
     },
-    storePosition(event){
-      if (event.target.value == "선택") {
+    storePosition(position){
+      if (position.target.value == "선택") {
         this.information.position = "선택 안함"
       }
       else{ 
-        this.information.position = `${event.target.value}`
+        this.information.position = `${position.target.value}`
       }    
     },
     addTodo() {
+      console.log(this.information)
       if (this.Head !== "") {
         let information = JSON.stringify(this.information);
         this.$store.commit('addTodo', information);
@@ -187,7 +191,8 @@ export default {
         category:"",
         date:"",
         time:"",
-        addDate:""
+        addDate:"",
+        position:'선택 안함'
       },
       this.Head = "",
       this.Memo = "",
@@ -385,8 +390,8 @@ li {
 }
 .position{
   position: fixed;
-  top: 444px;
-  left: 227px;
+  top: 430px;
+  left: 232px;
 }
 .Memo{
   font-size: 16px;

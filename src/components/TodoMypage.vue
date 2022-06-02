@@ -21,15 +21,15 @@
       <p class="text"> 현재 비밀번호 <br></p>
       <input class="passWord" v-model="currentPassword" type="password" placeholder="Type your password"/> <br>
       <div class="reauth" @click="reauthUser">재인증</div>   
-      <div v-if="reauth==true" class="perfect">
+      <div v-if="reauth == true" class="perfectReauth">
         <img width="12px" src="../assets/check.png"> &nbsp; 재인증이 완료되었습니다
+      </div>
+      <div v-if="reauth == false" class="notperfectReauth">
+        <img width="12px" src="../assets/exclamation.png">  &nbsp; <b>필수</b> &nbsp; 재인증해주세요
       </div>
       <img src="../assets/reload.png" class="newPassword">
       <p class="text"> 새 비밀번호 <br></p>
       <input class="passWord" v-model="newPassword" type="password" placeholder="Type your new password"/> <br>
-      <div v-if="reauth == false" class="notPerfect">
-        <img width="12px" src="../assets/exclamation.png">  &nbsp; <b>필수</b> &nbsp; 재인증해주세요
-      </div>
       <div v-if="newPassword" class="nothing" :class="{notPerfect: newPassword.length<6}">
         <img width="12px" src="../assets/exclamation.png">  &nbsp; 6자 이상으로 입력해주세요
       </div>
@@ -120,7 +120,7 @@ export default {
       deleteuser(){
         deleteUser(getAuth().currentUser)
           .then(() => {
-            this.showDelete = true;
+            this.$router.replace({path: "/"});
             localStorage.removeItem('img');
             localStorage.removeItem('name');
         }).catch((error) => {
@@ -456,5 +456,27 @@ export default {
   .all{
       height: 1000px;
       overflow-y: auto;
+  }
+  .perfectReauth{
+    display: flex;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #32BE5A;
+    font-size: 11px;
+    line-height: 13px;
+    height: 13px;
+    position:fixed;
+    top: 487px;
+    left: 90px
+  }
+  .notperfectReauth{
+    display: flex;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #FF5757;
+    font-size: 11px;
+    line-height: 13px;
+    height: 13px;
+    position:fixed;
+    top: 487px;
+    left: 90px
   }
 </style>

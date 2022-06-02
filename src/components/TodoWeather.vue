@@ -89,7 +89,7 @@ export default {
   },
   created(){
     //Today Weather
-    const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=5dc753fbb35d7e99e7fd80b06a9a18a7'
+    const BASE_URL = 'api'
       this.$http.get(`${BASE_URL}`)
       .then((result) => {
         this.currentTemp = (result.data.main.temp - 273.15).toFixed(1)
@@ -122,13 +122,11 @@ export default {
           this.description = '안개가 낄 예정이니 조심!';
         }
       })
-    const FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast?q=Seoul&appid=5dc753fbb35d7e99e7fd80b06a9a18a7'  
+    const FORECAST_URL = 'api'
       this.$http.get(`${FORECAST_URL}`)
       .then((forecast) => {
         let list = forecast.data.list
         for(let i in list){
-          // console.log(Number(list[i].main.temp-273.15))
-          // console.log(Number(list[i].main.temp-273.15).toFixed(1))
           let time = list[i].dt_txt
           if (time.slice(8, 10)!=list[0].dt_txt.slice(8, 10) && time.slice(8, 10)!=list[list.length-1].dt_txt.slice(8, 10))
             {
