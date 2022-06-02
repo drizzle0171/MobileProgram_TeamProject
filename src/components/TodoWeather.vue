@@ -127,8 +127,6 @@ export default {
       .then((forecast) => {
         let list = forecast.data.list
         for(let i in list){
-          // console.log(Number(list[i].main.temp-273.15))
-          // console.log(Number(list[i].main.temp-273.15).toFixed(1))
           let time = list[i].dt_txt
           if (time.slice(8, 10)!=list[0].dt_txt.slice(8, 10) && time.slice(8, 10)!=list[list.length-1].dt_txt.slice(8, 10))
             {

@@ -8,7 +8,7 @@
         <li v-for="(todoItem, index) in todos" :key = "todoItem.Head" class="shadow" >
           <span class="item" v-if="(todoItem.addDate[0]==dates[0]) && (todoItem.addDate[1]==dates[1]) && (todoItem.addDate[2]==dates[2])">
             <i v-if="(todoItem.position == '선택 안함')" class="checkBtn fas fa-check" :class="{checkBtn_done: todoItem.done}" aria-hidden="true" @click="check(todoItem, index)"></i>
-            <i v-if="(todoItem.position != '선택 안함')" class="cameraBtn fas fa-camera" :class="{cameraBtn_done: todoItem.position == '완료'}" @click="checkWithCam(todoItem)"></i>
+            <i v-if="(todoItem.position != '선택 안함')" class="cameraBtn_done fas fa-camera" :class="{cameraBtn_done: todoItem.position == '완료'}" @click="checkWithCam(todoItem)"></i>
             <div class="todo-item-text">
               <span> {{ todoItem.Head }} </span> <span :class="{category_school: (todoItem.category=='학교'), category_appointment: (todoItem.category=='약속'), category_assignment: (todoItem.category=='과제'), category_club: (todoItem.category=='동아리'), category_exercise: (todoItem.category=='운동'), category_etc: (todoItem.category=='기타')}">{{todoItem.category}}</span> <p class="todo-memo"> {{ todoItem.memo }} </p>
             </div>
@@ -210,10 +210,10 @@ export default {
         if (this.mugung > this.desk) {
           this.answer = '무궁관'
           }
-          else {
+        else {
             this.answer = '랩실 내 책상'
           }
-          if (this.todoItem.position == this.answer) {
+        if (this.todoItem.position == this.answer) {
             this.todoItem.position = '완료';
           }
           console.log(this.mugung, this.desk, this.answer)
@@ -573,7 +573,7 @@ ul {
   display: none;
 }
 .webcamContainer{
-  z-index: 9999;
+  z-index: 99999;
   width: 300px;
   height: 200px;
   position: fixed;
